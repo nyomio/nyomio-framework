@@ -1,0 +1,30 @@
+---
+micronaut:
+  application:
+    name: auth
+
+---
+micronaut:
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ZVu7PIRlxUguDve8IlWOlsSiInRU7EQZ
+    endpoints:
+      logout:
+        enabled: true
+        get-allowed: true
+    oauth2:
+      enabled: true
+      clients:
+        keycloak:
+          client-id: app
+          client-secret: 0f887697-1635-4188-a5a3-50b2dad67ce4
+          openid:
+            issuer: 'https://sso.nyomio.local/auth/realms/nyomio'

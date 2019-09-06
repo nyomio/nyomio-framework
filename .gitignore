@@ -21,6 +21,10 @@ hs_err_pid*
 
 .idea/
 
+certs/nyomio*
+certs/rootCA*
+install/traefikvalues.yml
+
 build/
 target/
 out/

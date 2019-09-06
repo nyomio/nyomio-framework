@@ -1,0 +1,7 @@
+dashboard:
+  enabled: true
+  domain: traefik.nyomio.local
+ssl:
+  enabled: true
+  defaultCert: NYOMIO_SAN_CERT_BASE64
+  defaultKey: NYOMIO_SAN_KEY_BASE64

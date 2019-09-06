@@ -13,4 +13,5 @@ technical decision:
   Kubernetes should be switched on: *preferences/kubernetes/enable*. 
  - [helm installed](https://helm.sh/docs/using_helm/#installing-helm)
  
+ ## Create and install SSL certs
  

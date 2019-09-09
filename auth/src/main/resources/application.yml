@@ -15,7 +15,7 @@ micronaut:
         signatures:
           secret:
             generator:
-              secret: ZVu7PIRlxUguDve8IlWOlsSiInRU7EQZ
+              secret: ${JWT_SECRET_KEY}
     endpoints:
       logout:
         enabled: true
@@ -24,7 +24,7 @@ micronaut:
       enabled: true
       clients:
         keycloak:
-          client-id: app
-          client-secret: 0f887697-1635-4188-a5a3-50b2dad67ce4
+          client-id: nyom-app
+          client-secret: ${CLIENT_SECRET}
           openid:
             issuer: 'https://sso.nyomio.local/auth/realms/nyomio'

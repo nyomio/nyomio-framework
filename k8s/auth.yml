@@ -19,6 +19,17 @@ spec:
           ports:
             - name: http
               containerPort: 8080
+          env:
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: nyom-app-oauth-client
+                  key: secret
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nyom-apps
+                  key: jwtsecret
 ---
 apiVersion: v1
 kind: Service

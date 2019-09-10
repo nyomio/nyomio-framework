@@ -20,7 +20,7 @@ printf "\n%s\n" "***** Adding ingress for keycloak..."
 kubectl apply -f ../k8s/keycloak-ingress.yml
 
 printf "\n%s\n" "***** Waiting for keycloak server to be ready..."
-kubectl wait --for=condition=ready --timeout=45s pod/nyom-sso-keycloak-0
+kubectl wait --for=condition=ready --timeout=450s pod/nyom-sso-keycloak-0
 
 printf "\n%s\n" "***** Logging in for kcadm.sh ..."
 kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user keycloak --password $KEYCLOAK_PASS"

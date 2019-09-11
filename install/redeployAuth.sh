@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+cd "$(dirname "$0")" || exit
+cd ..
 ./gradlew auth:build
-docker build -t "auth:v1" -f auth/Dockerfile .
+auth/build-docker.sh
 kubectl rollout restart deployment auth-deployment

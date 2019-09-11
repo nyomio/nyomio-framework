@@ -2,7 +2,13 @@
 micronaut:
   application:
     name: auth
-
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - "https://app.nyomio.local:4200"
 ---
 micronaut:
   security:

@@ -4,6 +4,9 @@ cd "$(dirname "$0")" || exit
 printf "\n%s\n" "***** Initilaizing helm..."
 helm init --wait
 
+kubectl apply -f ../k8s/coredns-rewrite.yml
+kubectl get pods -n kube-system -oname |grep coredns |xargs kubectl delete -n kube-system
+
 # Traefik
 printf "\n%s\n" "***** Installing Treafik from helm chart"
 helm install --name nyom-router --namespace kube-system --values traefikvalues.yml stable/traefik
@@ -49,6 +52,6 @@ kubectl create secret generic nyom-apps --from-literal="jwtsecret=$(openssl rand
 printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key for microservices..."
 cd ..
 ./gradlew auth:build
-docker build -t "auth:v1" -f auth/Dockerfile .
+auth/build-docker.sh
 kubectl apply -f k8s/auth.yml
 

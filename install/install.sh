@@ -5,7 +5,6 @@ printf "\n%s\n" "***** Initilaizing helm..."
 helm init --wait
 
 kubectl apply -f ../k8s/coredns-rewrite.yml
-kubectl get pods -n kube-system -oname |grep coredns |xargs kubectl delete -n kube-system
 
 # Traefik
 printf "\n%s\n" "***** Installing Treafik from helm chart"

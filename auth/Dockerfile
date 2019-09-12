@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM adoptopenjdk/openjdk11-openj9:alpine-jre
 COPY auth-*-all.jar auth.jar
 COPY rootCA.crt /tmp/
 RUN keytool -import -noprompt -v -trustcacerts -file /tmp/rootCA.crt -cacerts -storepass changeit -alias nyomio

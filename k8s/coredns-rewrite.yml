@@ -8,10 +8,7 @@ data:
     .:53 {
         errors
         health
-        rewrite stop {
-          name regex (sso\.nyomio\.local\.)$ nyom-router-traefik.kube-system.svc.cluster.local
-          answer name nyom-router-traefik.kube-system.svc.cluster.local sso.nyomio.local
-        }
+        rewrite name sso.nyomio.local nyom-router-traefik.kube-system.svc.cluster.local
         kubernetes cluster.local in-addr.arpa ip6.arpa {
            pods insecure
            upstream

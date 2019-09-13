@@ -25,7 +25,6 @@ micronaut:
     endpoints:
       logout:
         enabled: true
-        get-allowed: true
     oauth2:
       enabled: true
       clients:

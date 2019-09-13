@@ -51,6 +51,10 @@ This will do the following:
 - init helm
 - install Traefik
 - install Keycloak
-- create docker image for auth microservice, and install it to kubernetes
+- auth microservice: build, create docker image and install to kubernetes
+- nyom-app angular webapp: build, create docker image and install to kubernetes
+- set up all ingress rules
 
-Now you can access the app at [https://app.nyomio.local/user](https://app.nyomio.local/user)
+Now you can access the angular app at [https://app.nyomio.local/](https://app.nyomio.local/)
+
+# Development

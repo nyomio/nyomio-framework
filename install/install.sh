@@ -47,10 +47,12 @@ kubectl create secret generic nyom-app-oauth-client --from-literal="secret=$CLIE
 printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key for microservices..."
 kubectl create secret generic nyom-apps --from-literal="jwtsecret=$(openssl rand -base64 32)"
 
-# Build and start auth app
+# Build and start auth microservice
 printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key for microservices..."
 cd ..
-./gradlew auth:build
 auth/build-docker.sh
 kubectl apply -f k8s/auth.yml
 
+# Build and start angular webapp
+nyom-app/build-docker.sh
+kubectl apply -f k8s/webapp.yml

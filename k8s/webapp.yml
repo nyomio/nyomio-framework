@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "webapp-deployment"
+spec:
+  selector:
+    matchLabels:
+      app: "webapp"
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: "webapp"
+    spec:
+      containers:
+        - name: "webapp"
+          image: "webapp:v1"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "webapp-service"
+spec:
+  selector:
+    app: "webapp"
+  ports:
+    - name: http
+      targetPort: 80
+      port: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: "webapp-ingress"
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.priority: "1"
+spec:
+  rules:
+    - host: app.nyomio.local
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: "webapp-service"
+              servicePort: http

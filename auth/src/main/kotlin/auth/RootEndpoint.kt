@@ -16,8 +16,8 @@ class RootEndpoint {
     fun index(request: HttpRequest<*>): HttpResponse<String> {
         val redirectTo = ((request as NettyHttpRequest<*>).nettyRequest.headers()["Referer"] ?: "").let {
             when {
-                it.contains("app.nyomio.local") -> if (it.contains("oauth")) "/user" else it
-                else -> "/user"
+                it.contains("app.nyomio.local") -> if (it.contains("oauth")) "/api/user" else it
+                else -> "/api/user"
             }
         }
         return HttpResponse.temporaryRedirect(URI(redirectTo))

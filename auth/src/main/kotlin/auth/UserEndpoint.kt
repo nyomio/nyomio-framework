@@ -9,10 +9,10 @@ import io.micronaut.security.rules.SecurityRule
 
 data class UserData(val loginUrl: String, val logoutUrl: String, val ssoLogoutUrl: String, val authObject: Authentication?)
 
-@Controller("/user")
+@Controller("/api")
 class UserEndpoint {
 
-    @Get("/")
+    @Get("/user")
     @Secured(SecurityRule.IS_ANONYMOUS)
     fun index(auth: Authentication?)
             = UserData(

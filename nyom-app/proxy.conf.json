@@ -1,0 +1,15 @@
+{
+  "/oauth/*": {
+    "target": "https://app.nyomio.local",
+    "secure": false
+  },
+  "/logout": {
+    "target": "https://app.nyomio.local",
+    "secure": false
+  },
+  "/api/*": {
+    "target": "https://app.nyomio.local",
+    "secure": false
+  }
+}
+a

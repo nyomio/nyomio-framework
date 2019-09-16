@@ -28,7 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/theme.scss",
+              "node_modules/@covalent/core/common/platform.scss"
             ],
             "scripts": []
           },
@@ -93,7 +95,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/theme.scss",
+              "node_modules/@covalent/core/common/platform.scss"
             ],
             "scripts": []
           }
@@ -124,6 +128,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "nyom-app"
 }

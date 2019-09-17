@@ -19,16 +19,16 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-card>
-      <ul>
-        <li *ngIf="user == null"><a href="/oauth/login/keycloak">Login</a>
-        <li *ngIf="user == null">
-          <button (click)="jsLogin()">Js Login</button>
-        <li *ngIf="user != null"><a href="/logout">Logout</a></li>
-        <li *ngIf="user != null"><a href="{{getSsoLogoutUrl()}}">SSO Logout</a></li>
-      </ul>
+      <mat-card-content>
+        <div *ngIf="user == null"><a href="/oauth/login/keycloak">Login</a></div>
+        <div *ngIf="user != null"><a href="/logout">Logout</a></div>
+        <div *ngIf="user != null"><a href="{{getSsoLogoutUrl()}}">SSO Logout</a></div>
+      </mat-card-content>
     </mat-card>
     <mat-card>
-      User: {{user?.attributes?.preferred_username}}
+      <mat-card-content>
+        User: {{user?.attributes?.preferred_username}}
+      </mat-card-content>
     </mat-card>
   </td-layout-nav>
 </td-layout>

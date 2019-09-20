@@ -130,5 +130,8 @@
       }
     }
   },
-  "defaultProject": "nyom-app"
+  "defaultProject": "nyom-app",
+  "cli": {
+    "defaultCollection": "akita-schematics"
+  }
 }

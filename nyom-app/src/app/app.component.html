@@ -18,18 +18,7 @@
     <button mat-icon-button td-menu-button tdLayoutToggle>
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-card>
-      <mat-card-content>
-        <div *ngIf="user == null"><a href="/oauth/login/keycloak">Login</a></div>
-        <div *ngIf="user != null"><a href="/logout">Logout</a></div>
-        <div *ngIf="user != null"><a href="{{getSsoLogoutUrl()}}">SSO Logout</a></div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-content>
-        User: {{user?.attributes?.preferred_username}}
-      </mat-card-content>
-    </mat-card>
+    <router-outlet></router-outlet>
   </td-layout-nav>
 </td-layout>
 

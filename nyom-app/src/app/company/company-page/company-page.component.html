@@ -1,0 +1,37 @@
+<mat-card>
+  <mat-card-content>
+    <td-data-table
+        [data]="data"
+        [sortable]="true"
+        [columns]="columns"
+        [clickable]="true"
+        (rowClick)="rowClicked($event)"
+    >
+    </td-data-table>
+  </mat-card-content>
+
+  <button *ngIf="!(newCompanyMode || selectedCompany)" mat-raised-button color="primary" class="text-upper"
+          (click)="newCompanyMode = true; selectedCompany = null">
+    New
+  </button>
+
+  <h2 *ngIf="selectedCompany">Edit Company (id:{{selectedCompany.id}})</h2>
+  <h2 *ngIf="newCompanyMode">New Company</h2>
+
+  <td-dynamic-forms [hidden]="!(newCompanyMode || selectedCompany)"
+      #companyForm [elements]="formElements" >
+    <button mat-raised-button (click)="save()"
+            color="primary"
+            class="text-upper"
+            [disabled]="!companyForm.valid">
+      Save
+    </button>
+    <button mat-raised-button (click)="cancel()"
+            color="primary"
+            class="text-upper">
+      Cancel
+    </button>
+  </td-dynamic-forms>
+
+</mat-card>
+

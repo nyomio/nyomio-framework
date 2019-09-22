@@ -6,8 +6,8 @@ micronaut:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
-  db:
-    driver: org.postgresql.Driver
-    connection-string: jdbc:postgresql://localhost:3306/nyom
-    user: postgres
-    password: ${DB_PASSWORD}
+db:
+  driver: org.postgresql.Driver
+  connection-string: ${DB_URL}
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}

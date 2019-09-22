@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {CompanyPageComponent} from "./company/company-page/company-page.component";
+import {OrganizationPageComponent} from "./organization/organization-page/organization-page.component";
 
 const routes: Routes = [
   {
@@ -9,7 +9,7 @@ const routes: Routes = [
     redirectTo: "/company"
   },
   {
-    component: CompanyPageComponent,
+    component: OrganizationPageComponent,
     path: 'company'
   }
 ];

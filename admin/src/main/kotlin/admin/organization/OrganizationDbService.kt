@@ -1,4 +1,4 @@
-package admin.company
+package admin.organization
 
 import admin.db.DbAccess
 import io.reactivex.Single

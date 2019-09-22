@@ -10,20 +10,20 @@
     </td-data-table>
   </mat-card-content>
 
-  <button *ngIf="!(newCompanyMode || selectedCompany)" mat-raised-button color="primary" class="text-upper"
-          (click)="newCompanyMode = true; selectedCompany = null">
+  <button *ngIf="!(newOrganizationMode || selectedOrganization)" mat-raised-button color="primary" class="text-upper"
+          (click)="newOrganizationMode = true; selectedOrganization = null">
     New
   </button>
 
-  <h2 *ngIf="selectedCompany">Edit Company (id:{{selectedCompany.id}})</h2>
-  <h2 *ngIf="newCompanyMode">New Company</h2>
+  <h2 *ngIf="selectedOrganization">Edit Organization (id:{{selectedOrganization.id}})</h2>
+  <h2 *ngIf="newOrganizationMode">New Organization</h2>
 
-  <td-dynamic-forms [hidden]="!(newCompanyMode || selectedCompany)"
-      #companyForm [elements]="formElements" >
+  <td-dynamic-forms [hidden]="!(newOrganizationMode || selectedOrganization)"
+      #organizationForm [elements]="formElements" >
     <button mat-raised-button (click)="save()"
             color="primary"
             class="text-upper"
-            [disabled]="!companyForm.valid">
+            [disabled]="!organizationForm.valid">
       Save
     </button>
     <button mat-raised-button (click)="cancel()"

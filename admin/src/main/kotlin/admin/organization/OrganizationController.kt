@@ -1,4 +1,4 @@
-package admin.company
+package admin.organization
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get

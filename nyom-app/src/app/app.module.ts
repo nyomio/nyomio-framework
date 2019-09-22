@@ -13,13 +13,13 @@ import {NG_ENTITY_SERVICE_CONFIG} from '@datorama/akita-ng-entity-service';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
 import {environment} from '../environments/environment';
-import {CompanyPageComponent} from './company/company-page/company-page.component';
+import {OrganizationPageComponent} from './organization/organization-page/organization-page.component';
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
 
 @NgModule({
   declarations: [
     AppComponent,
-    CompanyPageComponent
+    OrganizationPageComponent
   ],
   imports: [
     CovalentLayoutModule,

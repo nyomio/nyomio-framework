@@ -10,6 +10,13 @@ kubectl apply -f ../k8s/coredns-rewrite.yml
 printf "\n%s\n" "***** Installing Treafik from helm chart"
 helm install --name nyom-router --namespace kube-system --values traefikvalues.yml stable/traefik
 
+# Postgres
+printf "\n%s\n" "***** Installing postgres from helm chart"
+helm install --name nyom-db stable/postgresql
+
+printf "\n%s\n" "***** Waiting for postgres server to be ready..."
+kubectl wait --for=condition=ready --timeout=450s pod/nyom-db-postgresql-0
+
 # Keycloak
 printf "\n%s\n"  "***** Installing Keycloak from helm chart"
 helm repo add codecentric https://codecentric.github.io/helm-charts
@@ -48,10 +55,16 @@ printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key 
 kubectl create secret generic nyom-apps --from-literal="jwtsecret=$(openssl rand -base64 32)"
 
 # Build and start auth microservice
-printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key for microservices..."
+printf "\n%s\n" "***** Building and starting auth microservcie..."
 cd ..
 auth/build-docker.sh
 kubectl apply -f k8s/auth.yml
+
+# Build and start admin microservice
+printf "\n%s\n" "***** Building and starting admin microservcie..."
+cd ..
+admin/build-docker.sh
+kubectl apply -f k8s/admin.yml
 
 # Build and start angular webapp
 nyom-app/build-docker.sh

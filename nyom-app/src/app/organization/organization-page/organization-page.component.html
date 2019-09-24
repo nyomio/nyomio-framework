@@ -1,37 +1,46 @@
 <mat-card>
-  <mat-card-content>
+  <mat-card-content
+    *tdLoading="'organization'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent'">
     <td-data-table
-        [data]="data"
-        [sortable]="true"
-        [columns]="columns"
-        [clickable]="true"
-        (rowClick)="rowClicked($event)"
+      [data]="data"
+      [sortable]="true"
+      [columns]="columns"
+      [clickable]="true"
+      (rowClick)="rowClicked($event)"
     >
     </td-data-table>
+    <button *ngIf="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"
+            mat-raised-button color="primary" class="text-upper"
+            (click)="organizationService.setNewMode(true)">
+      New
+    </button>
+
+    <h2 *ngIf="selectedOrganization$ | async">Edit Organization
+      (id:{{(selectedOrganization$ | async)}})</h2>
+    <h2 *ngIf="newOrganizationMode$ | async">New Organization</h2>
+
+    <td-dynamic-forms
+      [hidden]="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"
+      #organizationForm [elements]="formElements">
+      <button mat-raised-button (click)="save()"
+              color="primary"
+              class="text-upper"
+              [disabled]="!organizationForm.valid || (loading$ | async)">
+        Save
+      </button>
+      <button mat-raised-button (click)="cancel()"
+              color="primary"
+              class="text-upper"
+              [disabled]="(loading$ | async)">
+        Cancel
+      </button>
+      <button *ngIf="!(newOrganizationMode$ | async)" mat-raised-button (click)="delete()"
+              color="primary"
+              class="text-upper"
+              [disabled]="(loading$ | async)">
+        Delete
+      </button>
+    </td-dynamic-forms>
   </mat-card-content>
-
-  <button *ngIf="!(newOrganizationMode || selectedOrganization)" mat-raised-button color="primary" class="text-upper"
-          (click)="newOrganizationMode = true; selectedOrganization = null">
-    New
-  </button>
-
-  <h2 *ngIf="selectedOrganization">Edit Organization (id:{{selectedOrganization.id}})</h2>
-  <h2 *ngIf="newOrganizationMode">New Organization</h2>
-
-  <td-dynamic-forms [hidden]="!(newOrganizationMode || selectedOrganization)"
-      #organizationForm [elements]="formElements" >
-    <button mat-raised-button (click)="save()"
-            color="primary"
-            class="text-upper"
-            [disabled]="!organizationForm.valid">
-      Save
-    </button>
-    <button mat-raised-button (click)="cancel()"
-            color="primary"
-            class="text-upper">
-      Cancel
-    </button>
-  </td-dynamic-forms>
-
 </mat-card>
 

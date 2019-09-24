@@ -1,4 +1,6 @@
-FROM adoptopenjdk/openjdk11-openj9:jdk-11.0.1.13-alpine-slim
-COPY build/libs/admin-*-all.jar admin.jar
+FROM adoptopenjdk/openjdk11-openj9:alpine-jre
+COPY admin-*-all.jar admin.jar
 EXPOSE 8080
-CMD java -Dcom.sun.management.jmxremote -noverify ${JAVA_OPTS} -jar admin.jar
+CMD java -Dcom.sun.management.jmxremote -noverify ${JAVA_OPTS} \
+    -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000 \
+    -jar admin.jar

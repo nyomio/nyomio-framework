@@ -3,7 +3,12 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import {CovalentDataTableModule, CovalentLayoutModule, CovalentStepsModule} from "@covalent/core";
+import {
+  CovalentDataTableModule,
+  CovalentLayoutModule,
+  CovalentLoadingModule,
+  CovalentStepsModule
+} from "@covalent/core";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
@@ -34,6 +39,7 @@ import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
     MatButtonModule,
     CovalentDataTableModule,
     CovalentDynamicFormsModule,
+    CovalentLoadingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule.forRoot()
   ],

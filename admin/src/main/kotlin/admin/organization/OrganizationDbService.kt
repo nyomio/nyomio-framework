@@ -54,7 +54,6 @@ constructor(private val dba: DbAccess) {
                     insertFrom(it, org)
                 }
             }
-
         }
     }
 
@@ -87,6 +86,12 @@ constructor(private val dba: DbAccess) {
             OrganizationTable.select { OrganizationTable.id eq id }.firstOrNull()
         }?.let {
             Organization(it)
+        }
+    }
+
+    fun delete(id: Long) {
+        transaction(dba.db) {
+            OrganizationTable.deleteWhere { OrganizationTable.id eq id }
         }
     }
 

@@ -8,6 +8,7 @@ import { Organization } from './organization.model';
 })
 export class OrganizationQuery extends QueryEntity<OrganizationState, Organization> {
 
+
   constructor(protected store: OrganizationStore) {
     super(store);
   }

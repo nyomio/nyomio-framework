@@ -1,22 +1,20 @@
-import { ID } from '@datorama/akita';
-
 export interface Organization {
-  id: ID;
-  name: string,
-  address: string
+  id: number;
+  org_name: string,
+  org_address: string
 }
 
 const defaultOrganization: Organization = {
   id: 0,
-  name: "",
-  address: ""
+  org_name: "",
+  org_address: ""
 };
 
 /**
  * A factory function that creates Organization
  */
 export function createOrganization(params: Partial<Organization>): Organization {
-  return Object.assign({}, defaultOrganization,{
+  return Object.assign({}, defaultOrganization, {
     ...params
   } as Organization);
 }

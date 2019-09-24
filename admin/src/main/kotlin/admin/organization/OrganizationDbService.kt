@@ -31,7 +31,6 @@ object OrganizationTable : LongIdTable() {
     }
 }
 
-
 @Singleton
 class OrganizationDbService
 constructor(private val dba: DbAccess) {

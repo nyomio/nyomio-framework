@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {OrganizationPageComponent} from "./organization/organization-page/organization-page.component";
+import {AuthGuard} from "./auth/auth.guard";
 
 const routes: Routes = [
   {
@@ -10,7 +11,8 @@ const routes: Routes = [
   },
   {
     component: OrganizationPageComponent,
-    path: 'company'
+    path: 'company',
+    canActivate: [AuthGuard]
   }
 ];
 

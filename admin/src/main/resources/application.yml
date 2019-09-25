@@ -6,6 +6,17 @@ micronaut:
       swagger:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET_KEY}
 db:
   driver: org.postgresql.Driver
   connection-string: ${DB_URL}

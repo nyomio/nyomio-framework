@@ -16,10 +16,18 @@ class UserEndpoint {
     @Secured(SecurityRule.IS_ANONYMOUS)
     fun index(auth: Authentication?): AuthData {
         val userData = auth?.let {
+            val authRoles = auth.attributes["roles"]?.let { roles ->
+                if (roles is Iterable<*>) {
+                    roles as Iterable<String>
+                } else {
+                    emptyList()
+                }
+            } ?: emptyList()
+
             UserData(
                     it.attributes["preferred_username"]?.toString() ?: "",
                     it.attributes["email"]?.toString() ?: "",
-                    (auth.attributes["roles"] as Iterable<String>).toList()
+                    authRoles.toList()
             )
         }
         return AuthData(

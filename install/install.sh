@@ -49,8 +49,16 @@ printf "\n%s\n" "***** Creating admin user. u: admin, p: admin ..."
 kubectl exec nyom-sso-keycloak-0 -- bash -c '/opt/jboss/keycloak/bin/kcadm.sh create users -r nyomio -s username=admin -s enabled=true -o --fields id,username'
 kubectl exec nyom-sso-keycloak-0 -- bash -c '/opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username admin --new-password admin'
 
-printf "\n%s\n" "***** Adding admin role ..."
+printf "\n%s\n" "***** Adding admin role and assigning to admin user..."
 kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh create clients/$CLID/roles  -r nyomio -s name=admin"
+kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh add-roles -r nyomio --uusername admin --cid $CLID --rolename admin"
+
+printf "\n%s\n" "***** Setting up clinets-scope for mapping roles from client roles to access token ..."
+export CLIENT_SCOPE_ID
+CLIENT_SCOPE_ID=$(kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | jq -r '.[]  | select(.name == \"roles\") | .id'")
+export MAPPER_ID
+MAPPER_ID=$(kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh get client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models -r nyomio | jq -r '.[]  | select(.name == \"client roles\") | .id'")
+kubectl exec nyom-sso-keycloak-0 -- bash -c "/opt/jboss/keycloak/bin/kcadm.sh update client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models/$MAPPER_ID -s 'config.\"id.token.claim\"=\"true\"' -s 'config.\"usermodel.clientRoleMapping.clientId\"=\"nyom-app\"' -r nyomio"
 
 printf "\n%s\n" "***** Cereating kubernetes secret from keycloak nyom-app client secret..."
 export CLIENT_SECRET
@@ -62,14 +70,13 @@ printf "\n%s\n" "***** Generating kubernetes secret to use as JWT symmetric key 
 kubectl create secret generic nyom-apps --from-literal="jwtsecret=$(openssl rand -base64 32)"
 
 # Build and start auth microservice
-printf "\n%s\n" "***** Building and starting auth microservcie..."
+printf "\n%s\n" "***** Building and starting auth microservice..."
 cd ..
 auth/build-docker.sh
 kubectl apply -f k8s/auth.yml
 
 # Build and start admin microservice
-printf "\n%s\n" "***** Building and starting admin microservcie..."
-cd ..
+printf "\n%s\n" "***** Building and starting admin microservice..."
 admin/build-docker.sh
 kubectl apply -f k8s/admin.yml
 

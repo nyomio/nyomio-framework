@@ -45,28 +45,19 @@ spec:
       targetPort: 8080
       port: 8080
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: auth-ingress
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.priority: "2"
-    traefik.frontend.rule.type: PathPrefix
 spec:
-  rules:
-    - host: app.nyomio.local
-      http:
-        paths:
-          - path: /oauth/
-            backend:
-              serviceName: auth-service
-              servicePort: http
-          - path: /logout
-            backend:
-              serviceName: auth-service
-              servicePort: http
-          - path: /api
-            backend:
-              serviceName: auth-service
-              servicePort: http
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`app.nyomio.local`) && (PathPrefix(`/oauth/`) || PathPrefix(`/logout`) || PathPrefix(`/api/v1/auth/`))
+      kind: Rule
+      priority: 2
+      services:
+        - name: auth-service
+          port: 8080
+  tls:
+    secretName: certsecret

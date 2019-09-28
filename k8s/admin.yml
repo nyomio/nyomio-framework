@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "admin-deployment"
+spec:
+  selector:
+    matchLabels:
+      app: "admin"
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: "admin"
+    spec:
+      containers:
+        - name: "admin"
+          image: "admin:v1"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: debug
+              containerPort: 8000
+          env:
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nyom-apps
+                  key: jwtsecret
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nyom-db-postgresql
+                  key: postgresql-password
+            - name: DB_USER
+              value: postgres
+            - name: DB_URL
+              value: jdbc:postgresql://nyom-db-postgresql.default.svc.cluster.local:5432/postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "admin-service"
+spec:
+  selector:
+    app: "admin"
+  ports:
+    - name: http
+      targetPort: 8080
+      port: 8080
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: admin-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.priority: "3"
+    traefik.frontend.rule.type: PathPrefix
+spec:
+  rules:
+    - host: app.nyomio.local
+      http:
+        paths:
+          - path: /api/v1/admin/
+            backend:
+              serviceName: admin-service
+              servicePort: http

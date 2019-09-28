@@ -1,0 +1,5 @@
+micronaut:
+  application:
+    name: admin
+  config-client:
+    enabled: true

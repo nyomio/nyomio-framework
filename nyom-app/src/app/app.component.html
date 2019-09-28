@@ -1,6 +1,6 @@
 <td-layout>
-  <td-navigation-drawer flex sidenavTitle="Nyom App" name="Firstname Lastname"
-                        email="firstname.lastname@company.com">
+  <td-navigation-drawer flex sidenavTitle="Nyom App" [name]="(user$ | async)?.userName"
+                        [email]="(user$ | async)?.email">
     <mat-nav-list>
       <a mat-list-item>
         <mat-icon>home</mat-icon>
@@ -8,9 +8,10 @@
     </mat-nav-list>
     <div td-navigation-drawer-menu>
       <mat-nav-list>
-        <a mat-list-item>
-          <mat-icon>account_box</mat-icon>
-          Profile</a>
+        <a mat-list-item
+           [href]="(auth$ |async).ssoLogoutUrl.replace('[base_url]', currentLocation())">
+          <mat-icon>exit_to_app</mat-icon>
+          Logout</a>
       </mat-nav-list>
     </div>
   </td-navigation-drawer>
@@ -18,18 +19,7 @@
     <button mat-icon-button td-menu-button tdLayoutToggle>
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-card>
-      <mat-card-content>
-        <div *ngIf="user == null"><a href="/oauth/login/keycloak">Login</a></div>
-        <div *ngIf="user != null"><a href="/logout">Logout</a></div>
-        <div *ngIf="user != null"><a href="{{getSsoLogoutUrl()}}">SSO Logout</a></div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card>
-      <mat-card-content>
-        User: {{user?.attributes?.preferred_username}}
-      </mat-card-content>
-    </mat-card>
+    <router-outlet></router-outlet>
   </td-layout-nav>
 </td-layout>
 

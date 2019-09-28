@@ -1,33 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {AuthQuery} from "./auth/state/auth.query";
+import {AuthService} from "./auth/state/auth.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'nyom-app';
+  user$ = this.authQuery.select(store => store.user);
+  auth$ = this.authQuery.select();
 
-  constructor(private http: HttpClient, public router: Router) {}
-
-  user: any = null;
+  constructor(private authQuery: AuthQuery, private authService: AuthService, public router: Router) {
+  }
 
   ngOnInit(): void {
     this.getUser()
   }
 
-  getSsoLogoutUrl() {
-    return 'https://sso.nyomio.local/auth/realms/nyomio/protocol/openid-connect/logout?redirect_uri=' +
-      `${window.location.protocol}//${window.location.host}/logout`;
-  }
-
   getUser() {
-    this.http.get('api/user').subscribe((value: any) => this.user = value.authObject)
+    this.authService.queryLoginStateFromServer();
   }
 
-  jsLogin() {
-    this.http.get('oauth/login/keycloak').subscribe((value: any) => console.log(value))
+  currentLocation() {
+    return `${window.location.protocol}//${window.location.host}`;
   }
 }

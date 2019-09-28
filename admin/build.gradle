@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm"
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.allopen"
+    id "com.google.cloud.tools.jib" version "1.6.1"
     id "com.github.johnrengelman.shadow"
     id "application"
 }
@@ -10,27 +11,36 @@ version "0.1"
 
 dependencies {
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-    implementation "io.micronaut:micronaut-security-jwt"
-    implementation 'io.micronaut.configuration:micronaut-security-oauth2'
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut:micronaut-management"
     implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-security-jwt"
     implementation "io.micronaut:micronaut-http-server-netty"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-    implementation "io.micronaut:micronaut-runtime"
+
+    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "javax.annotation:javax.annotation-api"
+
+    implementation "org.postgresql:postgresql:42.2.8"
+    implementation "org.jetbrains.exposed:exposed:0.17.3"
+
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
+    kapt "io.micronaut.configuration:micronaut-openapi"
     kaptTest platform("io.micronaut:micronaut-bom:$micronautVersion")
     kaptTest "io.micronaut:micronaut-inject-java"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
     runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testImplementation "org.jetbrains.spek:spek-api:1.1.5"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-    testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "io.micronaut.test:micronaut-test-kotlintest"
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "io.kotlintest:kotlintest-runner-junit5:3.3.2"
 }
 
-mainClassName = "auth.Application"
+mainClassName = "admin.Application"
 
 repositories {
     mavenCentral()

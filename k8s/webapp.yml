@@ -33,6 +33,19 @@ spec:
       port: 80
 ---
 apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: rediredt-404-to-index-html
+spec:
+  errors:
+    status:
+      - 404
+    query: /
+    service:
+      name: webapp-service
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: webapp-ingress
@@ -46,5 +59,7 @@ spec:
       services:
         - name: webapp-service
           port: 80
+      middlewares:
+        - name: rediredt-404-to-index-html
   tls:
     secretName: certsecret

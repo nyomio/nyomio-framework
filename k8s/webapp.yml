@@ -32,19 +32,34 @@ spec:
       targetPort: 80
       port: 80
 ---
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
 metadata:
-  name: "webapp-ingress"
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.priority: "1"
+  name: rediredt-404-to-index-html
 spec:
-  rules:
-    - host: app.nyomio.local
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: "webapp-service"
-              servicePort: http
+  errors:
+    status:
+      - 404
+    query: /
+    service:
+      name: webapp-service
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: webapp-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`app.nyomio.local`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: webapp-service
+          port: 80
+      middlewares:
+        - name: rediredt-404-to-index-html
+  tls:
+    secretName: certsecret

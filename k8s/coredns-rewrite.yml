@@ -8,7 +8,7 @@ data:
     .:53 {
         errors
         health
-        rewrite name sso.nyomio.local nyom-router-traefik.kube-system.svc.cluster.local
+        rewrite name sso.nyomio.local traefik-ingress.kube-system.svc.cluster.local
         kubernetes cluster.local in-addr.arpa ip6.arpa {
            pods insecure
            upstream

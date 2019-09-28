@@ -6,9 +6,10 @@ helm init --wait
 
 kubectl apply -f ../k8s/coredns-rewrite.yml
 
-# Traefik
-printf "\n%s\n" "***** Installing Treafik from helm chart"
-helm install --name nyom-router --namespace kube-system --values traefikvalues.yml stable/traefik
+## Traefik
+#printf "\n%s\n" "***** Installing Treafik from helm chart"
+kubectl apply -f traefikcertsecret.yml
+kubectl apply -f traefikv2.yml
 
 # Postgres
 printf "\n%s\n" "***** Installing postgres from helm chart"

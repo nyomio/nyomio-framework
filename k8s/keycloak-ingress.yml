@@ -1,15 +1,16 @@
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: keycloak-ingress
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
-  rules:
-    - host: sso.nyomio.local
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: nyom-sso-keycloak-http
-              servicePort: http
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sso.nyomio.local`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: nyom-sso-keycloak-http
+          port: 80
+  tls:
+    secretName: certsecret

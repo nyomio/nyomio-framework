@@ -11,7 +11,7 @@ hs_err_pid*
 
 certs/nyomio*
 certs/rootCA*
-install/traefikvalues.yml
+install/traefikcertsecret.yml
 
 build/
 target/

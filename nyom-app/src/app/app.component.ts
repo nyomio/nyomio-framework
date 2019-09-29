@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthQuery} from "./auth/state/auth.query";
-import {AuthService} from "./auth/state/auth.service";
+import {AuthQuery} from "./common/auth/state/auth.query";
+import {AuthService} from "./common/auth/state/auth.service";
 
 @Component({
   selector: 'app-root',

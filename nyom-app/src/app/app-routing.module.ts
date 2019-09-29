@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {OrganizationPageComponent} from "./organization/organization-page/organization-page.component";
-import {AuthGuard} from "./auth/auth.guard";
+import {OrganizationPageComponent} from "./page/organization/organization-page/organization-page.component";
+import {AuthGuard} from "./common/auth/auth.guard";
 
 const routes: Routes = [
   {

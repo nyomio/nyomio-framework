@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
 import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
-import {handleHttpError, UiErrorService} from "../../common/error.util";
+import {handleHttpError, UiErrorService} from "../../../common/error/error.util";
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends UiErrorService {

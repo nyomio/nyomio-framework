@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthState, AuthStore} from './auth.store';
-import {handleHttpError, UiErrorService} from "../../common/error.util";
+import {handleHttpError, UiErrorService} from "../../error/error.util";
 
 @Injectable({providedIn: 'root'})
 export class AuthService extends UiErrorService {

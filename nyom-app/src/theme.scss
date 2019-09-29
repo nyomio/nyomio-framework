@@ -11,14 +11,20 @@ $typography: mat-typography-config(
 @include mat-core($typography); // $typography is an **optional** argument for the mat-core
 
 $primary: mat-palette($mat-green, 500, 100, 900);
-$accent:  mat-palette($mat-light-blue, 600, A100, A400);
+$accent: mat-palette($mat-light-blue, 600, A100, A400);
 
-$warn:    mat-palette($mat-red, 600, 100, 900);
+$warn: mat-palette($mat-red, 600, 100, 900);
 
 $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
 @include covalent-theme($theme, $typography); // $typography is an **optional** argument for the covalent-theme
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

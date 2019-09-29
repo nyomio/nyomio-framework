@@ -18,13 +18,16 @@ import {NG_ENTITY_SERVICE_CONFIG} from '@datorama/akita-ng-entity-service';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
 import {environment} from '../environments/environment';
-import {OrganizationPageComponent} from './organization/organization-page/organization-page.component';
+import {OrganizationPageComponent} from './page/organization/organization-page/organization-page.component';
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
+import {ErrorComponent} from "./common/error/error.componet";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
     AppComponent,
-    OrganizationPageComponent
+    OrganizationPageComponent,
+    ErrorComponent
   ],
   imports: [
     CovalentLayoutModule,
@@ -37,6 +40,7 @@ import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
     MatListModule,
     MatCardModule,
     MatButtonModule,
+    MatSnackBarModule,
     CovalentDataTableModule,
     CovalentDynamicFormsModule,
     CovalentLoadingModule,

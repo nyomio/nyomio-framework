@@ -3,18 +3,22 @@ import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
 import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
+import {handleHttpError, UiErrorService} from "../../../common/error/error.util";
 
 @Injectable({providedIn: 'root'})
-export class OrganizationService {
+export class OrganizationService extends UiErrorService {
 
   constructor(private organizationStore: OrganizationStore,
               private organizationQuery: OrganizationQuery,
               private http: HttpClient) {
+    super(organizationStore)
   }
 
   get() {
     this.organizationStore.setLoading(true);
-    this.http.get('/api/v1/admin/organization/all').subscribe((value: Organization[]) => {
+    this.http.get('/api/v1/admin/organization/all')
+    .pipe(handleHttpError(this.organizationStore))
+    .subscribe((value: Organization[]) => {
         this.organizationStore.setLoading(false);
         this.organizationStore.add(value)
       }
@@ -24,7 +28,9 @@ export class OrganizationService {
   upsert(organization: Organization) {
     this.organizationStore.setLoading(true);
     const originalId = organization.id;
-    this.http.put('/api/v1/admin/organization', organization).subscribe((resp: number) => {
+    this.http.put('/api/v1/admin/organization', organization)
+    .pipe(handleHttpError(this.organizationStore))
+    .subscribe((resp: number) => {
       this.organizationStore.setLoading(false);
       this.setSelected(null);
       organization.id = resp;
@@ -39,11 +45,12 @@ export class OrganizationService {
   deleteSelected() {
     this.organizationStore.setLoading(true);
     const selectedId = this.organizationQuery.getValue().ui.selectedOrganization;
-      this.http.delete(`/api/v1/admin/organization/${selectedId}`)
-      .subscribe((resp: number) => {
-        this.organizationStore.setLoading(false);
-        this.organizationStore.remove(selectedId);
-      });
+    this.http.delete(`/api/v1/admin/organization/${selectedId}`)
+    .pipe(handleHttpError(this.organizationStore))
+    .subscribe((resp: number) => {
+      this.organizationStore.setLoading(false);
+      this.organizationStore.remove(selectedId);
+    });
   }
 
   setSelected(id: number) {
@@ -53,4 +60,5 @@ export class OrganizationService {
   setNewMode(mode: boolean) {
     this.organizationStore.update({ui: {selectedOrganization: null, newOrganizationMode: mode}})
   }
+
 }

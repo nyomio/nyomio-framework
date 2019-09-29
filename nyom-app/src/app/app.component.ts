@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthQuery} from "./auth/state/auth.query";
-import {AuthService} from "./auth/state/auth.service";
+import {AuthQuery} from "./common/auth/state/auth.query";
+import {AuthService} from "./common/auth/state/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   user$ = this.authQuery.select(store => store.user);
   auth$ = this.authQuery.select();
 
-  constructor(private authQuery: AuthQuery, private authService: AuthService, public router: Router) {
+  constructor(public authQuery: AuthQuery, public authService: AuthService, public router: Router) {
   }
 
   ngOnInit(): void {

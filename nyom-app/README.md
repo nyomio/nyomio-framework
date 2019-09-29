@@ -20,7 +20,19 @@ As a rule of thumb, all meaningful (**_TODO_**: needs definition) action perform
 **_TODO_**: we need some kind of a soft rule on what to put in the router state.
 
 ### Error handling
-For error handling Akita's built-in error state 
+For error handling Akita's built-in error state should be used. `ErrorComponent` makes it easy to add error feedback on a page.
+Just add
+```html
+<app-error [assignedQuery]="myQuery" [assignedService]="myService"></app-error>
+```
+to a page, and set [assignedQuery] and [assignedService] to the respective Akita query and store. 
+The service must extend `UiErrorService`.
+
+Also, in your http queries, if you would like errors to be shown, just add
+```angular2
+.pipe(handleHttpError(this.store))
+```
+before the subscribe call.
 
 ### Pages
 Pages should be placed inside the page directory. Each page must have it's own component.

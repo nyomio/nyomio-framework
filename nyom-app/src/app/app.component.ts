@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   user$ = this.authQuery.select(store => store.user);
   auth$ = this.authQuery.select();
 
-  constructor(private authQuery: AuthQuery, private authService: AuthService, public router: Router) {
+  constructor(public authQuery: AuthQuery, public authService: AuthService, public router: Router) {
   }
 
   ngOnInit(): void {

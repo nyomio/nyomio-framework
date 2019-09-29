@@ -50,7 +50,7 @@ export class OrganizationPageComponent implements OnInit {
   ngOnInit() {
     this.organizationService.get();
     this.organizationQuery.selectAll().subscribe((value: Organization[]) => {
-        log(value);
+        log(value.toString());
         this.data = value;
       }
     );

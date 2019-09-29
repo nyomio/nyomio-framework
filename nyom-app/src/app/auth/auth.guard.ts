@@ -23,7 +23,6 @@ export class AuthGuard {
         }
         return false;
       }),
-
     );
   }
 }

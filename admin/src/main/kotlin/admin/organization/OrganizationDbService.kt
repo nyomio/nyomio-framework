@@ -1,6 +1,6 @@
 package admin.organization
 
-import admin.db.DbAccess
+import db.DbAccess
 import io.reactivex.Single
 import org.jetbrains.exposed.dao.LongIdTable
 import org.jetbrains.exposed.sql.*

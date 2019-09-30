@@ -1,3 +1,4 @@
 rootProject.name = 'nyomio-framework-demo'
 include 'auth'
 include 'admin'
+include 'dbutils'

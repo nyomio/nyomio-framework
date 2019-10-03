@@ -16,16 +16,19 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-inject"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
 
     implementation "org.postgresql:postgresql:42.2.8"
     implementation "org.jetbrains.exposed:exposed:0.17.3"
+
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+
 }
 
 compileKotlin {

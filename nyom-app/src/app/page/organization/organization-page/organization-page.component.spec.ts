@@ -12,10 +12,13 @@ describe('OrganizationPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OrganizationPageComponent, ErrorComponent, CovalentDataTableModule,
+      declarations: [OrganizationPageComponent, ErrorComponent],
+      imports: [
+        CovalentDataTableModule,
         CovalentDynamicFormsModule,
         BrowserDynamicTestingModule,
-        CovalentLoadingModule,]
+        CovalentLoadingModule,
+      ]
     })
     .compileComponents();
   }));

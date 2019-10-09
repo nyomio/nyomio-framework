@@ -10,6 +10,8 @@ plugins {
 version "0.1"
 
 dependencies {
+    implementation project(':dbutils')
+
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-runtime"
     implementation "io.micronaut:micronaut-management"

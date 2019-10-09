@@ -1,0 +1,168 @@
+package nyomio.dbutils
+
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
+
+
+object TestDevice : EntityTable() {
+    val secret: Column<String> = varchar("secret", 50)
+    val name: Column<String> = varchar("name", 50)
+    val owner: Column<Long> = long("owner_id")
+}
+
+object TestUser : EntityTable() {
+    val name: Column<String> = varchar("name", 50)
+    val email: Column<String> = varchar("email", 80)
+}
+
+class RevisionTableTest {
+
+    companion object {
+
+        var dbAccess: DbAccess? = null
+
+        @BeforeAll
+        @JvmStatic
+        fun beforeAll() {
+            dbAccess = DbAccess(
+                    "jdbc:postgresql://localhost:5432/test",
+                    "org.postgresql.Driver",
+                    "postgres",
+                    "qQz3xeauvH",
+                    false)
+            dropRecreate()
+            createTestUsers()
+            createTestDevices()
+        }
+
+        private fun dropRecreate() {
+            transaction(dbAccess?.db) {
+                TestDevice.dropStatement().forEach { exec(it) }
+                TestUser.dropStatement().forEach { exec(it) }
+                RevisionEndTable.dropStatement().forEach { exec(it) }
+                RevisionTable.dropStatement().forEach { exec(it) }
+                SchemaUtils.create(RevisionTable, RevisionEndTable, TestUser, TestDevice)
+            }
+        }
+
+        private fun createTestUsers() {
+            transaction(dbAccess?.db) {
+                TestUser.insertRevisioned(10) {
+                    it[name] = "User1"
+                    it[email] = "user@user1.com"
+                }
+
+                TestUser.insertRevisioned(10) {
+                    it[name] = "User2"
+                    it[email] = "user@user2.com"
+                }
+            }
+
+            transaction(dbAccess?.db) {
+                TestUser.updateRevisioned(1, 20) {
+                    it[name] = "User1"
+                    it[email] = "user@user1-mail.com"
+                }
+
+                TestUser.updateRevisioned(2, 20) {
+                    it[name] = "User2 Boss"
+                    it[email] = "user@user2-mail.com"
+                }
+            }
+        }
+
+        private fun createTestDevices() {
+            for (i in 1..3) {
+                transaction(dbAccess?.db) {
+                    insertTestDevice(i, if (i == 1) 1 else 2)
+                }
+            }
+        }
+
+        private fun insertTestDevice(index: Int, owner: Long, nameBase: String = "device", secretBase: String = "secret") {
+            val entityId = TestDevice.insertRevisioned(
+                    10,
+                    OperationContext("ctx-${index}", 1)) {
+                it[secret] = "${secretBase}-${index}"
+                it[name] = "${nameBase}-${index}"
+                it[TestDevice.owner] = owner
+            }
+
+            TestDevice.updateRevisioned(entityId, 20,
+                    OperationContext("ctx-${index}-2", 2)) {
+                it[secret] = "${secretBase}-${index}-mod"
+                it[name] = "${nameBase}-${index}-mod"
+                it[TestDevice.owner] = owner
+            }
+        }
+    }
+
+
+    @Test
+    fun `Query Devices at Different Timestamps`() {
+
+        transaction(dbAccess?.db) {
+            Assertions.assertEquals(0,
+                    atTimestamp(0, TestDevice.selectAll()).toList().size)
+
+            val earlier = atTimestamp(15, TestDevice.selectAll()).toList()
+            Assertions.assertEquals(3, earlier.size)
+            Assertions.assertEquals("secret-1", earlier[0][TestDevice.secret])
+            Assertions.assertEquals("device-1", earlier[0][TestDevice.name])
+
+            val latest = atTimestamp(40, TestDevice.selectAll()).toList()
+            Assertions.assertEquals(3, latest.size)
+            Assertions.assertEquals("secret-1-mod", latest[0][TestDevice.secret])
+            Assertions.assertEquals("device-1-mod", latest[0][TestDevice.name])
+
+            val allVersions = TestDevice.selectAll().toList()
+            Assertions.assertEquals(6, allVersions.size)
+
+            Assertions.assertEquals(2,
+                    atTimestamp(40, TestDevice.select { TestDevice.owner eq 2 }).toList().size)
+
+        }
+    }
+
+    @Test
+    fun `User to Device Join at Given Timestamp`() {
+        transaction(dbAccess?.db) {
+            val expectedRenderedResult = """
+                …tDevice.revision_id | TestDevice.entity_id | TestDevice.secret    | TestDevice.name      | TestDevice.owner_id  | TestUser.revision_id | TestUser.entity_id   | TestUser.name        | TestUser.email       | 
+                5                    | 1                    | secret-1             | device-1             | 1                    | 1                    | 1                    | User1                | user@user1.com       | 
+                7                    | 2                    | secret-2             | device-2             | 2                    | 2                    | 2                    | User2                | user@user2.com       | 
+                9                    | 3                    | secret-3             | device-3             | 2                    | 2                    | 2                    | User2                | user@user2.com       | 
+                """.trimIndent()
+
+            val renderedResult = atTimestamp(15,
+                    TestDevice
+                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
+                            .selectAll())
+                    .renderResult("nyomio.dbutils.")
+
+            Assertions.assertEquals(expectedRenderedResult, renderedResult)
+        }
+
+
+        transaction(dbAccess?.db) {
+            val expectedRenderedResult = """
+                …tDevice.revision_id | TestDevice.entity_id | TestDevice.secret    | TestDevice.name      | TestDevice.owner_id  | TestUser.revision_id | TestUser.entity_id   | TestUser.name        | TestUser.email       | 
+                8                    | 2                    | secret-2-mod         | device-2-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
+                10                   | 3                    | secret-3-mod         | device-3-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
+                """.trimIndent()
+            val renderedResult = atTimestamp(20,
+                    TestDevice
+                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
+                            .select { TestUser.name like "%Boss" })
+                    .renderResult("nyomio.dbutils.")
+        }
+    }
+
+    //TODO
+    fun concurrentUpdateTest() {
+
+    }
+}

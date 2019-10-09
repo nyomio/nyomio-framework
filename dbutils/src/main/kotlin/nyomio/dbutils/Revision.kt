@@ -1,4 +1,4 @@
-package db
+package nyomio.dbutils
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -26,24 +26,40 @@ object RevisionEndTable : Table() {
 /**
  *
  */
-fun atTimestamp(timestamp: Long, query: Query) = query
-        .adjustColumnSet { innerJoin(RevisionTable).leftJoin(RevisionEndTable) }
-        .andWhere {
-            RevisionTable.timestamp lessEq timestamp and
-                    ((RevisionEndTable.timestamp greater timestamp) or RevisionEndTable.timestamp.isNull())
+fun atTimestamp(timestamp: Long, query: Query): Query {
+
+    var i = 1
+    query.targets.forEach {
+        val entityTbl = it as EntityTable
+        val revAlias = RevisionTable.alias("rev$i")
+        val revEndAlias = RevisionEndTable.alias("revEnd$i")
+
+        query.adjustColumnSet { join(revAlias, JoinType.INNER, it.revisionId, revAlias[RevisionTable.id]) }
+        query.adjustColumnSet { join(revEndAlias, JoinType.LEFT, it.revisionId, revEndAlias[RevisionEndTable.revisionId]) }
+        query.andWhere {
+            revAlias[RevisionTable.timestamp] lessEq timestamp and
+                    ((revEndAlias[RevisionEndTable.timestamp] greater timestamp)
+                            or revEndAlias[RevisionEndTable.timestamp].isNull())
         }
+        i++
+    }
+
+
+
+    return query
+}
 
 
 fun <T : EntityTable> T.insertRevisioned(timeStamp: Long = System.currentTimeMillis(),
-                                         operationContext: OperationContext? = null,
-                                         updateBody: T.(InsertStatement<Number>) -> Unit): Long {
+                                                        operationContext: OperationContext? = null,
+                                                        updateBody: T.(InsertStatement<Number>) -> Unit): Long {
     return insertRevisionedInternal(null, timeStamp, updateBody, operationContext)
 }
 
 
 private fun <T : EntityTable> T.insertRevisionedInternal(entityId: Long?, timeStamp: Long,
-                                                                   updateBody: T.(InsertStatement<Number>) -> Unit,
-                                                                   operationContext: OperationContext? = null): Long {
+                                                                        updateBody: T.(InsertStatement<Number>) -> Unit,
+                                                                        operationContext: OperationContext? = null): Long {
     val nextRevisionId = insertNewRevision(timeStamp, operationContext)
 
     return this.insert {
@@ -58,8 +74,8 @@ private fun <T : EntityTable> T.insertRevisionedInternal(entityId: Long?, timeSt
 }
 
 fun <T : EntityTable> T.updateRevisioned(entityId: Long, timeStamp: Long = System.currentTimeMillis(),
-                                 operationContext: OperationContext? = null,
-                                 updateBody: T.(InsertStatement<Number>) -> Unit
+                                                        operationContext: OperationContext? = null,
+                                                        updateBody: T.(InsertStatement<Number>) -> Unit
 ) {
     // TODO: date checks
     // Do not allow update if at the given timestamp the entity is already closed (means: revision end set)

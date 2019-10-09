@@ -1,7 +1,7 @@
 package admin
 
 import admin.organization.OrganizationTable
-import db.DbAccess
+import nyomio.dbutils.DbAccess
 import io.micronaut.runtime.Micronaut
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerStartupEvent

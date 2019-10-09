@@ -1,4 +1,4 @@
-package db
+package nyomio.dbutils
 
 import io.micronaut.context.annotation.Property
 import org.jetbrains.exposed.sql.Database

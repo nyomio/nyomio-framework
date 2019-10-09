@@ -18,9 +18,9 @@ constructor(private val organizationDbService: OrganizationDbService) {
     @Get(uri = "/{id}")
     fun getById(id: Long) = organizationDbService.getById(id)
 
-    @Delete(uri = "/{id}")
-    @Secured("admin")
-    fun deleteById(id: Long) = organizationDbService.delete(id)
+//    @Delete(uri = "/{id}")
+//    @Secured("admin")
+//    fun deleteById(id: Long) = organizationDbService.delete(id)
 
     @Put(uri = "/")
     @Secured("admin")

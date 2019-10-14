@@ -24,18 +24,18 @@ object RevisionEndTable : Table() {
 
 
 /**
- *
+ * Adds joins and where clauses all the target tables, so that only the rows live at the
+ * given timestamp will be returned.
  */
 fun atTimestamp(timestamp: Long, query: Query): Query {
-
     var i = 1
     query.targets.forEach {
         val entityTbl = it as EntityTable
         val revAlias = RevisionTable.alias("rev$i")
         val revEndAlias = RevisionEndTable.alias("revEnd$i")
 
-        query.adjustColumnSet { join(revAlias, JoinType.INNER, it.revisionId, revAlias[RevisionTable.id]) }
-        query.adjustColumnSet { join(revEndAlias, JoinType.LEFT, it.revisionId, revEndAlias[RevisionEndTable.revisionId]) }
+        query.adjustColumnSet { join(revAlias, JoinType.INNER, entityTbl.revisionId, revAlias[RevisionTable.id]) }
+        query.adjustColumnSet { join(revEndAlias, JoinType.LEFT, entityTbl.revisionId, revEndAlias[RevisionEndTable.revisionId]) }
         query.andWhere {
             revAlias[RevisionTable.timestamp] lessEq timestamp and
                     ((revEndAlias[RevisionEndTable.timestamp] greater timestamp)
@@ -43,9 +43,6 @@ fun atTimestamp(timestamp: Long, query: Query): Query {
         }
         i++
     }
-
-
-
     return query
 }
 
@@ -56,10 +53,27 @@ fun <T : EntityTable> T.insertRevisioned(timeStamp: Long = System.currentTimeMil
     return insertRevisionedInternal(null, timeStamp, updateBody, operationContext)
 }
 
+fun <T : EntityTable> T.updateRevisioned(entityId: Long, timeStamp: Long = System.currentTimeMillis(),
+                                         operationContext: OperationContext? = null,
+                                         updateBody: T.(InsertStatement<Number>) -> Unit
+) {
+    // TODO: date checks
+    // Do not allow update if at the given timestamp the entity is already closed (means: revision end set)
+    closeOpenRevision(entityId, timeStamp, operationContext)
+    insertRevisionedInternal(entityId, timeStamp, updateBody, operationContext)
+}
+
+fun <T : EntityTable> T.deleteRevisioned(entityId: Long, timeStamp: Long = System.currentTimeMillis(),
+                                                  operationContext: OperationContext? = null) {
+    // TODO: date checks
+    closeOpenRevision(entityId, timeStamp, operationContext)
+}
+
 
 private fun <T : EntityTable> T.insertRevisionedInternal(entityId: Long?, timeStamp: Long,
                                                                         updateBody: T.(InsertStatement<Number>) -> Unit,
                                                                         operationContext: OperationContext? = null): Long {
+    // TODO: date checks
     val nextRevisionId = insertNewRevision(timeStamp, operationContext)
 
     return this.insert {
@@ -73,13 +87,8 @@ private fun <T : EntityTable> T.insertRevisionedInternal(entityId: Long?, timeSt
     }.resultedValues?.get(0)?.get(this.entityId)!!
 }
 
-fun <T : EntityTable> T.updateRevisioned(entityId: Long, timeStamp: Long = System.currentTimeMillis(),
-                                                        operationContext: OperationContext? = null,
-                                                        updateBody: T.(InsertStatement<Number>) -> Unit
-) {
-    // TODO: date checks
-    // Do not allow update if at the given timestamp the entity is already closed (means: revision end set)
-
+private fun <T : EntityTable> T.closeOpenRevision(entityId: Long, timeStamp: Long,
+                                                  operationContext: OperationContext? = null) {
     val entityTable = this
 
     val previousRevisionId = atTimestamp(timeStamp, (entityTable.select {
@@ -92,8 +101,6 @@ fun <T : EntityTable> T.updateRevisioned(entityId: Long, timeStamp: Long = Syste
         it[traceId] = operationContext?.traceId ?: ""
         it[userId] = operationContext?.userId ?: -1
     }
-
-    insertRevisionedInternal(entityId, timeStamp, updateBody, operationContext)
 }
 
 private fun insertNewRevision(timeStamp: Long, operationContext: OperationContext? = null) =

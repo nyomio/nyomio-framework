@@ -81,10 +81,10 @@ constructor(private val dba: DbAccess) {
         }
     }
 
-//    fun delete(id: Long) {
-//        transaction(dba.db) {
-//            OrganizationTable.deleteWhere { OrganizationTable.id eq id }
-//        }
-//    }
+    fun delete(entityId: Long) {
+        transaction(dba.db) {
+            OrganizationTable.deleteRevisioned(entityId)
+        }
+    }
 
 }

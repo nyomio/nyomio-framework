@@ -2,14 +2,9 @@
 <mat-card>
   <mat-card-content
     *tdLoading="'organization'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent'">
-    <td-data-table
-      [data]="data"
-      [sortable]="true"
-      [columns]="columns"
-      [clickable]="true"
-      (rowClick)="rowClicked($event)"
-    >
-    </td-data-table>
+
+    <nyom-table [dataSource]="dataSource" [columns]="columns" (rowClicked)="rowClicked($event)"></nyom-table>
+
     <button *ngIf="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"
             mat-raised-button color="primary" class="text-upper"
             (click)="organizationService.setNewMode(true)">

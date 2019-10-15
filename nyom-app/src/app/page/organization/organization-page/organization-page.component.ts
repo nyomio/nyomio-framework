@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {OrganizationQuery} from "../state/organization.query";
-import {ITdDataTableColumn, ITdDataTableRowClickEvent, TdLoadingService} from "@covalent/core";
+import {TdLoadingService} from "@covalent/core";
 import {OrganizationService} from "../state/organization.service";
 import {log} from "util";
 import {createOrganization, Organization} from "../state/organization.model";
@@ -9,6 +9,7 @@ import {
   TdDynamicElement,
   TdDynamicFormsComponent
 } from "@covalent/dynamic-forms";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-organization-page',
@@ -17,15 +18,16 @@ import {
 })
 export class OrganizationPageComponent implements OnInit {
 
-  data: Organization[] = [];
+  dataSource = new MatTableDataSource<Organization>([]);
+
   selectedOrganization$ = this.organizationQuery.select(state => state.ui.selectedOrganization);
   newOrganizationMode$ = this.organizationQuery.select(state => state.ui.newOrganizationMode);
   loading$ = this.organizationQuery.selectLoading();
 
-  columns: ITdDataTableColumn[] = [
-    {name: 'id', label: 'ID', sortable: true},
-    {name: 'org_name', label: 'Name', sortable: true},
-    {name: 'org_address', label: 'Address', sortable: true},
+  columns: any[] = [
+    {name: 'id', label: 'ID'},
+    {name: 'org_name', label: 'Name'},
+    {name: 'org_address', label: 'Address'},
   ];
 
   @ViewChild('organizationForm', {static: false})
@@ -49,9 +51,9 @@ export class OrganizationPageComponent implements OnInit {
 
   ngOnInit() {
     this.organizationService.get();
+
     this.organizationQuery.selectAll().subscribe((value: Organization[]) => {
-        log(value.toString());
-        this.data = value;
+        this.dataSource.data = value;
       }
     );
 
@@ -84,8 +86,8 @@ export class OrganizationPageComponent implements OnInit {
     });
   }
 
-  rowClicked(event: ITdDataTableRowClickEvent) {
-    this.organizationService.setSelected(event.row.id)
+  rowClicked(row: Organization) {
+    this.organizationService.setSelected(row.id)
   }
 
   save() {

@@ -22,6 +22,8 @@ import {OrganizationPageComponent} from './page/organization/organization-page/o
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
 import {ErrorComponent} from "./common/error/error.componet";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatCardModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatTableModule,
+    MatSortModule,
     CovalentDataTableModule,
     CovalentDynamicFormsModule,
     CovalentLoadingModule,

@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {OrganizationQuery} from "../state/organization.query";
-import {ITdDataTableColumn, ITdDataTableRowClickEvent, TdLoadingService} from "@covalent/core";
+import {TdLoadingService} from "@covalent/core";
 import {OrganizationService} from "../state/organization.service";
 import {log} from "util";
 import {createOrganization, Organization} from "../state/organization.model";
@@ -9,24 +9,30 @@ import {
   TdDynamicElement,
   TdDynamicFormsComponent
 } from "@covalent/dynamic-forms";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-organization-page',
   templateUrl: './organization-page.component.html',
   styleUrls: ['./organization-page.component.scss']
 })
-export class OrganizationPageComponent implements OnInit {
+export class OrganizationPageComponent implements OnInit, AfterViewInit {
 
-  data: Organization[] = [];
+  dataSource = new MatTableDataSource<Organization>([]);
+  @ViewChildren(MatSort) sort: QueryList<MatSort>;
+
   selectedOrganization$ = this.organizationQuery.select(state => state.ui.selectedOrganization);
   newOrganizationMode$ = this.organizationQuery.select(state => state.ui.newOrganizationMode);
   loading$ = this.organizationQuery.selectLoading();
 
-  columns: ITdDataTableColumn[] = [
+  columns: any[] = [
     {name: 'id', label: 'ID', sortable: true},
     {name: 'org_name', label: 'Name', sortable: true},
     {name: 'org_address', label: 'Address', sortable: true},
   ];
+
+  displayedColumns: String[] = this.columns.map(value => value.name);
 
   @ViewChild('organizationForm', {static: false})
   organizationForm: TdDynamicFormsComponent;
@@ -47,11 +53,18 @@ export class OrganizationPageComponent implements OnInit {
               private _loadingService: TdLoadingService) {
   }
 
+  ngAfterViewInit(): void {
+    if (this.sort) {
+      this.dataSource.sort = this.sort.first;
+    }
+  }
+
   ngOnInit() {
     this.organizationService.get();
+
     this.organizationQuery.selectAll().subscribe((value: Organization[]) => {
         log(value.toString());
-        this.data = value;
+        this.dataSource.data = value;
       }
     );
 
@@ -84,8 +97,8 @@ export class OrganizationPageComponent implements OnInit {
     });
   }
 
-  rowClicked(event: ITdDataTableRowClickEvent) {
-    this.organizationService.setSelected(event.row.id)
+  rowClicked(row: Organization) {
+    this.organizationService.setSelected(row.id)
   }
 
   save() {

@@ -1,3 +1,22 @@
+@import '~@angular/material/theming';
+
 button {
   margin: 5px
 }
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+tr:hover {
+  background-color: mat-color($mat-grey, 200);
+}
+
+tr {
+  cursor: pointer;
+}
+

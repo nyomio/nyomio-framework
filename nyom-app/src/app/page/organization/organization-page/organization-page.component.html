@@ -3,6 +3,18 @@
   <mat-card-content
     *tdLoading="'organization'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent'">
 
+    <div fxLayout="row">
+      <mat-form-field class="example-form-field">
+        <input matInput type="text" name="filter" placeholder="Filter">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field >
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date" name="revisionTime">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
     <nyom-table [dataSource]="dataSource" [columns]="columns" (rowClicked)="rowClicked($event)"></nyom-table>
 
     <button *ngIf="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"

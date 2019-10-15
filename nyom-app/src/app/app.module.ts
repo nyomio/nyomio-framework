@@ -3,12 +3,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from "@angular/common/http";
-import {
-  CovalentDataTableModule,
-  CovalentLayoutModule,
-  CovalentLoadingModule,
-  CovalentStepsModule
-} from "@covalent/core";
+import {CovalentLayoutModule, CovalentLoadingModule, CovalentStepsModule} from "@covalent/core";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
@@ -24,7 +19,12 @@ import {ErrorComponent} from "./common/error/error.componet";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
-import { NyomTableComponent } from './common/nyom-table/nyom-table.component';
+import {NyomTableComponent} from './common/nyom-table/nyom-table.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatMomentDateModule} from "@angular/material-moment-adapter"
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -47,7 +47,11 @@ import { NyomTableComponent } from './common/nyom-table/nyom-table.component';
     MatSnackBarModule,
     MatTableModule,
     MatSortModule,
-    CovalentDataTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    FlexLayoutModule,
     CovalentDynamicFormsModule,
     CovalentLoadingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),

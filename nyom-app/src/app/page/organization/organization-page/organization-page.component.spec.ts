@@ -5,6 +5,10 @@ import {ErrorComponent} from "../../../common/error/error.componet";
 import {CovalentDataTableModule, CovalentLoadingModule} from "@covalent/core";
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
 import {BrowserDynamicTestingModule} from "@angular/platform-browser-dynamic/testing";
+import {MatCardModule} from "@angular/material/card";
+import {HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('OrganizationPageComponent', () => {
   let component: OrganizationPageComponent;
@@ -18,6 +22,10 @@ describe('OrganizationPageComponent', () => {
         CovalentDynamicFormsModule,
         BrowserDynamicTestingModule,
         CovalentLoadingModule,
+        MatCardModule,
+        HttpClientModule,
+        MatSnackBarModule,
+        BrowserAnimationsModule
       ]
     })
     .compileComponents();

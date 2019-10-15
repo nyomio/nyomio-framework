@@ -24,12 +24,14 @@ import {ErrorComponent} from "./common/error/error.componet";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
+import { NyomTableComponent } from './common/nyom-table/nyom-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrganizationPageComponent,
-    ErrorComponent
+    ErrorComponent,
+    NyomTableComponent
   ],
   imports: [
     CovalentLayoutModule,

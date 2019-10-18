@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NyomTableComponent } from './nyom-table.component';
+import {NyomTableComponent} from './nyom-table.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
 
 describe('NyomTableComponent', () => {
   let component: NyomTableComponent;
@@ -8,7 +10,11 @@ describe('NyomTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NyomTableComponent ]
+      declarations: [NyomTableComponent],
+      imports: [
+        MatTableModule,
+        MatSortModule,
+      ]
     })
     .compileComponents();
   }));
@@ -22,4 +28,5 @@ describe('NyomTableComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

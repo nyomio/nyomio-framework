@@ -1,8 +1,7 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {OrganizationQuery} from "../state/organization.query";
 import {TdLoadingService} from "@covalent/core";
 import {OrganizationService} from "../state/organization.service";
-import {log} from "util";
 import {createOrganization, Organization} from "../state/organization.model";
 import {
   ITdDynamicElementConfig,
@@ -10,11 +9,12 @@ import {
   TdDynamicFormsComponent
 } from "@covalent/dynamic-forms";
 import {MatTableDataSource} from "@angular/material/table";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-organization-page',
   templateUrl: './organization-page.component.html',
-  styleUrls: ['./organization-page.component.scss']
+  styleUrls: ['./organization-page.component.scss'],
 })
 export class OrganizationPageComponent implements OnInit {
 
@@ -122,4 +122,7 @@ export class OrganizationPageComponent implements OnInit {
     this.organizationForm.dynamicForm.controls.org_name.setValue(org.org_name);
   }
 
+  onRevisionTimeChange($event: moment.Moment) {
+    console.log($event);
+  }
 }

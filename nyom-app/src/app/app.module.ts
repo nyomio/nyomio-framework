@@ -25,13 +25,17 @@ import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatMomentDateModule} from "@angular/material-moment-adapter"
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {ReactiveFormsModule} from "@angular/forms";
+import { RevisionDateTimePickerComponent } from './common/revision-date-time-picker/revision-date-time-picker.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrganizationPageComponent,
     ErrorComponent,
-    NyomTableComponent
+    NyomTableComponent,
+    RevisionDateTimePickerComponent
   ],
   imports: [
     CovalentLayoutModule,
@@ -51,11 +55,13 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     MatInputModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    MatButtonToggleModule,
     FlexLayoutModule,
     CovalentDynamicFormsModule,
     CovalentLoadingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    AkitaNgRouterStoreModule.forRoot()
+    AkitaNgRouterStoreModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers: [{
     provide: NG_ENTITY_SERVICE_CONFIG,

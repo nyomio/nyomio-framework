@@ -12,6 +12,7 @@ import {By} from "@angular/platform-browser";
 import {DebugElement} from "@angular/core";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import * as moment from "moment";
+import {MatIconModule} from "@angular/material/icon";
 
 describe('RevisionDateTimePickerComponent', () => {
   let component: RevisionDateTimePickerComponent;
@@ -26,6 +27,7 @@ describe('RevisionDateTimePickerComponent', () => {
         MatDatepickerModule,
         MatMomentDateModule,
         MatButtonToggleModule,
+        MatIconModule,
         FlexLayoutModule,
         ReactiveFormsModule,
         NoopAnimationsModule
@@ -56,9 +58,9 @@ describe('RevisionDateTimePickerComponent', () => {
 
   it('entering a date should update time and emit new date', () => {
     clickSpecificDateBtn();
-    setDateInput('1982-12-18')
+    setDateInput('1982-12-18');
     let timeInput = byCss('input[name=timeOfDateTime');
-    expect(timeInput.nativeElement.value).toBe("00:00:00 +01:00")
+    expect(timeInput.nativeElement.value).toBe("00:00:00")
   });
 
   it('unix epoch should be parsed correctly and new date should be emitted', () => {
@@ -67,10 +69,9 @@ describe('RevisionDateTimePickerComponent', () => {
     component.onDateTimeChange.subscribe(next => emittedDate = next);
     let dateInputDe = setDateInput('1571330938');
     let timeInput = byCss('input[name=timeOfDateTime');
-    expect(timeInput.nativeElement.value).toBe("18:48:58 +02:00");
+    expect(timeInput.nativeElement.value).toBe("18:48:58");
     expect(dateInputDe.nativeElement.value).toBe("2019-10-17");
     expect(emittedDate).toEqual(moment(1571330938000));
-
   });
 
   it('java epoch should be parsed correctly and new date should be emitted', () => {
@@ -79,21 +80,39 @@ describe('RevisionDateTimePickerComponent', () => {
     component.onDateTimeChange.subscribe(next => emittedDate = next);
     let dateInputDe = setDateInput('1576318320000');
     let timeInput = byCss('input[name=timeOfDateTime');
-    expect(timeInput.nativeElement.value).toBe("11:12:00 +01:00");
+    expect(timeInput.nativeElement.value).toBe("11:12:00");
     expect(dateInputDe.nativeElement.value).toBe("2019-12-14");
     expect(emittedDate).toEqual(moment(1576318320000));
   });
 
   it('should emmit new date if time part is changed', () => {
     clickSpecificDateBtn();
+    // spying ans using toHaveBeenCalledWith does not work for momentJs, as equality comparision d
     let emittedDate: moment.Moment = null;
-    component.onDateTimeChange.subscribe(next => emittedDate = next);
+    let dateEmittedTimes = 0;
+    component.onDateTimeChange.subscribe(next => {
+      emittedDate = next;
+      dateEmittedTimes++;
+    });
     setDateInput('2015-05-10');
     let timeInput = byCss('input[name=timeOfDateTime');
-    expect(timeInput.nativeElement.value).toBe("00:00:00 +02:00");
+    expect(timeInput.nativeElement.value).toBe("00:00:00");
 
-    timeInput.nativeElement.value = "18:50:00 +02:00";
+    expect(emittedDate.valueOf()).toEqual(moment("2015-05-10 00:00:00+02").valueOf());
 
+    setInputSendEnter(timeInput, "18:50:00");
+    expect(emittedDate.valueOf()).toEqual(moment("2015-05-10 18:50:00+02").valueOf());
+    expect(dateEmittedTimes).toBe(2);
+  });
+
+  it('should set time to 0 if down arrow icon is pressed', () =>{
+    clickSpecificDateBtn();
+    setDateInput('1566453000000'); // Thursday, August 22, 2019 7:50:00 GMT+02:00
+    let floorIcon = byCss('.floorIcon');
+    floorIcon.nativeElement.click();
+    fixture.detectChanges();
+    let timeInput = byCss('input[name=timeOfDateTime');
+    expect(timeInput.nativeElement.value).toBe("00:00:00");
   });
 
   function setDateInput(value: string): DebugElement {
@@ -104,6 +123,14 @@ describe('RevisionDateTimePickerComponent', () => {
     inputDe.nativeElement.dispatchEvent(new Event('change'));
     fixture.detectChanges();
     return inputDe;
+  }
+
+  function setInputSendEnter(input: DebugElement, value: string) {
+    input.nativeElement.click();
+    input.nativeElement.value = "18:50:00";
+    input.nativeElement.dispatchEvent(new Event('input'));
+    input.triggerEventHandler("keypress", {key: "Enter", code: "Enter"});
+    fixture.detectChanges();
   }
 
   function clickSpecificDateBtn() {

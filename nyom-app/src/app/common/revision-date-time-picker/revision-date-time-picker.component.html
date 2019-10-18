@@ -13,6 +13,8 @@
     <mat-form-field class="timeOfDateTime">
       <input matInput type="text" name="timeOfDateTime" placeholder="time"
              [formControl]="selectedTimeControl" (keypress)="timeOfDateTimeKeyPress($event)">
+      <mat-icon matSuffix class="floorIcon" (click)="floorTime()">arrow_downward</mat-icon>
     </mat-form-field>
+    <span>{{timeZonePart}}</span>
   </div>
 </div>

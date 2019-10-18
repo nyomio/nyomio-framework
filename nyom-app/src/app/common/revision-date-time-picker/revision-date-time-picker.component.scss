@@ -1,5 +1,5 @@
 .date-picker {
-  width: 150px;
+  width: 100px;
 }
 
 .validity-toggle {
@@ -7,9 +7,14 @@
 }
 
 .timeOfDateTime {
-  width: 150px;
+  width: 100px;
 }
 
 mat-form-field {
   margin: 5px;
+}
+
+.floorIcon {
+  vertical-align: middle;
+  width: 1em;
 }

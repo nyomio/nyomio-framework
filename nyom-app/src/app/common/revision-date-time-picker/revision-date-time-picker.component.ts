@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MAT_DATE_FORMATS} from "@angular/material/core";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from "moment";
@@ -102,11 +102,13 @@ export class RevisionDateTimePickerComponent implements OnInit {
   private updateSelectedTime() {
     try {
       let timeParts = this.selectedTimeControl.value.split(":");
-      let parsedDuration = moment.duration({
-        seconds: +(timeParts[2].split("+")[0].trim()),
-        minutes: +timeParts[1],
-        hours: +timeParts[0],
-      });
+      let h: number = +timeParts[0];
+      let m = +timeParts[1];
+      let s = +(timeParts[2].split("+")[0].trim());
+      if (isNaN(h) || isNaN(m) || isNaN(s)) {
+        return;
+      }
+      let parsedDuration = moment.duration({hours: h, minutes: m, seconds: s});
       if (parsedDuration.asMilliseconds() != this.selectedTime.asMilliseconds()) {
         this.selectedTime = parsedDuration;
         this.emmitDateTimeChange();

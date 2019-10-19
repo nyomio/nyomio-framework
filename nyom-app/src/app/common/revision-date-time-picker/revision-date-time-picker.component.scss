@@ -1,3 +1,5 @@
+@import '../../../theme';
+
 .date-picker {
   width: 100px;
 }
@@ -17,4 +19,6 @@ mat-form-field {
 .floorIcon {
   vertical-align: middle;
   width: 1em;
+  color: mat-color(map-get($theme, foreground), icon);
+  cursor: pointer;
 }

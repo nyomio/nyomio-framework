@@ -15,6 +15,9 @@ constructor(private val organizationDbService: OrganizationDbService) {
     @Get(uri = "/all")
     fun list() = organizationDbService.listAll()
 
+    @Get(uri = "/all-at/{timestamp}")
+    fun listAt(timestamp: Long) = organizationDbService.listAll(timestamp)
+
     @Get(uri = "/{id}")
     fun getById(id: Long) = organizationDbService.getById(id)
 

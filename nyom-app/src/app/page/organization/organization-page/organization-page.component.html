@@ -11,7 +11,6 @@
       <revision-date-time-picker (onDateTimeChange)="onRevisionTimeChange($event)"></revision-date-time-picker>
     </div>
 
-
     <nyom-table [dataSource]="dataSource" [columns]="columns" (rowClicked)="rowClicked($event)"></nyom-table>
 
     <button *ngIf="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"

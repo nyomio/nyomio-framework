@@ -49,9 +49,9 @@ constructor(private val dba: DbAccess) {
         }
     }
 
-    fun listAll() = Single.just(
+    fun listAll(timestamp: Long = System.currentTimeMillis()) = Single.just(
             transaction(dba.db) {
-                atTimestamp(System.currentTimeMillis(), OrganizationTable.selectAll()).toList()
+                atTimestamp(timestamp, OrganizationTable.selectAll()).toList()
             }.map {
                 Organization(it)
             }

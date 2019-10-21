@@ -1,10 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MAT_DATE_FORMATS} from "@angular/material/core";
 import {MatDatepickerInputEvent} from "@angular/material/datepicker";
 import * as moment from "moment";
 import {FormControl} from "@angular/forms";
 import {debounce} from "rxjs/operators";
 import {interval} from "rxjs";
+import {MatButtonToggleChange} from "@angular/material/button-toggle";
 
 const MAIN_DATE_FORMAT = 'YYYY-MM-DD';
 const TIME_FORMAT = 'HH:mm:ss';
@@ -30,15 +31,15 @@ const MY_DATE_FORMATS = {
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS}
   ]
 })
-export class RevisionDateTimePickerComponent implements OnInit {
+export class RevisionDateTimePickerComponent implements OnInit, AfterViewInit{
 
   @Output()
   onDateTimeChange = new EventEmitter<moment.Moment>();
 
   modeToggle = 'now';
-  selectedDate: moment.Moment = null;
+  selectedDate: moment.Moment;
   timeZonePart = '';
-  selectedTime: moment.Duration = null;
+  selectedTime: moment.Duration;
   selectedTimeControl = new FormControl('');
 
   constructor() {
@@ -50,6 +51,10 @@ export class RevisionDateTimePickerComponent implements OnInit {
     ).subscribe(newValue => {
       this.updateSelectedTime();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.updateSelectedDateTime(this.now());
   }
 
   timeOfDateTimeKeyPress(event: any) {
@@ -80,6 +85,18 @@ export class RevisionDateTimePickerComponent implements OnInit {
     this.selectedTime = moment.duration(0, 's');
     this.updateTimeInputValue();
     this.emmitDateTimeChange();
+  }
+
+  modeToggleChange(event: MatButtonToggleChange) {
+    this.modeToggle = event.value;
+  }
+
+  onNowClick() {
+    this.updateSelectedDateTime(this.now());
+  }
+
+  private now(): moment.Moment {
+    return moment().startOf('second');
   }
 
   private updateSelectedDateTime(newDateTime: moment.Moment, updateTimePart: boolean = true) {

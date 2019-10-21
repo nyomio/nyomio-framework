@@ -50,8 +50,6 @@ export class OrganizationPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.organizationService.get();
-
     this.organizationQuery.selectAll().subscribe((value: Organization[]) => {
         this.dataSource.data = value;
       }
@@ -123,6 +121,6 @@ export class OrganizationPageComponent implements OnInit {
   }
 
   onRevisionTimeChange($event: moment.Moment) {
-    console.log($event);
+    this.organizationService.getAt($event.valueOf());
   }
 }

@@ -18,6 +18,8 @@ describe('RevisionDateTimePickerComponent', () => {
   let component: RevisionDateTimePickerComponent;
   let fixture: ComponentFixture<RevisionDateTimePickerComponent>;
   let toggleBtnDes: DebugElement[];
+  let emittedDate: moment.Moment = null;
+  let dateEmittedTimes = 0;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,7 +42,14 @@ describe('RevisionDateTimePickerComponent', () => {
     fixture = TestBed.createComponent(RevisionDateTimePickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    emittedDate = null;
+    dateEmittedTimes = 0;
+    // spying ans using toHaveBeenCalledWith does not work for momentJs, as equality comparision d
     toggleBtnDes = fixture.debugElement.queryAll(By.css("mat-button-toggle"));
+    component.onDateTimeChange.subscribe(next => {
+      emittedDate = next;
+      dateEmittedTimes++;
+    });
 
   });
 
@@ -65,8 +74,6 @@ describe('RevisionDateTimePickerComponent', () => {
 
   it('unix epoch should be parsed correctly and new date should be emitted', () => {
     clickSpecificDateBtn();
-    let emittedDate: moment.Moment = null;
-    component.onDateTimeChange.subscribe(next => emittedDate = next);
     let dateInputDe = setDateInput('1571330938');
     let timeInput = byCss('input[name=timeOfDateTime');
     expect(timeInput.nativeElement.value).toBe("18:48:58");
@@ -76,8 +83,6 @@ describe('RevisionDateTimePickerComponent', () => {
 
   it('java epoch should be parsed correctly and new date should be emitted', () => {
     clickSpecificDateBtn();
-    let emittedDate: moment.Moment = null;
-    component.onDateTimeChange.subscribe(next => emittedDate = next);
     let dateInputDe = setDateInput('1576318320000');
     let timeInput = byCss('input[name=timeOfDateTime');
     expect(timeInput.nativeElement.value).toBe("11:12:00");
@@ -87,13 +92,7 @@ describe('RevisionDateTimePickerComponent', () => {
 
   it('should emmit new date if time part is changed', () => {
     clickSpecificDateBtn();
-    // spying ans using toHaveBeenCalledWith does not work for momentJs, as equality comparision d
-    let emittedDate: moment.Moment = null;
-    let dateEmittedTimes = 0;
-    component.onDateTimeChange.subscribe(next => {
-      emittedDate = next;
-      dateEmittedTimes++;
-    });
+
     setDateInput('2015-05-10');
     let timeInput = byCss('input[name=timeOfDateTime');
     expect(timeInput.nativeElement.value).toBe("00:00:00");
@@ -113,6 +112,15 @@ describe('RevisionDateTimePickerComponent', () => {
     fixture.detectChanges();
     let timeInput = byCss('input[name=timeOfDateTime');
     expect(timeInput.nativeElement.value).toBe("00:00:00");
+  });
+
+  it('when switching to now, it should emmit current timestamp', () =>{
+    clickSpecificDateBtn();
+    let dateBtnDe = byCss('mat-button-toggle[value=now] > button');
+    dateBtnDe.nativeElement.click();
+    fixture.detectChanges();
+    expect(Math.abs(emittedDate.valueOf()-moment().valueOf())).toBeLessThan(1000);
+    expect(dateEmittedTimes).toBe(1);
   });
 
   function setDateInput(value: string): DebugElement {

@@ -8,11 +8,12 @@ data:
     .:53 {
         errors
         health
+        ready
         rewrite name sso.nyomio.local traefik-ingress.kube-system.svc.cluster.local
         kubernetes cluster.local in-addr.arpa ip6.arpa {
            pods insecure
-           upstream
            fallthrough in-addr.arpa ip6.arpa
+           ttl 30
         }
         prometheus :9153
         forward . /etc/resolv.conf
@@ -21,4 +22,3 @@ data:
         reload
         loadbalance
     }
-

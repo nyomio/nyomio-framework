@@ -50,6 +50,13 @@ Simply run
 install/install.sh
 ```
 **_IMPORTANT:_** Having rootCA and leaf SSL certificates created is a prerequisite for installing.
+
+To run on minikube you have to use minikube's docker command in the terminal which you will use to 
+execute install.sh. Execute before install.sh:
+```bash
+eval $(minikube docker-env)
+```
+
 This will do the following:
 - init helm
 - install Traefik
@@ -59,5 +66,15 @@ This will do the following:
 - set up all ingress rules
 
 Now you can access the angular app at [https://app.nyomio.local/](https://app.nyomio.local/)
+
+# Add DNS entries to the hosts file
+```
+10.109.10.97 traefik.nyomio.local app.nyomio.local sso.nyomio.local
+```
+Here you have to replace 10.109.10.97 with the external ip of traefik ingress service.
+
+# Getting externalIp for traefik service on minikube
+You have to execute ```minikube tunnel``` to make traefik accessible from the host. After that
+you can see the ip in the result of ```k get services traefik-ingress```
 
 # Development

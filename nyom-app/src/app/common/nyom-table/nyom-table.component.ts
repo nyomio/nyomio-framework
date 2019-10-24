@@ -23,11 +23,12 @@ export interface Column {
 export class NyomTableComponent implements OnInit, AfterViewInit{
 
   @Input()
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
   @ViewChildren(MatSort) sort: QueryList<MatSort>;
 
   @Input()
-  columns: Column[];
+  columns: Column[] = [];
 
   @Output()
   rowClicked = new EventEmitter<any>();

@@ -34,7 +34,7 @@ constructor(
                 }
                 transaction(it) {
                     tableListProvider?.let {
-                        SchemaUtils.createMissingTablesAndColumns(*(it()))
+                        SchemaUtils.createMissingTablesAndColumns(*(it()), RevisionTable, RevisionEndTable)
                     }
                             ?: logger.error("TableList not initialized before lazy instantiating db connection")
 

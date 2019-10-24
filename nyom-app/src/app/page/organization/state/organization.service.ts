@@ -14,12 +14,13 @@ export class OrganizationService extends UiErrorService {
     super(organizationStore)
   }
 
-  get() {
+  getAt(timestamp: number) {
     this.organizationStore.setLoading(true);
-    this.http.get('/api/v1/admin/organization/all')
+    this.http.get('/api/v1/admin/organization/all-at/' + timestamp)
     .pipe(handleHttpError(this.organizationStore))
     .subscribe((value: Organization[]) => {
         this.organizationStore.setLoading(false);
+        this.organizationStore.remove(this.organizationQuery.getAll().map(org => org.id));
         this.organizationStore.add(value)
       }
     )

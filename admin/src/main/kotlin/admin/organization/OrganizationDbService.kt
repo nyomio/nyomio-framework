@@ -1,31 +1,24 @@
 package admin.organization
 
-import nyomio.dbutils.DbAccess
 import io.reactivex.Single
-import org.jetbrains.exposed.dao.LongIdTable
+import nyomio.dbutils.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 import javax.inject.Singleton
 
-data class Organization(val id: Long, val org_name: String, val org_address: String) {
+data class Organization(val org_name: String, val org_address: String, val id: Long? = null, val revisionId: Long? = null) {
     constructor(row: ResultRow) :
-            this(row[OrganizationTable.id].value,
-                    row[OrganizationTable.name],
-                    row[OrganizationTable.address])
+            this(row[OrganizationTable.name],
+                    row[OrganizationTable.address],
+                    row[OrganizationTable.entityId])
 }
 
-object OrganizationTable : LongIdTable() {
+object OrganizationTable : EntityTable() {
     val name: Column<String> = varchar("name", 100)
     val address: Column<String> = varchar("address", 200)
 
     fun insertFrom(stmt: InsertStatement<Number>, organization: Organization) {
-        stmt[name] = organization.org_name
-        stmt[address] = organization.org_address
-    }
-
-    fun updateFrom(stmt: UpdateStatement, organization: Organization) {
         stmt[name] = organization.org_name
         stmt[address] = organization.org_address
     }
@@ -37,28 +30,28 @@ constructor(private val dba: DbAccess) {
 
     fun createTables() {
         transaction(dba.db) {
-            SchemaUtils.create(OrganizationTable)
+            SchemaUtils.create(OrganizationTable, RevisionTable, RevisionEndTable)
         }
     }
 
     fun addTestData() {
         transaction(dba.db) {
             listOf(
-                    Organization(1, "Inepex zrt.", "1054, Honvéd u. 8."),
-                    Organization(1, "Székhelyszolgálat.net kft.", "1054, Honvéd u. 8."),
-                    Organization(1, "Inclust kft.", "1054, Honvéd u. 8."),
-                    Organization(1, "Somodi Tibor ev", "1054, Honvéd u. 8.")
+                    Organization("Inepex zrt.", "1054, Honvéd u. 8."),
+                    Organization("Székhelyszolgálat.net kft.", "1054, Honvéd u. 8."),
+                    Organization("Inclust kft.", "1054, Honvéd u. 8."),
+                    Organization("Somodi Tibor ev", "1054, Honvéd u. 8.")
             ).forEach { org ->
-                OrganizationTable.insert {
+                OrganizationTable.insertRevisioned {
                     insertFrom(it, org)
                 }
             }
         }
     }
 
-    fun listAll() = Single.just(
+    fun listAll(timestamp: Long = System.currentTimeMillis()) = Single.just(
             transaction(dba.db) {
-                OrganizationTable.selectAll().toList()
+                atTimestamp(timestamp, OrganizationTable.selectAll()).toList()
             }.map {
                 Organization(it)
             }
@@ -66,31 +59,31 @@ constructor(private val dba: DbAccess) {
 
     fun add(organization: Organization): Long {
         return transaction(dba.db) {
-            OrganizationTable.insert {
+            OrganizationTable.insertRevisioned {
                 insertFrom(it, organization)
-            }[OrganizationTable.id].value
+            }
         }
     }
 
     fun edit(organization: Organization) {
         transaction(dba.db) {
-            OrganizationTable.update({ OrganizationTable.id eq organization.id }) {
-                updateFrom(it, organization)
+            OrganizationTable.updateRevisioned(entityId = organization.id!!) {
+                insertFrom(it, organization)
             }
         }
     }
 
     fun getById(id: Long): Organization? {
         return transaction(dba.db) {
-            OrganizationTable.select { OrganizationTable.id eq id }.firstOrNull()
+            OrganizationTable.select { OrganizationTable.entityId eq id }.firstOrNull()
         }?.let {
             Organization(it)
         }
     }
 
-    fun delete(id: Long) {
+    fun delete(entityId: Long) {
         transaction(dba.db) {
-            OrganizationTable.deleteWhere { OrganizationTable.id eq id }
+            OrganizationTable.deleteRevisioned(entityId)
         }
     }
 

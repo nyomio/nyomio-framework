@@ -21,6 +21,7 @@ kubectl wait --for=condition=ready --timeout=450s pod/nyom-db-postgresql-0
 # Keycloak
 printf "\n%s\n"  "***** Installing Keycloak from helm chart"
 helm repo add codecentric https://codecentric.github.io/helm-charts
+helm repo update
 helm install --name nyom-sso codecentric/keycloak
 export KEYCLOAK_PASS
 KEYCLOAK_PASS=$(kubectl get secret --namespace default nyom-sso-keycloak-http -o jsonpath="{.data.password}" | base64 --decode; echo)

@@ -53,6 +53,20 @@ Rules of thumb
  - TDD would be great, but it is really hard to do right (at least for me :) )
  - e2e tests for the main functionality with some edge cases are a must.
  - use unit test, where it makes sense (component is easier to develop against a test)
+
+## Execute development server on kubernetes using skaffold
+The install script installs the production version. Before executing the development server
+you have to delete the production deployment:
+```
+kubectl delete -f k8s/webapp.yml
+```
+
+Scaffold builds and deploys a container for nyom-app development. Also it monitors the changes and triggers recompile.
+To execute scaffold:
+```
+cd nyom-app
+scaffold dev
+```
  
 # Angular CLI-s generated docs with some modification
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.3.

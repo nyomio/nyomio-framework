@@ -1,0 +1,10 @@
+<div fxLayout="row" fxLayoutAlign="center center" >
+  <mat-form-field class="filter" fxFlex="1 1 auto">
+    <input matInput type="text" name="filter" placeholder="Filter">
+    <mat-icon matSuffix class="search-icon">search</mat-icon>
+  </mat-form-field>
+  <revision-date-time-picker (onDateTimeChange)="emitOnDateTimeChange($event)"></revision-date-time-picker>
+</div>
+
+<nyom-table [dataSource]="dataSource" [columns]="columns" (rowClicked)="emitRowClicked($event)"></nyom-table>
+

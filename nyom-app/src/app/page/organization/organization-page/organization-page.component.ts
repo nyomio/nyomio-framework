@@ -10,6 +10,7 @@ import {
 } from "@covalent/dynamic-forms";
 import {MatTableDataSource} from "@angular/material/table";
 import * as moment from "moment";
+import {EntityFormComponent} from "../../../common/entity-form/entity-form.component";
 
 @Component({
   selector: 'app-organization-page',
@@ -18,20 +19,20 @@ import * as moment from "moment";
 })
 export class OrganizationPageComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<Organization>([]);
-
   selectedOrganization$ = this.organizationQuery.select(state => state.ui.selectedOrganization);
   newOrganizationMode$ = this.organizationQuery.select(state => state.ui.newOrganizationMode);
   loading$ = this.organizationQuery.selectLoading();
 
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
   columns: any[] = [
     {name: 'id', label: 'ID'},
     {name: 'org_name', label: 'Name'},
     {name: 'org_address', label: 'Address'},
   ];
 
-  @ViewChild('organizationForm', {static: false})
-  organizationForm: TdDynamicFormsComponent;
+  formTitle = "";
+
+  formDeleteVisible: boolean = false;
 
   formElements: ITdDynamicElementConfig[] = [{
     name: 'org_name',
@@ -43,6 +44,9 @@ export class OrganizationPageComponent implements OnInit {
     label: 'Organization Address',
     type: TdDynamicElement.Input,
   }];
+
+  @ViewChild(EntityFormComponent, {static: false})
+  entityForm: EntityFormComponent;
 
   constructor(public organizationQuery: OrganizationQuery,
               public organizationService: OrganizationService,
@@ -56,22 +60,26 @@ export class OrganizationPageComponent implements OnInit {
     );
 
     this.selectedOrganization$.subscribe((selectedId: number) => {
-      if (!this.organizationForm) {
+      if (!this.entityForm) {
         return
       }
       if (selectedId == null) {
-        this.clearForm();
+        this.entityForm.clearForm();
       } else {
+        this.formTitle = "Edit Organization";
+        this.formDeleteVisible = true;
         this.updateFormForSelected(selectedId);
       }
     });
 
     this.newOrganizationMode$.subscribe(
       next => {
-        if (!this.organizationForm || !next) {
+        if (!this.entityForm || !next) {
           return
         }
-        this.clearForm();
+        this.formTitle = "New Organization";
+        this.formDeleteVisible = false;
+        this.entityForm.clearForm();
       }
     );
 
@@ -104,23 +112,21 @@ export class OrganizationPageComponent implements OnInit {
 
   delete() {
     this.organizationService.deleteSelected();
+    this.entityForm.clearForm();
   }
 
   private createOrganizationFromForm(): Organization {
-    return createOrganization(this.organizationForm.value)
-  }
-
-  private clearForm() {
-    this.organizationForm.dynamicForm.reset();
+    return createOrganization(this.entityForm.getValue())
   }
 
   private updateFormForSelected(selectedId: number) {
     const org = this.organizationQuery.getEntity(selectedId);
-    this.organizationForm.dynamicForm.controls.org_address.setValue(org.org_address);
-    this.organizationForm.dynamicForm.controls.org_name.setValue(org.org_name);
+    this.entityForm.setValue(org);
   }
 
   onRevisionTimeChange($event: moment.Moment) {
     this.organizationService.getAt($event.valueOf());
   }
+
+
 }

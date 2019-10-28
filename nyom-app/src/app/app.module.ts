@@ -28,6 +28,9 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {ReactiveFormsModule} from "@angular/forms";
 import { RevisionDateTimePickerComponent } from './common/revision-date-time-picker/revision-date-time-picker.component';
+import { EntityEditorComponent } from './common/entity-editor/entity-editor.component';
+import { EntityTableComponent } from './common/entity-table/entity-table.component';
+import { EntityFormComponent } from './common/entity-form/entity-form.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { RevisionDateTimePickerComponent } from './common/revision-date-time-pic
     OrganizationPageComponent,
     ErrorComponent,
     NyomTableComponent,
-    RevisionDateTimePickerComponent
+    RevisionDateTimePickerComponent,
+    EntityEditorComponent,
+    EntityTableComponent,
+    EntityFormComponent
   ],
   imports: [
     CovalentLayoutModule,

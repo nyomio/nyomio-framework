@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EntityEditorComponent } from './entity-editor.component';
+import {EntityEditorComponent} from './entity-editor.component';
 
 describe('EntityEditorComponent', () => {
   let component: EntityEditorComponent;

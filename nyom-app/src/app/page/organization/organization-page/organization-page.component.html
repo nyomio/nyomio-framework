@@ -1,28 +1,4 @@
 <app-error [assignedQuery]="organizationQuery" [assignedService]="organizationService"></app-error>
-<mat-card>
-  <mat-card-content
-    *tdLoading="'organization'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent'">
-
-    <entity-table [dataSource]="dataSource" [columns]="columns" (rowClicked)="rowClicked($event)"
-    (onDateTimeChange)="onRevisionTimeChange($event)"></entity-table>
-
-    <button *ngIf="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"
-            mat-raised-button color="primary" class="text-upper"
-            (click)="organizationService.setNewMode(true)">
-      New
-    </button>
-
-    <entity-form
-      [hidden]="!((newOrganizationMode$ | async) || (selectedOrganization$ | async))"
-      [isLoading$]="loading$"
-      [formTitle]="formTitle"
-      [formElements]="formElements"
-      [isDeleteVisible]="formDeleteVisible"
-      (onSaveClicked)="save()"
-      (onCancelClicked)="cancel()"
-      (onDeleteClicked)="delete()" >
-    </entity-form>
-
-  </mat-card-content>
-</mat-card>
-
+<entity-editor entityName="Organization" [columns]="columns" [formElements]="formElements"
+               [query]="organizationQuery" [service]="organizationService"
+                [defaultEntity]="defaultEntity"></entity-editor>

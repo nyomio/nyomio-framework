@@ -1,0 +1,5 @@
+commonLabels:
+  testLabel: label1
+resources:
+  - fwdemo-namespace.yaml
+  - postgresql.yaml

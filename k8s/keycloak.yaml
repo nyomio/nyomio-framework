@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: framework-demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: jboss/keycloak
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    kubernetes.io/name: keycloak
+  name: keycloak
+  namespace: framework-demo
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      name: keycloak-http
+    - port: 8443
+      targetPort: 8443
+      name: keycloak-https
+  selector:
+    k8s-app: keycloak

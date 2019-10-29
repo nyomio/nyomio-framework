@@ -3,3 +3,4 @@ commonLabels:
 resources:
   - fwdemo-namespace.yaml
   - postgresql.yaml
+  - keycloak.yaml

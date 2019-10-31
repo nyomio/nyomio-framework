@@ -1,0 +1,18 @@
+apiVersion: skaffold/v1beta17
+kind: Config
+build:
+  artifacts:
+  - image: webapp-dev-skaffold
+    docker:
+      dockerfile: skaffold/Dockerfile
+    sync:
+      infer:
+        - '**/*'
+  local:
+    useDockerCLI: true
+    useBuildkit: false
+    push: false
+deploy:
+  kubectl:
+    manifests:
+      - skaffold/k8s*.yaml

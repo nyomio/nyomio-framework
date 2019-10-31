@@ -17,7 +17,8 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "esModuleInterop": true // needed to make moment.js import work
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

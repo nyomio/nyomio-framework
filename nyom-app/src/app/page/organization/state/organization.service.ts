@@ -3,8 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
 import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
-import {handleHttpError, UiErrorService} from "../../../common/error/error.util";
-import {EntityEditorService} from "../../../common/entity-editor/entity-editor.service";
+import {handleHttpError} from "../../../common/error/error.util";
+import {EntityEditorService} from "angular-common-components-lib";
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends EntityEditorService {

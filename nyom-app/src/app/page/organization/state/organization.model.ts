@@ -1,6 +1,4 @@
-import {
-  EntityEditorModel
-} from "../../../common/entity-editor/entity-editor.model";
+import {EntityEditorModel} from "angular-common-components-lib/lib/entity-editor/entity-editor.model";
 
 export interface Organization extends EntityEditorModel {
   org_name: string,

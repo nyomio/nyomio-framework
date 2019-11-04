@@ -1,5 +1,7 @@
 @import '~@angular/material/theming';
 @import '~@covalent/core/theming/all-theme';
+@import '~angular-common-components-lib/revision-date-time-picker-theme';
+//@import '../projects/angular-common-components-lib/src/lib/revision-date-time-picker/revision-date-time-picker-theme';
 
 // Define a custom typography config that overrides the font-family
 // or any typography level.
@@ -19,6 +21,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
 @include covalent-theme($theme, $typography); // $typography is an **optional** argument for the covalent-theme
+@include revision-date-time-picker-theme($theme);
 
 html, body {
   height: 100%;

@@ -13,6 +13,13 @@ spec:
       containers:
         - name: keycloak
           image: jboss/keycloak
+          env:
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: keycloak-initial-admin
+                key: password
+          command: ['sh','-c','/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p KEYCLOAK_ADMIN_PASSWORD;']
 ---
 apiVersion: v1
 kind: Service

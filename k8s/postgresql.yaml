@@ -11,15 +11,6 @@ spec:
     requests:
       storage: 10Gi
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-user
-  namespace: framework-demo
-type: Opaque
-data:
-  password: NmVFRXBaZDQ=
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -48,6 +39,10 @@ spec:
                 secretKeyRef:
                   name: postgres-user
                   key: password
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "psql -U postgres -c 'create database keycloak'"]
 ---
 apiVersion: v1
 kind: Service

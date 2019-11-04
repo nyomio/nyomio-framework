@@ -19,7 +19,21 @@ spec:
               secretKeyRef:
                 name: keycloak-initial-admin
                 key: password
-          command: ['sh','-c','/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p KEYCLOAK_ADMIN_PASSWORD;']
+          - name: DB_VENDOR
+            value: postgres
+          - name: DB_USER
+            value: postgres
+          - name: DB_ADDR
+            value: postgresql.framework-demo.svc.cluster.local
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-user
+                key: password
+          lifecycle:
+            postStart:
+              exec:
+                command: ['/bin/sh','-c','"/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p KEYCLOAK_ADMIN_PASSWORD; /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload"']
 ---
 apiVersion: v1
 kind: Service

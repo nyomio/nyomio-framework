@@ -53,8 +53,11 @@ Rules of thumb
  - TDD would be great, but it is really hard to do right (at least for me :) )
  - e2e tests for the main functionality with some edge cases are a must.
  - use unit test, where it makes sense (component is easier to develop against a test)
-
+ 
 ## Execute development server on kubernetes using skaffold
+You can use google's scaffold tool to run angular dev server inside kubernetes.
+First you need to [install skaffold](https://skaffold.dev/docs/install/).
+
 The install script installs the production version. Before executing the development server
 you have to delete the production deployment:
 ```

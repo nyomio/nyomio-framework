@@ -10,10 +10,10 @@ ng generate library nyomio-frontend-components
 that you don't have to export Angular components, only modules.
 ```
 /*
- * Public API Surface of angular-common-components-lib
+ * Public API Surface of nyomio-ng-components
  */
 
-export * from './lib/angular-common-components-lib.module';
+export * from './lib/nyomio-ng-components.module';
 export * from './lib/error/ui-error-service';
 export * from './lib/entity-editor/entity-editor.service';
 export * from './lib/entity-editor/entity-editor.model';
@@ -33,14 +33,14 @@ export * from './lib/entity-editor/entity-editor.store';
   * the `theme.scss` of you application has to include the library theme
     ```
     @import..
-    @include angular-common-components-lib-theme($theme)
+    @include nyomio-ng-components-theme($theme)
     ```
   * add `scss-bundle` to include theme scss files in the build
     * create nyomio-frontend-components/scss-bundle.config.json
       ```
       {
-        "entry": "./projects/angular-common-components-lib/src/lib/src/angular-common-components-lib-theme.scss",
-        "dest": "./dist/angular-common-components-lib/angular-common-components-lib-theme.scss",
+        "entry": "./projects/nyomio-ng-components/src/lib/src/nyomio-ng-components-theme.scss",
+        "dest": "./dist/nyomio-ng-components/nyomio-ng-components-theme.scss",
         "includePaths": ["projects/shared-styles"]
       }
       ```

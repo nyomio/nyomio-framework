@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {AuthState, AuthStore} from './auth.store';
 import {handleHttpError} from "../../error/error.util";
-import {UiErrorService} from "angular-common-components-lib";
+import {UiErrorService} from "nyomio-ng-components";
 
 @Injectable({providedIn: 'root'})
 export class AuthService extends UiErrorService {

@@ -10,7 +10,7 @@ import {
 } from "@covalent/dynamic-forms";
 import {MatTableDataSource} from "@angular/material/table";
 import * as moment from "moment";
-import {Column} from "angular-common-components-lib/lib/nyom-table/nyom-table.component";
+import {Column} from "nyomio-ng-components/lib/nyom-table/nyom-table.component";
 
 @Component({
   selector: 'app-organization-page',

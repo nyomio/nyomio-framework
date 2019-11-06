@@ -25,7 +25,7 @@ import {MatMomentDateModule} from "@angular/material-moment-adapter"
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {ReactiveFormsModule} from "@angular/forms";
-import {AngularCommonComponentsLibModule, EntityEditorService} from "angular-common-components-lib";
+import {NyomioNgComponentsModule} from "nyomio-ng-components";
 import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
 
 @NgModule({
@@ -59,7 +59,7 @@ import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule.forRoot(),
     ReactiveFormsModule,
-    AngularCommonComponentsLibModule,
+    NyomioNgComponentsModule,
   ],
   providers: [{
     provide: NG_ENTITY_SERVICE_CONFIG,

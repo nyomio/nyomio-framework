@@ -4,7 +4,7 @@ import {OrganizationStore} from './organization.store';
 import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
 import {handleHttpError} from "../../../common/error/error.util";
-import {EntityEditorService} from "angular-common-components-lib";
+import {EntityEditorService} from "nyomio-ng-components";
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends EntityEditorService {

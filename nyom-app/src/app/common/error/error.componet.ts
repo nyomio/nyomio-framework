@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewEncapsulation} from "@angular/core";
 import {MatSnackBar, MatSnackBarConfig, MatSnackBarDismiss} from "@angular/material/snack-bar";
 import {Query} from "@datorama/akita";
 import {ErrorState} from "./error.util";
-import {UiErrorService} from "angular-common-components-lib/lib/error/ui-error-service";
+import {UiErrorService} from "nyomio-ng-components/lib/error/ui-error-service";
 
 @Component({
   selector: 'app-error',

@@ -68,7 +68,7 @@ Scaffold builds and deploys a container for nyom-app development. Also it monito
 To execute scaffold:
 ```
 cd nyom-app
-scaffold dev
+skaffold dev
 ```
  
 # Angular CLI-s generated docs with some modification

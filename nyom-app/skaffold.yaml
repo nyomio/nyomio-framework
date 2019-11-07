@@ -10,7 +10,7 @@ build:
         - '**/*'
   local:
     useDockerCLI: true
-    useBuildkit: false
+    useBuildkit: true
     push: false
 deploy:
   kubectl:

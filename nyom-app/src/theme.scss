@@ -1,5 +1,6 @@
 @import '~@angular/material/theming';
 @import '~@covalent/core/theming/all-theme';
+@import '~nyomio-ng-components/nyomio-ng-components-theme';
 
 // Define a custom typography config that overrides the font-family
 // or any typography level.
@@ -19,6 +20,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
 @include covalent-theme($theme, $typography); // $typography is an **optional** argument for the covalent-theme
+@include nyomio-ng-components-theme($theme);
 
 html, body {
   height: 100%;

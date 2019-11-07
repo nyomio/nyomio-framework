@@ -1,20 +1,10 @@
 import {Injectable} from '@angular/core';
-import {EntityState, EntityStore, StoreConfig} from '@datorama/akita';
+import {EntityStore, StoreConfig} from '@datorama/akita';
 import {Organization} from './organization.model';
+import {EntityEditorEntityState, initialState} from "nyomio-ng-components";
 
-export interface OrganizationState extends EntityState<Organization> {
-  ui: {
-    selectedOrganization: number;
-    newOrganizationMode: boolean;
-  }
+export interface OrganizationState extends EntityEditorEntityState<Organization> {
 }
-
-const initialState = {
-  ui: {
-    selectedOrganization: null,
-    newOrganizationMode: false
-  }
-};
 
 @Injectable({providedIn: 'root'})
 @StoreConfig({name: 'organization'})

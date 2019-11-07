@@ -22,7 +22,7 @@ spec:
             - name: debug
               containerPort: 8000
           env:
-            - name: CLIENT_SECRET
+            - name: KEYCLOAK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: nyom-app-oauth-client
@@ -32,6 +32,10 @@ spec:
                 secretKeyRef:
                   name: nyom-apps
                   key: jwtsecret
+            - name: KEYCLOAK_CLIENT_ID
+              value: "nyom-app"
+            - name: KEYCLOAK_OPENID_ISSUER_URL
+              value: "https://sso.nyomio.local/auth/realms/nyomio"
 ---
 apiVersion: v1
 kind: Service

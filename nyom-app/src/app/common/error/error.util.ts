@@ -6,15 +6,6 @@ export interface ErrorState {
   dismissed: boolean;
 }
 
-export class UiErrorService {
-  constructor(private store: Store<any>) {
-  }
-
-  public dismissError(errorText: string) {
-    this.store.setError({errorText: errorText, dismissed: true})
-  }
-}
-
 export const handleHttpError = <T>(store: Store) => tap<T>(
   (value: T) => {
   },

@@ -3,10 +3,11 @@ import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
 import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
-import {handleHttpError, UiErrorService} from "../../../common/error/error.util";
+import {handleHttpError} from "../../../common/error/error.util";
+import {EntityEditorService} from "nyomio-ng-components";
 
 @Injectable({providedIn: 'root'})
-export class OrganizationService extends UiErrorService {
+export class OrganizationService extends EntityEditorService {
 
   constructor(private organizationStore: OrganizationStore,
               private organizationQuery: OrganizationQuery,
@@ -45,21 +46,13 @@ export class OrganizationService extends UiErrorService {
 
   deleteSelected() {
     this.organizationStore.setLoading(true);
-    const selectedId = this.organizationQuery.getValue().ui.selectedOrganization;
+    const selectedId = this.organizationQuery.getValue().ui.selectedEntity;
     this.http.delete(`/api/v1/admin/organization/${selectedId}`)
     .pipe(handleHttpError(this.organizationStore))
     .subscribe((resp: number) => {
       this.organizationStore.setLoading(false);
       this.organizationStore.remove(selectedId);
     });
-  }
-
-  setSelected(id: number) {
-    this.organizationStore.update({ui: {selectedOrganization: id, newOrganizationMode: false}})
-  }
-
-  setNewMode(mode: boolean) {
-    this.organizationStore.update({ui: {selectedOrganization: null, newOrganizationMode: mode}})
   }
 
 }

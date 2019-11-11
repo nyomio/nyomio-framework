@@ -1,5 +1,9 @@
 package nyomio.dbutils
 
+import nyomio.dbutils.revisionedentity.EntityTable
+import nyomio.dbutils.revisionedentity.RevisionEndTable
+import nyomio.dbutils.revisionedentity.RevisionTable
+import nyomio.dbutils.revisionedentity.RevisionedQueryService
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions
@@ -23,6 +27,7 @@ class RevisionTableTest {
     companion object {
 
         var dbAccess: DbAccess? = null
+        lateinit var revSvc: RevisionedQueryService
 
         @BeforeAll
         @JvmStatic
@@ -31,8 +36,9 @@ class RevisionTableTest {
                     "jdbc:postgresql://localhost:5432/test",
                     "org.postgresql.Driver",
                     "postgres",
-                    "qQz3xeauvH",
+                    "Ge8lEFpmGl",
                     false)
+            revSvc = RevisionedQueryService()
             dropRecreate()
             createTestUsers()
             createTestDevices()
@@ -50,26 +56,26 @@ class RevisionTableTest {
 
         private fun createTestUsers() {
             transaction(dbAccess?.db) {
-                TestUser.insertRevisioned(10) {
-                    it[name] = "User1"
-                    it[email] = "user@user1.com"
+                revSvc.insertRevisioned(TestUser, 10) {
+                    it[TestUser.name] = "User1"
+                    it[TestUser.email] = "user@user1.com"
                 }
 
-                TestUser.insertRevisioned(10) {
-                    it[name] = "User2"
-                    it[email] = "user@user2.com"
+                revSvc.insertRevisioned(TestUser, 10) {
+                    it[TestUser.name] = "User2"
+                    it[TestUser.email] = "user@user2.com"
                 }
             }
 
             transaction(dbAccess?.db) {
-                TestUser.updateRevisioned(1, 20) {
-                    it[name] = "User1"
-                    it[email] = "user@user1-mail.com"
+                revSvc.updateRevisioned(TestUser, 1, 20) {
+                    it[TestUser.name] = "User1"
+                    it[TestUser.email] = "user@user1-mail.com"
                 }
 
-                TestUser.updateRevisioned(2, 20) {
-                    it[name] = "User2 Boss"
-                    it[email] = "user@user2-mail.com"
+                revSvc.updateRevisioned(TestUser, 2, 20) {
+                    it[TestUser.name] = "User2 Boss"
+                    it[TestUser.email] = "user@user2-mail.com"
                 }
             }
         }
@@ -83,18 +89,19 @@ class RevisionTableTest {
         }
 
         private fun insertTestDevice(index: Int, owner: Long, nameBase: String = "device", secretBase: String = "secret") {
-            val entityId = TestDevice.insertRevisioned(
+            val entityId = revSvc.insertRevisioned(
+                    TestDevice,
                     10,
                     OperationContext("ctx-${index}", 1)) {
-                it[secret] = "${secretBase}-${index}"
-                it[name] = "${nameBase}-${index}"
+                it[TestDevice.secret] = "${secretBase}-${index}"
+                it[TestDevice.name] = "${nameBase}-${index}"
                 it[TestDevice.owner] = owner
             }
 
-            TestDevice.updateRevisioned(entityId, 20,
+            revSvc.updateRevisioned(TestDevice, entityId, 20,
                     OperationContext("ctx-${index}-2", 2)) {
-                it[secret] = "${secretBase}-${index}-mod"
-                it[name] = "${nameBase}-${index}-mod"
+                it[TestDevice.secret] = "${secretBase}-${index}-mod"
+                it[TestDevice.name] = "${nameBase}-${index}-mod"
                 it[TestDevice.owner] = owner
             }
         }
@@ -106,14 +113,15 @@ class RevisionTableTest {
 
         transaction(dbAccess?.db) {
             Assertions.assertEquals(0,
-                    atTimestamp(0, TestDevice.selectAll()).toList().size)
+                    revSvc.atTimestamp(0, revSvc.filter(TestDevice, "test")).toList().size)
+//                    revSvc.atTimestamp(0, TestDevice.selectAll()).toList().size)
 
-            val earlier = atTimestamp(15, TestDevice.selectAll()).toList()
+            val earlier = revSvc.atTimestamp(15, TestDevice.selectAll()).toList()
             Assertions.assertEquals(3, earlier.size)
             Assertions.assertEquals("secret-1", earlier[0][TestDevice.secret])
             Assertions.assertEquals("device-1", earlier[0][TestDevice.name])
 
-            val latest = atTimestamp(40, TestDevice.selectAll()).toList()
+            val latest = revSvc.atTimestamp(40, TestDevice.selectAll()).toList()
             Assertions.assertEquals(3, latest.size)
             Assertions.assertEquals("secret-1-mod", latest[0][TestDevice.secret])
             Assertions.assertEquals("device-1-mod", latest[0][TestDevice.name])
@@ -122,7 +130,7 @@ class RevisionTableTest {
             Assertions.assertEquals(6, allVersions.size)
 
             Assertions.assertEquals(2,
-                    atTimestamp(40, TestDevice.select { TestDevice.owner eq 2 }).toList().size)
+                    revSvc.atTimestamp(40, TestDevice.select { TestDevice.owner eq 2 }).toList().size)
 
         }
     }
@@ -137,7 +145,7 @@ class RevisionTableTest {
                 9                    | 3                    | secret-3             | device-3             | 2                    | 2                    | 2                    | User2                | user@user2.com       | 
                 """.trimIndent()
 
-            val renderedResult = atTimestamp(15,
+            val renderedResult = revSvc.atTimestamp(15,
                     TestDevice
                             .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
                             .selectAll())
@@ -153,7 +161,7 @@ class RevisionTableTest {
                 8                    | 2                    | secret-2-mod         | device-2-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
                 10                   | 3                    | secret-3-mod         | device-3-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
                 """.trimIndent()
-            val renderedResult = atTimestamp(20,
+            val renderedResult = revSvc.atTimestamp(20,
                     TestDevice
                             .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
                             .select { TestUser.name like "%Boss" })

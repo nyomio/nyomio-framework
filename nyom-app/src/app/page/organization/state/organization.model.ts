@@ -1,4 +1,4 @@
-import {EntityEditorModel} from "nyomio-ng-components/lib/entity-editor/entity-editor.model";
+import {EntityEditorModel} from "nyomio-ng-components";
 
 export interface Organization extends EntityEditorModel {
   org_name: string,

@@ -1,0 +1,15 @@
+{
+  "name": "generator-nyomio-microservice",
+  "version": "0.1.0",
+  "description": "",
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "voca": "^1.4.0",
+    "yeoman-generator": "^4.2.0"
+  }
+}

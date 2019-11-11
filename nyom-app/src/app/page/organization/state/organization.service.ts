@@ -15,9 +15,9 @@ export class OrganizationService extends EntityEditorService {
     super(organizationStore)
   }
 
-  getAt(timestamp: number) {
+  getAt(timestamp: number, filter?: string) {
     this.organizationStore.setLoading(true);
-    this.http.get('/api/v1/admin/organization/all-at/' + timestamp)
+    this.http.get('/api/v1/admin/organization/all-at/' + timestamp + (filter ? "/" + filter : ""))
     .pipe(handleHttpError(this.organizationStore))
     .subscribe((value: Organization[]) => {
         this.organizationStore.setLoading(false);

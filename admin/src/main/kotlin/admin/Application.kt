@@ -1,5 +1,6 @@
 package admin
 
+import admin.device.DeviceTable
 import admin.organization.OrganizationTable
 import nyomio.dbutils.DbAccess
 import io.micronaut.runtime.Micronaut

@@ -2,7 +2,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm"
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.allopen"
-    id "com.google.cloud.tools.jib" version "1.6.1"
     id "com.github.johnrengelman.shadow"
     id "application"
 }

@@ -8,6 +8,7 @@ data:
     .:53 {
         errors
         health
+        ready
         rewrite name sso.nyomio.local traefik-ingress.kube-system.svc.cluster.local
         kubernetes cluster.local in-addr.arpa ip6.arpa {
            pods insecure

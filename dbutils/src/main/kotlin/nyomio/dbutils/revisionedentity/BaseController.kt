@@ -11,8 +11,8 @@ import io.micronaut.security.rules.SecurityRule
 abstract class BaseController <E : Entity, T : EntityTable>
 constructor(private val baseDbService: RevisionedQueryDbServiceBaseService<E, T>){
 
-    @Get(uri = "/all{/filter}")
-    fun list(@PathVariable("filter") filter: String?) = baseDbService.listAll(filter=filter)
+    @Get(uri = "/all")
+    fun list() = baseDbService.listAll()
 
     @Get(uri = "/all-at/{timestamp}{/filter}")
     fun listAt(@PathVariable("timestamp") timestamp: Long, @PathVariable("filter") filter: String?) = baseDbService.listAll(timestamp, filter)

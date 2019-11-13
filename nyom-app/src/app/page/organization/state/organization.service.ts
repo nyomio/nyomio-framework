@@ -12,7 +12,7 @@ export class OrganizationService extends EntityEditorService {
   constructor(private organizationStore: OrganizationStore,
               private organizationQuery: OrganizationQuery,
               private http: HttpClient) {
-    super(organizationStore)
+    super(organizationStore, organizationQuery)
   }
 
   getAt(timestamp: number, filter?: string) {

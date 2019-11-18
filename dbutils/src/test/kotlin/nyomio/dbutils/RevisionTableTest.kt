@@ -113,8 +113,7 @@ class RevisionTableTest {
 
         transaction(dbAccess?.db) {
             Assertions.assertEquals(0,
-                    revSvc.atTimestamp(0, revSvc.filter(TestDevice, "test")).toList().size)
-//                    revSvc.atTimestamp(0, TestDevice.selectAll()).toList().size)
+                    revSvc.atTimestamp(0, TestDevice.selectAll()).toList().size)
 
             val earlier = revSvc.atTimestamp(15, TestDevice.selectAll()).toList()
             Assertions.assertEquals(3, earlier.size)

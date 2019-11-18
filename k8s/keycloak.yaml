@@ -33,7 +33,8 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ['/bin/sh','-c','"/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p KEYCLOAK_ADMIN_PASSWORD; /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload"']
+                command: ["/bin/sh", "-c", "/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p $KEYCLOAK_ADMIN_PASSWORD;
+                while ! /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload; do echo 'wait for keycloak ready'; done;"]
 ---
 apiVersion: v1
 kind: Service

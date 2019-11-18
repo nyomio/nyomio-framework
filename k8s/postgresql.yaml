@@ -42,7 +42,7 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "psql -U postgres -c 'create database keycloak'"]
+                command: ["/bin/sh", "-c", "while ! nc -z 127.0.0.1 5432; do sleep 1; done && if ! psql -lqt -U postgres | cut -d \\| -f 1 | grep -qw keycloak; then psql -U postgres -c 'create database keycloak'; fi;"]
 ---
 apiVersion: v1
 kind: Service

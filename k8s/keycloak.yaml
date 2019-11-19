@@ -19,6 +19,8 @@ spec:
               secretKeyRef:
                 name: keycloak-initial-admin
                 key: password
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
           - name: DB_VENDOR
             value: postgres
           - name: DB_USER
@@ -34,7 +36,22 @@ spec:
             postStart:
               exec:
                 command: ["/bin/sh", "-c", "/opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u keycloak -p $KEYCLOAK_ADMIN_PASSWORD;
-                while ! /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload; do echo 'wait for keycloak ready'; done;"]
+                while ! /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload; do echo 'wait for keycloak ready'; done;
+                while ! curl --silent 127.0.0.1:8080; do echo 'wait for keycloak ready'; done;
+                /opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user keycloak --password $KEYCLOAK_ADMIN_PASSWORD;
+                /opt/jboss/keycloak/bin/kcadm.sh create realms --set realm=nyomio --set enabled=true;
+                CLID=$(/opt/jboss/keycloak/bin/kcadm.sh create clients -r nyomio -s clientId=nyom-app -s publicClient=true -s 'redirectUris=[\"*\"]' -i);
+                /opt/jboss/keycloak/bin/kcadm.sh create users -r nyomio -s username=user -s enabled=true -o --fields id,username;
+                /opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username user --new-password user;
+                /opt/jboss/keycloak/bin/kcadm.sh create users -r nyomio -s username=admin -s enabled=true -o --fields id,username;
+                /opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username admin --new-password admin;
+                /opt/jboss/keycloak/bin/kcadm.sh create clients/$CLID/roles  -r nyomio -s name=admin;
+                /opt/jboss/keycloak/bin/kcadm.sh add-roles -r nyomio --uusername admin --cid $CLID --rolename admin;
+                CLIENT_SCOPE_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1  '\"name\" : \"roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
+                MAPPER_ID=(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1  '\"name\" : \"client roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
+                /opt/jboss/keycloak/bin/kcadm.sh update client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models/$MAPPER_ID -s 'config.\"id.token.claim\"=\"true\"' -s 'config.\"usermodel.clientRoleMapping.clientId\"=\"nyom-app\"' -r nyomio;
+                ADMIN_CONSOLE_CLIENT_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get clients -r master -q clientId=security-admin-console -F id | cut -d\":\" -f2 | tr -cd '[:alnum:]._-');
+                /opt/jboss/keycloak/bin/kcadm.sh update clients/$ADMIN_CONSOLE_CLIENT_ID -r master -s redirectUris+=\"*\";"]
 ---
 apiVersion: v1
 kind: Service
@@ -46,10 +63,28 @@ metadata:
 spec:
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
       name: keycloak-http
     - port: 8443
       targetPort: 8443
       name: keycloak-https
   selector:
     k8s-app: keycloak
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak-ingress
+  namespace: framework-demo
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sso.nyomio.local`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: keycloak
+          port: 80
+  tls:
+    secretName: certsecret

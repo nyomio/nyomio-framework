@@ -3,3 +3,4 @@ commonLabels:
 resources:
   - postgresql.yaml
   - keycloak.yaml
+  - coredns-rewrite.yml

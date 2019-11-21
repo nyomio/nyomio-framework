@@ -47,8 +47,8 @@ spec:
                 /opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username admin --new-password admin;
                 /opt/jboss/keycloak/bin/kcadm.sh create clients/$CLID/roles  -r nyomio -s name=admin;
                 /opt/jboss/keycloak/bin/kcadm.sh add-roles -r nyomio --uusername admin --cid $CLID --rolename admin;
-                CLIENT_SCOPE_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1  '\"name\" : \"roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
-                MAPPER_ID=(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1  '\"name\" : \"client roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
+                CLIENT_SCOPE_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1 '\"name\" : \"roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
+                MAPPER_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1 '\"name\" : \"client roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
                 /opt/jboss/keycloak/bin/kcadm.sh update client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models/$MAPPER_ID -s 'config.\"id.token.claim\"=\"true\"' -s 'config.\"usermodel.clientRoleMapping.clientId\"=\"nyom-app\"' -r nyomio;
                 ADMIN_CONSOLE_CLIENT_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get clients -r master -q clientId=security-admin-console -F id | cut -d\":\" -f2 | tr -cd '[:alnum:]._-');
                 /opt/jboss/keycloak/bin/kcadm.sh update clients/$ADMIN_CONSOLE_CLIENT_ID -r master -s redirectUris+=\"*\";"]

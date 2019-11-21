@@ -4,15 +4,31 @@ import {OrganizationPageComponent} from "./page/organization/organization-page/o
 import {AuthGuard} from "./common/auth/auth.guard";
 import {EntityEditorGuard} from "nyomio-ng-components";
 
+export const ROUTES = {
+  organizations: 'organizations',
+  users: 'users',
+  devices: 'devices',
+};
+
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: "/company"
+    redirectTo: '/' + ROUTES.organizations
   },
   {
     component: OrganizationPageComponent,
-    path: 'company',
+    path: ROUTES.organizations,
+    canActivate: [AuthGuard, EntityEditorGuard]
+  },
+  {
+    component: OrganizationPageComponent,
+    path: ROUTES.users,
+    canActivate: [AuthGuard, EntityEditorGuard]
+  },
+  {
+    component: OrganizationPageComponent,
+    path: ROUTES.devices,
     canActivate: [AuthGuard, EntityEditorGuard]
   }
 ];

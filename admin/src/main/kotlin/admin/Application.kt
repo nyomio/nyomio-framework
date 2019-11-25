@@ -1,5 +1,7 @@
 package admin
 
+import admin.device.DeviceTable
+import admin.employee.EmployeeTable
 import admin.organization.OrganizationTable
 import nyomio.dbutils.DbAccess
 import io.micronaut.runtime.Micronaut
@@ -30,6 +32,6 @@ object Application {
 class DbConfiguration(private val dbAccess: DbAccess) {
     @EventListener
     fun onStartup(event: ServerStartupEvent) {
-        dbAccess.setTableListProvider { arrayOf(OrganizationTable) }
+        dbAccess.setTableListProvider { arrayOf(OrganizationTable, EmployeeTable, DeviceTable) }
     }
 }

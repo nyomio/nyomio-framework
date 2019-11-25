@@ -9,16 +9,18 @@ import io.micronaut.security.rules.SecurityRule
 
 @Secured(SecurityRule.IS_AUTHENTICATED)
 abstract class BaseController <E : Entity, T : EntityTable>
-constructor(private val baseDbService: RevisionedQueryDbServiceBaseService<E, T>){
+constructor(private val baseDbService: BaseDbService<E, T>){
 
     @Get(uri = "/all")
     fun list() = baseDbService.listAll()
 
     @Get(uri = "/all-at/{timestamp}{/filter}")
-    fun listAt(@PathVariable("timestamp") timestamp: Long, @PathVariable("filter") filter: String?) = baseDbService.listAll(timestamp, filter)
+    open fun listAt(@PathVariable("timestamp") timestamp: Long, @PathVariable("filter") filter: String?) =
+            baseDbService.listAll(timestamp, filter)
 
-    @Get(uri = "/{id}")
-    fun getById(id: Long) = baseDbService.getById(id)
+    @Get(uri = "/by-id/{id}{/timestamp}")
+    fun getById(@PathVariable("id") id: Long, @PathVariable("timestamp") timestamp: Long?) =
+            baseDbService.getById(id, timestamp ?: System.currentTimeMillis())
 
     @Delete(uri = "/{id}")
     @Secured("admin")

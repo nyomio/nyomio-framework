@@ -1,0 +1,59 @@
+{{- range .File.MessageType}}
+{{- $messageName := .Name }}
+# {{.Name}}
+
+## Kotlin data class
+{{- range .Field}}
+val {{.Name}}: {{- if eq (.Type | string) "TYPE_INT32" }} Int
+               {{- else if eq (.Type | string) "TYPE_INT64" }} Long
+               {{- else if eq (.Type | string) "TYPE_STRING" }} String
+               {{- else if eq (.Type | string) "TYPE_BOOL" }} Boolean
+               {{- end }},
+{{- end}}
+
+## Exposed DB object
+{{- range .Field}}
+val {{.Name}}: Column<{{- if eq (.Type | string) "TYPE_INT32" }}Int
+               {{- else if eq (.Type | string) "TYPE_INT64" }}Long
+               {{- else if eq (.Type | string) "TYPE_STRING" }}String
+               {{- else if eq (.Type | string) "TYPE_BOOL" }}Boolean
+               {{- end }}> =
+               {{- if eq (.Type | string) "TYPE_INT32" }} integer("{{ .Name | snakecase }}")
+               {{- else if eq (.Type | string) "TYPE_INT64" }} long("{{ .Name | snakecase }}")
+               {{- else if eq (.Type | string) "TYPE_STRING" }} varchar("{{ .Name | snakecase }}", 100)
+               {{- else if eq (.Type | string) "TYPE_BOOL" }} bool("{{ .Name | snakecase }}")
+               {{- end }}
+{{- end}}
+
+## Exposed resultRow to data class mapping
+{{- range .Field}}
+row[{{ $messageName }}Table.{{ .Name }}],
+{{- end}}
+
+
+## Data class to InsertStatement mapping
+{{- range .Field}}
+stmt[{{ .Name }}] = {{ $messageName | lower }}.{{ .Name }}
+{{- end}}
+
+
+## Typescript model
+{{- range .Field}}
+{{.Name}}: {{- if eq (.Type | string) "TYPE_INT32" }} number
+               {{- else if eq (.Type | string) "TYPE_INT64" }} number
+               {{- else if eq (.Type | string) "TYPE_STRING" }} string
+               {{- else if eq (.Type | string) "TYPE_BOOL" }} boolean
+               {{- end }},
+{{- end}}
+
+## Typescript default object
+id: 0,
+{{- range .Field}}
+{{.Name}}: {{- if eq (.Type | string) "TYPE_INT32" }} 0
+               {{- else if eq (.Type | string) "TYPE_INT64" }} 0
+               {{- else if eq (.Type | string) "TYPE_STRING" }} ""
+               {{- else if eq (.Type | string) "TYPE_BOOL" }} true
+               {{- end }},
+{{- end}}
+
+{{- end}}

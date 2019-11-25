@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package example;
+
+service Dummy {
+}
+
+message Organization {
+  string name = 1;
+  string address = 2;
+}
+
+message User {
+  string email = 1;
+  string name = 2;
+  int64 organizationId = 3;
+}

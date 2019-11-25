@@ -1,10 +1,10 @@
 package nyomio.dbutils
 
-import nyomio.dbutils.revisionedentity.EntityTable
-import nyomio.dbutils.revisionedentity.RevisionEndTable
-import nyomio.dbutils.revisionedentity.RevisionTable
-import nyomio.dbutils.revisionedentity.RevisionedQueryService
+import com.fasterxml.jackson.databind.ser.Serializers
+import nyomio.dbutils.RevisionTableTest.Companion.dbAccess
+import nyomio.dbutils.revisionedentity.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -22,23 +22,41 @@ object TestUser : EntityTable() {
     val email: Column<String> = varchar("email", 80)
 }
 
+
 class RevisionTableTest {
 
     companion object {
 
         var dbAccess: DbAccess? = null
-        lateinit var revSvc: RevisionedQueryService
+        lateinit var userDbService: BaseDbService<Entity, TestUser>
+        lateinit var deviceDbService: BaseDbService<Entity, TestDevice>
+
 
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
             dbAccess = DbAccess(
-                    "jdbc:postgresql://localhost:5432/test",
+                    "jdbc:postgresql://traefik.nyomio.local:5432/test",
                     "org.postgresql.Driver",
                     "postgres",
-                    "Ge8lEFpmGl",
+                    "xZ5ie8evM4",
                     false)
-            revSvc = RevisionedQueryService()
+            deviceDbService = object : BaseDbService<Entity, TestDevice>(dbAccess!!) {
+                override fun table() = TestDevice
+
+                override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
+
+                override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                }
+            }
+            userDbService = object : BaseDbService<Entity, TestUser>(dbAccess!!) {
+                override fun table() = TestUser
+
+                override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
+
+                override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                }
+            }
             dropRecreate()
             createTestUsers()
             createTestDevices()
@@ -56,24 +74,24 @@ class RevisionTableTest {
 
         private fun createTestUsers() {
             transaction(dbAccess?.db) {
-                revSvc.insertRevisioned(TestUser, 10) {
+                userDbService.insertRevisioned(TestUser, 10) {
                     it[TestUser.name] = "User1"
                     it[TestUser.email] = "user@user1.com"
                 }
 
-                revSvc.insertRevisioned(TestUser, 10) {
+                userDbService.insertRevisioned(TestUser, 10) {
                     it[TestUser.name] = "User2"
                     it[TestUser.email] = "user@user2.com"
                 }
             }
 
             transaction(dbAccess?.db) {
-                revSvc.updateRevisioned(TestUser, 1, 20) {
+                userDbService.updateRevisioned(TestUser, 1, 20) {
                     it[TestUser.name] = "User1"
                     it[TestUser.email] = "user@user1-mail.com"
                 }
 
-                revSvc.updateRevisioned(TestUser, 2, 20) {
+                userDbService.updateRevisioned(TestUser, 2, 20) {
                     it[TestUser.name] = "User2 Boss"
                     it[TestUser.email] = "user@user2-mail.com"
                 }
@@ -89,7 +107,7 @@ class RevisionTableTest {
         }
 
         private fun insertTestDevice(index: Int, owner: Long, nameBase: String = "device", secretBase: String = "secret") {
-            val entityId = revSvc.insertRevisioned(
+            val entityId = deviceDbService.insertRevisioned(
                     TestDevice,
                     10,
                     OperationContext("ctx-${index}", 1)) {
@@ -98,7 +116,7 @@ class RevisionTableTest {
                 it[TestDevice.owner] = owner
             }
 
-            revSvc.updateRevisioned(TestDevice, entityId, 20,
+            deviceDbService.updateRevisioned(TestDevice, entityId, 20,
                     OperationContext("ctx-${index}-2", 2)) {
                 it[TestDevice.secret] = "${secretBase}-${index}-mod"
                 it[TestDevice.name] = "${nameBase}-${index}-mod"
@@ -113,14 +131,14 @@ class RevisionTableTest {
 
         transaction(dbAccess?.db) {
             Assertions.assertEquals(0,
-                    revSvc.atTimestamp(0, TestDevice.selectAll()).toList().size)
+                    deviceDbService.atTimestamp(0).toList().size)
 
-            val earlier = revSvc.atTimestamp(15, TestDevice.selectAll()).toList()
+            val earlier = deviceDbService.atTimestamp(15).toList()
             Assertions.assertEquals(3, earlier.size)
             Assertions.assertEquals("secret-1", earlier[0][TestDevice.secret])
             Assertions.assertEquals("device-1", earlier[0][TestDevice.name])
 
-            val latest = revSvc.atTimestamp(40, TestDevice.selectAll()).toList()
+            val latest = deviceDbService.atTimestamp(40).toList()
             Assertions.assertEquals(3, latest.size)
             Assertions.assertEquals("secret-1-mod", latest[0][TestDevice.secret])
             Assertions.assertEquals("device-1-mod", latest[0][TestDevice.name])
@@ -129,7 +147,7 @@ class RevisionTableTest {
             Assertions.assertEquals(6, allVersions.size)
 
             Assertions.assertEquals(2,
-                    revSvc.atTimestamp(40, TestDevice.select { TestDevice.owner eq 2 }).toList().size)
+                    deviceDbService.atTimestamp(40).andWhere { TestDevice.owner eq 2 }.toList().size)
 
         }
     }
@@ -144,11 +162,15 @@ class RevisionTableTest {
                 9                    | 3                    | secret-3             | device-3             | 2                    | 2                    | 2                    | User2                | user@user2.com       | 
                 """.trimIndent()
 
-            val renderedResult = revSvc.atTimestamp(15,
-                    TestDevice
-                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
-                            .selectAll())
+            val renderedResult = TestDevice
+                    .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
+                    .selectAll().atTimestamp(15)
                     .renderResult("nyomio.dbutils.")
+//            val renderedResult = deviceDbService.atTimestamp(15,
+//                    TestDevice
+//                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
+//                            .selectAll())
+//                    .renderResult("nyomio.dbutils.")
 
             Assertions.assertEquals(expectedRenderedResult, renderedResult)
         }
@@ -160,10 +182,9 @@ class RevisionTableTest {
                 8                    | 2                    | secret-2-mod         | device-2-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
                 10                   | 3                    | secret-3-mod         | device-3-mod         | 2                    | 4                    | 2                    | User2 Boss           | user@user2-mail.com  | 
                 """.trimIndent()
-            val renderedResult = revSvc.atTimestamp(20,
-                    TestDevice
-                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
-                            .select { TestUser.name like "%Boss" })
+            val renderedResult = TestDevice
+                    .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
+                    .selectAll().atTimestamp(20).andWhere {TestUser.name like "%Boss" }
                     .renderResult("nyomio.dbutils.")
         }
     }

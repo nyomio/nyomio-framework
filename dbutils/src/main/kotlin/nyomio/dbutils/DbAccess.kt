@@ -1,6 +1,8 @@
 package nyomio.dbutils
 
 import io.micronaut.context.annotation.Property
+import nyomio.dbutils.revisionedentity.RevisionEndTable
+import nyomio.dbutils.revisionedentity.RevisionTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table

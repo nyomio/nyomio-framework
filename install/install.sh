@@ -17,6 +17,7 @@ helm install --name nyom-db stable/postgresql
 
 printf "\n%s\n" "***** Waiting for postgres server to be ready..."
 kubectl wait --for=condition=ready --timeout=450s pod/nyom-db-postgresql-0
+kubectl apply -f ../k8s/postgres-ingresstcp.yml
 
 # Keycloak
 printf "\n%s\n"  "***** Installing Keycloak from helm chart"

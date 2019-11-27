@@ -1,13 +1,18 @@
 package admin.organization
 
-import io.reactivex.Single
+import admin.organization.OrganizationTable.insertFrom
 import nyomio.dbutils.*
+import nyomio.dbutils.revisionedentity.RevisionedQueryDbServiceBaseService
+import nyomio.dbutils.revisionedentity.Entity
+import nyomio.dbutils.revisionedentity.EntityTable
+import nyomio.dbutils.revisionedentity.RevisionedQueryService
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 import javax.inject.Singleton
 
-data class Organization(val org_name: String, val org_address: String, val id: Long? = null, val revisionId: Long? = null) {
+class Organization(val org_name: String, val org_address: String, entityId: Long? = null,
+                        val revisionId: Long? = null) : Entity(entityId) {
     constructor(row: ResultRow) :
             this(row[OrganizationTable.name],
                     row[OrganizationTable.address],
@@ -25,14 +30,17 @@ object OrganizationTable : EntityTable() {
 }
 
 @Singleton
-class OrganizationDbService
-constructor(private val dba: DbAccess) {
+class OrganizationDbServiceRevisionedQueryDbService
+constructor(private val dba: DbAccess,
+            private val revSvc: RevisionedQueryService)
+    : RevisionedQueryDbServiceBaseService<Organization, OrganizationTable>(dba, revSvc) {
 
-    fun createTables() {
-        transaction(dba.db) {
-            SchemaUtils.create(OrganizationTable, RevisionTable, RevisionEndTable)
-        }
-    }
+    override fun table() = OrganizationTable
+
+    override fun mapResultRowToEntity(resultRow: ResultRow) = Organization(resultRow)
+
+    override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Organization) =
+            OrganizationTable.insertFrom(stmt, entity)
 
     fun addTestData() {
         transaction(dba.db) {
@@ -42,48 +50,10 @@ constructor(private val dba: DbAccess) {
                     Organization("Inclust kft.", "1054, Honvéd u. 8."),
                     Organization("Somodi Tibor ev", "1054, Honvéd u. 8.")
             ).forEach { org ->
-                OrganizationTable.insertRevisioned {
+                revSvc.insertRevisioned(table()) {
                     insertFrom(it, org)
                 }
             }
-        }
-    }
-
-    fun listAll(timestamp: Long = System.currentTimeMillis()) = Single.just(
-            transaction(dba.db) {
-                atTimestamp(timestamp, OrganizationTable.selectAll()).toList()
-            }.map {
-                Organization(it)
-            }
-    )
-
-    fun add(organization: Organization): Long {
-        return transaction(dba.db) {
-            OrganizationTable.insertRevisioned {
-                insertFrom(it, organization)
-            }
-        }
-    }
-
-    fun edit(organization: Organization) {
-        transaction(dba.db) {
-            OrganizationTable.updateRevisioned(entityId = organization.id!!) {
-                insertFrom(it, organization)
-            }
-        }
-    }
-
-    fun getById(id: Long): Organization? {
-        return transaction(dba.db) {
-            OrganizationTable.select { OrganizationTable.entityId eq id }.firstOrNull()
-        }?.let {
-            Organization(it)
-        }
-    }
-
-    fun delete(entityId: Long) {
-        transaction(dba.db) {
-            OrganizationTable.deleteRevisioned(entityId)
         }
     }
 

@@ -57,7 +57,7 @@ import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
     CovalentDynamicFormsModule,
     CovalentLoadingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    AkitaNgRouterStoreModule.forRoot(),
+    AkitaNgRouterStoreModule,
     ReactiveFormsModule,
     NyomioNgComponentsModule,
   ],

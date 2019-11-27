@@ -5,19 +5,22 @@ import {Organization} from './organization.model';
 import {OrganizationQuery} from "./organization.query";
 import {handleHttpError} from "../../../common/error/error.util";
 import {EntityEditorService} from "nyomio-ng-components";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends EntityEditorService {
 
-  constructor(private organizationStore: OrganizationStore,
+  constructor(router: Router,
+              route: ActivatedRoute,
+              private organizationStore: OrganizationStore,
               private organizationQuery: OrganizationQuery,
               private http: HttpClient) {
-    super(organizationStore)
+    super(router, route, organizationStore, organizationQuery)
   }
 
-  getAt(timestamp: number) {
+  getAt(timestamp: number, filter?: string) {
     this.organizationStore.setLoading(true);
-    this.http.get('/api/v1/admin/organization/all-at/' + timestamp)
+    this.http.get('/api/v1/admin/organization/all-at/' + timestamp + (filter ? "/" + filter : ""))
     .pipe(handleHttpError(this.organizationStore))
     .subscribe((value: Organization[]) => {
         this.organizationStore.setLoading(false);

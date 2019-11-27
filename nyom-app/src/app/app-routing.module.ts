@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {OrganizationPageComponent} from "./page/organization/organization-page/organization-page.component";
 import {AuthGuard} from "./common/auth/auth.guard";
+import {EntityEditorGuard} from "nyomio-ng-components";
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
   {
     component: OrganizationPageComponent,
     path: 'company',
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, EntityEditorGuard]
   }
 ];
 

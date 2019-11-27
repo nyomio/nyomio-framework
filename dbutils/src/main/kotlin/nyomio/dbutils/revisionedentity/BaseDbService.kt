@@ -18,10 +18,10 @@ constructor(private val dba: DbAccess) {
     protected abstract fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: E)
 
     open fun listAll(timeStamp: Long = System.currentTimeMillis(), filter: String? = null) =
-            executeSelectQuery(atTimestamp(timeStamp).filter(filter))
+            executeSelectQueryWith(atTimestamp(timeStamp).filter(filter))
 
     fun getById(id: Long, timestamp: Long = System.currentTimeMillis()) =
-            executeSelectQuery(atTimestamp(timestamp).andWhere { table().entityId eq id })
+            executeSelectQueryWith(atTimestamp(timestamp).andWhere { table().entityId eq id })
 
     fun add(entity: E): Long {
         return transaction(dba.db) {
@@ -53,11 +53,19 @@ constructor(private val dba: DbAccess) {
         return table().selectAll().atTimestamp(timestamp)
     }
 
-    protected fun executeSelectQuery(query: Query) = Single.fromCallable {
+    protected fun executeSelectQueryWith(query: Query) = Single.fromCallable {
         transaction(dba.db) {
             query.toList()
         }.map {
             mapResultRowToEntity(it)
+        }
+    }
+
+    protected fun <C> executeSelectQueryWithCustomMapping(query: Query, mapping: (ResultRow) -> C) = Single.fromCallable {
+        transaction(dba.db) {
+            query.toList()
+        }.map {
+            mapping(it)
         }
     }
 

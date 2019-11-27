@@ -22,6 +22,10 @@ module.exports = class extends Generator {
     );
   }
 
+  end() {
+    this.log("You have to add the generated table to the DbConfiguration of Application.kt.")
+  }
+
   // The name `constructor` is important here
   constructor(args, opts) {
     super(args, opts);

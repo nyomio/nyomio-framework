@@ -9,7 +9,7 @@ import nyomio.dbutils.revisionedentity.BaseController
 @Controller("/api/v1/admin/organization")
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class OrganizationController
-constructor(private val organizationDbService: OrganizationDbServiceRevisionedQueryDbService)
+constructor(private val organizationDbService: OrganizationDbService)
     : BaseController<Organization, OrganizationTable>(organizationDbService) {
 
     @Get(uri = "/add-test-data")

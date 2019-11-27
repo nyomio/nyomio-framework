@@ -26,11 +26,15 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NyomioNgComponentsModule} from "nyomio-ng-components";
 import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
+import {UserComponent} from "./page/user/user.component";
+import {DeviceComponent} from "./page/device/device.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     OrganizationPageComponent,
+    UserComponent,
+    DeviceComponent
   ],
   imports: [
     CovalentLayoutModule,

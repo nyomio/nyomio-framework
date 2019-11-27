@@ -47,6 +47,12 @@ We need a soft rule to determine where a component should be placed. There are 3
  
 ### Responsiveness
 Pages must work optimized to tablet and phone mode. 
+
+### Scaffolding
+nyomio-ng-components define a schematic to generate entity-editor component.
+```
+ng generate nyomio-ng-components:entity-editor --name EntityName
+```
  
 ### Testing
 Rules of thumb

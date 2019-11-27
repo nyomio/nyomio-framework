@@ -1,6 +1,7 @@
 package admin.organization
 
 import admin.organization.OrganizationTable.insertFrom
+import admin.organization.OrganizationTable.shortName
 import nyomio.dbutils.*
 import nyomio.dbutils.revisionedentity.BaseDbService
 import nyomio.dbutils.revisionedentity.Entity
@@ -32,7 +33,7 @@ object OrganizationTable : EntityTable() {
 }
 
 @Singleton
-class OrganizationDbServiceRevisionedQueryDbService
+class OrganizationDbService
 constructor(private val dba: DbAccess)
     : BaseDbService<Organization, OrganizationTable>(dba) {
 
@@ -57,5 +58,9 @@ constructor(private val dba: DbAccess)
             }
         }
     }
+
+    fun getByShortName(organizationName: String) =
+            executeSelectQueryWith(atTimestamp(System.currentTimeMillis()).andWhere { shortName eq organizationName })
+                    .map { it.first() }
 
 }

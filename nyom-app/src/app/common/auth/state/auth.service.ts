@@ -15,6 +15,8 @@ export class AuthService extends UiErrorService {
     this.http.get('/api/v1/auth/user')
     .pipe(handleHttpError(this.authStore))
     .subscribe((value: AuthState) => {
+      // TODO: remove hardwired organization
+      value.activeOrganization = 'inepex';
       this.authStore.update(value)
     })
   }

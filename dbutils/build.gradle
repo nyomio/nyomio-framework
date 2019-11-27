@@ -15,25 +15,34 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-inject"
-    implementation "ch.qos.logback:logback-classic:1.2.3"
-
+    implementation "io.micronaut:micronaut-security-jwt"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "org.jetbrains.exposed:exposed:0.17.3"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+    implementation "org.postgresql:postgresql:42.2.8"
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
-
-    implementation "org.postgresql:postgresql:42.2.8"
-    implementation "org.jetbrains.exposed:exposed:0.17.3"
 
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = '1.8'
+        javaParameters = true
+    }
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = '1.8'
+        javaParameters = true
+    }
+}
+test {
+    useJUnitPlatform()
 }

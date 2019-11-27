@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {OrganizationQuery} from "../state/organization.query";
 import {TdLoadingService} from "@covalent/core";
 import {OrganizationService} from "../state/organization.service";
-import {createOrganization, Organization} from "../state/organization.model";
+import {defaultOrganization, Organization} from "../state/organization.model";
 import {
   ITdDynamicElementConfig,
   TdDynamicElement,
@@ -10,6 +10,7 @@ import {
 } from "@covalent/dynamic-forms";
 import {MatTableDataSource} from "@angular/material/table";
 import * as moment from "moment";
+import {Column} from "nyomio-ng-components/lib/nyom-table/nyom-table.component";
 
 @Component({
   selector: 'app-organization-page',
@@ -18,20 +19,11 @@ import * as moment from "moment";
 })
 export class OrganizationPageComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<Organization>([]);
-
-  selectedOrganization$ = this.organizationQuery.select(state => state.ui.selectedOrganization);
-  newOrganizationMode$ = this.organizationQuery.select(state => state.ui.newOrganizationMode);
-  loading$ = this.organizationQuery.selectLoading();
-
-  columns: any[] = [
+  columns: Column[] = [
     {name: 'id', label: 'ID'},
     {name: 'org_name', label: 'Name'},
     {name: 'org_address', label: 'Address'},
   ];
-
-  @ViewChild('organizationForm', {static: false})
-  organizationForm: TdDynamicFormsComponent;
 
   formElements: ITdDynamicElementConfig[] = [{
     name: 'org_name',
@@ -44,83 +36,15 @@ export class OrganizationPageComponent implements OnInit {
     type: TdDynamicElement.Input,
   }];
 
+  defaultEntity = defaultOrganization;
+
   constructor(public organizationQuery: OrganizationQuery,
-              public organizationService: OrganizationService,
-              private _loadingService: TdLoadingService) {
+              public organizationService: OrganizationService
+  ) {
   }
 
-  ngOnInit() {
-    this.organizationQuery.selectAll().subscribe((value: Organization[]) => {
-        this.dataSource.data = value;
-      }
-    );
-
-    this.selectedOrganization$.subscribe((selectedId: number) => {
-      if (!this.organizationForm) {
-        return
-      }
-      if (selectedId == null) {
-        this.clearForm();
-      } else {
-        this.updateFormForSelected(selectedId);
-      }
-    });
-
-    this.newOrganizationMode$.subscribe(
-      next => {
-        if (!this.organizationForm || !next) {
-          return
-        }
-        this.clearForm();
-      }
-    );
-
-    this.organizationQuery.selectLoading().subscribe((loading: boolean) => {
-      if (loading) {
-        this._loadingService.register('organization');
-      } else {
-        this._loadingService.resolve('organization');
-      }
-    });
+  ngOnInit(): void {
   }
 
-  rowClicked(row: Organization) {
-    this.organizationService.setSelected(row.id)
-  }
 
-  save() {
-    if (this.organizationQuery.getValue().ui.newOrganizationMode) {
-      this.organizationService.upsert(this.createOrganizationFromForm())
-    } else {
-      const org = this.createOrganizationFromForm();
-      org.id = this.organizationQuery.getValue().ui.selectedOrganization;
-      this.organizationService.upsert(org)
-    }
-  }
-
-  cancel() {
-    this.organizationService.setSelected(null);
-  }
-
-  delete() {
-    this.organizationService.deleteSelected();
-  }
-
-  private createOrganizationFromForm(): Organization {
-    return createOrganization(this.organizationForm.value)
-  }
-
-  private clearForm() {
-    this.organizationForm.dynamicForm.reset();
-  }
-
-  private updateFormForSelected(selectedId: number) {
-    const org = this.organizationQuery.getEntity(selectedId);
-    this.organizationForm.dynamicForm.controls.org_address.setValue(org.org_address);
-    this.organizationForm.dynamicForm.controls.org_name.setValue(org.org_name);
-  }
-
-  onRevisionTimeChange($event: moment.Moment) {
-    this.organizationService.getAt($event.valueOf());
-  }
 }

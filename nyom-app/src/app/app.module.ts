@@ -11,15 +11,12 @@ import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {NG_ENTITY_SERVICE_CONFIG} from '@datorama/akita-ng-entity-service';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
-import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
 import {environment} from '../environments/environment';
 import {OrganizationPageComponent} from './page/organization/organization-page/organization-page.component';
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
-import {ErrorComponent} from "./common/error/error.componet";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
-import {NyomTableComponent} from './common/nyom-table/nyom-table.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -27,15 +24,17 @@ import {MatMomentDateModule} from "@angular/material-moment-adapter"
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {ReactiveFormsModule} from "@angular/forms";
-import { RevisionDateTimePickerComponent } from './common/revision-date-time-picker/revision-date-time-picker.component';
+import {NyomioNgComponentsModule} from "nyomio-ng-components";
+import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
+import {UserComponent} from "./page/user/user.component";
+import {DeviceComponent} from "./page/device/device.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     OrganizationPageComponent,
-    ErrorComponent,
-    NyomTableComponent,
-    RevisionDateTimePickerComponent
+    UserComponent,
+    DeviceComponent
   ],
   imports: [
     CovalentLayoutModule,
@@ -60,8 +59,9 @@ import { RevisionDateTimePickerComponent } from './common/revision-date-time-pic
     CovalentDynamicFormsModule,
     CovalentLoadingModule,
     environment.production ? [] : AkitaNgDevtools.forRoot(),
-    AkitaNgRouterStoreModule.forRoot(),
-    ReactiveFormsModule
+    AkitaNgRouterStoreModule,
+    ReactiveFormsModule,
+    NyomioNgComponentsModule,
   ],
   providers: [{
     provide: NG_ENTITY_SERVICE_CONFIG,

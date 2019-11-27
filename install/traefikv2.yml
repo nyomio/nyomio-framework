@@ -108,6 +108,7 @@ spec:
             - --log.level=info
             - --entrypoints.web.Address=:8000
             - --entrypoints.websecure.Address=:4443
+            - --entrypoints.postgres.Address=:5432
             - --providers.kubernetescrd
             - --providers.kubernetesingress=true
           ports:
@@ -115,6 +116,8 @@ spec:
               containerPort: 8000
             - name: websecure
               containerPort: 4443
+            - name: postgres
+              containerPort: 5432
             - name: admin
               containerPort: 8080
 
@@ -201,6 +204,10 @@ spec:
       name: https
       port: 443
       targetPort: 4443
+    - protocol: TCP
+      name: postgres
+      port: 5432
+      targetPort: 5432
   selector:
     app: traefik
   type: LoadBalancer

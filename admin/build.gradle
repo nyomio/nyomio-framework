@@ -2,7 +2,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm"
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.allopen"
-    id "com.google.cloud.tools.jib" version "1.6.1"
     id "com.github.johnrengelman.shadow"
     id "application"
 }
@@ -27,11 +26,15 @@ dependencies {
 
     implementation "org.postgresql:postgresql:42.2.8"
     implementation "org.jetbrains.exposed:exposed:0.17.3"
+    implementation "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin:${mapstructVersion}.Beta2"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}.Final"
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
     kapt "io.micronaut.configuration:micronaut-openapi"
+    kapt "org.mapstruct:mapstruct-processor:${mapstructVersion}.Final"
+    kapt "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin-processor:${mapstructVersion}.Beta2"
     kaptTest platform("io.micronaut:micronaut-bom:$micronautVersion")
     kaptTest "io.micronaut:micronaut-inject-java"
     runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
@@ -47,6 +50,7 @@ mainClassName = "admin.Application"
 repositories {
     mavenCentral()
     maven { url "https://jcenter.bintray.com" }
+    maven { url "https://jitpack.io" }
 }
 
 configurations {

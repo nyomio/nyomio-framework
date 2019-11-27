@@ -47,12 +47,35 @@ We need a soft rule to determine where a component should be placed. There are 3
  
 ### Responsiveness
 Pages must work optimized to tablet and phone mode. 
+
+### Scaffolding
+nyomio-ng-components define a schematic to generate entity-editor component.
+```
+ng generate nyomio-ng-components:entity-editor --name EntityName
+```
  
 ### Testing
 Rules of thumb
  - TDD would be great, but it is really hard to do right (at least for me :) )
  - e2e tests for the main functionality with some edge cases are a must.
  - use unit test, where it makes sense (component is easier to develop against a test)
+ 
+## Execute development server on kubernetes using skaffold
+You can use google's scaffold tool to run angular dev server inside kubernetes.
+First you need to [install skaffold](https://skaffold.dev/docs/install/).
+
+The install script installs the production version. Before executing the development server
+you have to delete the production deployment:
+```
+kubectl delete -f k8s/webapp.yml
+```
+
+Scaffold builds and deploys a container for nyom-app development. Also it monitors the changes and triggers recompile.
+To execute scaffold:
+```
+cd nyom-app
+skaffold dev
+```
  
 # Angular CLI-s generated docs with some modification
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.3.

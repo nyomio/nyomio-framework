@@ -23,7 +23,7 @@ micronaut:
       enabled: true
       clients:
         keycloak:
-          client-id: nyom-app
-          client-secret: ${CLIENT_SECRET}
+          client-id: ${KEYCLOAK_CLIENT_ID}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET}
           openid:
-            issuer: 'https://sso.nyomio.local/auth/realms/nyomio'
+            issuer: ${KEYCLOAK_OPENID_ISSUER_URL}

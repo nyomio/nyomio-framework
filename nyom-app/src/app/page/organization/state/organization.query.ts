@@ -1,16 +1,15 @@
 import {Injectable} from '@angular/core';
-import {QueryEntity} from '@datorama/akita';
-import {OrganizationState, OrganizationStore} from './organization.store';
-import {Organization} from './organization.model';
+import {OrganizationStore} from './organization.store';
+import {EntityEditorQuery} from "nyomio-ng-components";
+import {RouterQuery} from "@datorama/akita-ng-router-store";
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationQuery extends QueryEntity<OrganizationState, Organization> {
+export class OrganizationQuery extends EntityEditorQuery {
 
-
-  constructor(protected store: OrganizationStore) {
-    super(store);
+  constructor(routerQuery: RouterQuery, protected store: OrganizationStore) {
+    super(routerQuery, store);
   }
 
 }

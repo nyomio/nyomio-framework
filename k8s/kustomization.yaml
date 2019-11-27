@@ -4,3 +4,4 @@ resources:
   - postgresql.yaml
   - keycloak.yaml
   - coredns-rewrite.yml
+  - fwdemo-clusterrole.yaml

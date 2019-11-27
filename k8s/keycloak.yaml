@@ -51,7 +51,10 @@ spec:
                 MAPPER_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio | grep -B1 '\"name\" : \"client roles\"' | grep \"id\" | cut -d\":\" -f2 | cut -d'\"' -f2);
                 /opt/jboss/keycloak/bin/kcadm.sh update client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models/$MAPPER_ID -s 'config.\"id.token.claim\"=\"true\"' -s 'config.\"usermodel.clientRoleMapping.clientId\"=\"nyom-app\"' -r nyomio;
                 ADMIN_CONSOLE_CLIENT_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get clients -r master -q clientId=security-admin-console -F id | cut -d\":\" -f2 | tr -cd '[:alnum:]._-');
-                /opt/jboss/keycloak/bin/kcadm.sh update clients/$ADMIN_CONSOLE_CLIENT_ID -r master -s redirectUris+=\"*\";"]
+                /opt/jboss/keycloak/bin/kcadm.sh update clients/$ADMIN_CONSOLE_CLIENT_ID -r master -s redirectUris+=\"*\";
+                TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token);
+                curl -XPOST -k https://10.96.0.1/api/v1/namespaces/framework-demo/secrets -H \"Authorization: $TOKEN\" -H 'Accept: application/json' -H 'Content-Type: application/json'
+                --data '{\"kind\":\"Secret\", \"apiVersion\":\"v1\", \"metadata\": { \"namespace\":\"framework-demo\",\"name\":\"client-secret\"},\"data\": {\"client-secret\":\"asdfsdfs\"}}';"]
 ---
 apiVersion: v1
 kind: Service

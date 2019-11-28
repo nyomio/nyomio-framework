@@ -2,18 +2,16 @@ package admin.device
 
 import admin.organization.OrganizationDbService
 import admin.user.UserRevisionedDbService
-import admin.user.UserTable
 import nyomio.dbutils.*
 import nyomio.dbutils.revisionedentity.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.transactions.transaction
 import javax.inject.Singleton
 
 class Device(
-        val name: String,
-        val imei: String,
-        val organizationId: Long,
+        var name: String,
+        var imei: String,
+        var organizationId: Long,
         entityId: Long? = null
 ) : Entity(entityId) {
     constructor(row: ResultRow) :
@@ -44,7 +42,7 @@ constructor(private val dba: DbAccess,
             private val orgDbService: OrganizationDbService)
     : BaseDbService<Device, DeviceTable>(dba) {
 
-    fun listAllForUser(organizationName: String, timestamp: Long = System.currentTimeMillis(), filter: String? = null) =
+    fun listOwnAt(organizationName: String, timestamp: Long = System.currentTimeMillis(), filter: String? = null) =
             orgDbService.getByShortName(organizationName).flatMap { org ->
                 executeSelectQueryWith(atTimestamp(timestamp).filter(filter)
                         .andWhere { DeviceTable.organizationId.eq(org.id!!) })
@@ -58,13 +56,10 @@ constructor(private val dba: DbAccess,
             DeviceTable.insertFrom(stmt, entity)
 
     fun addOwn(organization: String, device: Device): Long {
-        return transaction(dba.db) {
-            orgDbService.getByShortName(organization).map { org ->
-                insertRevisioned(table()) {
-                    mapEntityToInsertStatement(it, device)
-                    it[UserTable.organizationId] = org.id!!
-                }
-            }.blockingGet()
-        }
+        return orgDbService.getByShortName(organization).map { org ->
+            device.organizationId = org.id!!
+            add(device)
+
+        }.blockingGet()
     }
 }

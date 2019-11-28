@@ -7,6 +7,7 @@ import admin.organization.Organization
 import admin.organization.OrganizationDbService
 import admin.user.UserRevisionedDbService
 import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Put
 import io.micronaut.security.annotation.Secured
 
@@ -17,7 +18,7 @@ constructor(private val organizationDbService: OrganizationDbService,
             private val userDbService: UserRevisionedDbService,
             private val deviceDbService: DeviceRevisionedDbService) {
 
-    @Put(uri = "/seed")
+    @Get(uri = "/seed")
     fun seed() {
         organizationDbService.add(Organization("Carborail", "carborail", "Budapest")).let { organizationId ->
             userDbService.add(User("carbouser1@test.com", "carbouser1", organizationId))

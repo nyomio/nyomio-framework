@@ -15,17 +15,11 @@ class DeviceController
 constructor(private val deviceDbService: DeviceRevisionedDbService)
     : BaseController<Device, DeviceTable>(deviceDbService) {
 
-    @Get(uri = "/own-at/{timestamp}{/filter}")
+    @Get(uri = "/own-at{/timestamp}{/filter}")
     fun listOwnAt(organizationName: String,
-                  timestamp: Long,
+                  timestamp: Long?,
                   filter: String?) =
-            deviceDbService.listAllForUser(organizationName, timestamp, filter)
-
-    @Secured("admin")
-    @Get(uri = "/all-at/{timestamp}{/filter}")
-    override fun listAt(timestamp: Long, filter: String?): Single<List<Device>> {
-        return super.listAt(timestamp, filter)
-    }
+            deviceDbService.listOwnAt(organizationName, timestamp ?: System.currentTimeMillis(), filter)
 
     @Put(uri = "/own")
     fun addOwn(organization: String, device: Device) =
@@ -35,4 +29,13 @@ constructor(private val deviceDbService: DeviceRevisionedDbService)
                 deviceDbService.edit(device)
                 device.id
             }
+
+    @Secured("admin")
+    override fun listAt(timestamp: Long, filter: String?) = super.listAt(timestamp, filter)
+
+    @Secured("admin")
+    override fun list() = super.list()
+
+    @Secured("admin")
+    override fun getById(id: Long, timestamp: Long?) = super.getById(id, timestamp)
 }

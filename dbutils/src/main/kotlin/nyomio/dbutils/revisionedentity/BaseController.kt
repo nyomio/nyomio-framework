@@ -12,7 +12,7 @@ abstract class BaseController <E : Entity, T : EntityTable>
 constructor(protected val baseDbService: BaseDbService<E, T>){
 
     @Get(uri = "/all")
-    fun list() = baseDbService.listAll()
+    open fun list() = baseDbService.listAll()
 
     @Get(uri = "/all-at/{timestamp}{/filter}")
     open fun listAt(@PathVariable("timestamp") timestamp: Long, @PathVariable("filter") filter: String?) =

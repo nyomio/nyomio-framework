@@ -22,7 +22,7 @@ export class UserService extends EntityEditorService {
   }
 
   buildGetAtUrl(timestamp: number, filter?: string): string {
-    return `/api/v1/admin/${this.authQuery.getValue().activeOrganization}/user/own/at/${timestamp}${filter ? filter : ""}`;
+    return `/api/v1/admin/${this.authQuery.getValue().activeOrganization}/user/own-at/${timestamp}${filter ? "/" + filter : ""}`;
   }
 
   buildUpsertUrl(): string {

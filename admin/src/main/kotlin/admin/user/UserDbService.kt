@@ -2,14 +2,12 @@ package admin.user
 
 import admin.organization.OrganizationDbService
 import admin.organization.OrganizationTable
-import com.github.pozo.KotlinBuilder
 import io.micronaut.security.utils.SecurityService
 import io.reactivex.Single
 import nyomio.dbutils.*
 import nyomio.dbutils.revisionedentity.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import javax.inject.Singleton
 
@@ -40,7 +38,7 @@ class User(
                     row[UserTable.entityId]
             )
 
-    constructor(): this("", "", 0L, 0L)
+    constructor() : this("", "", 0L, 0L)
 }
 
 object UserTable : EntityTable() {
@@ -60,8 +58,7 @@ class UserRevisionedDbService
 constructor(private val dba: DbAccess,
             private val securityService: SecurityService,
             private val orgDbService: OrganizationDbService
-            )
-    : BaseDbService<User, UserTable>(dba) {
+) : BaseDbService<User, UserTable>(dba) {
 
     private val logger = LoggerFactory.getLogger(UserRevisionedDbService::class.java)
 
@@ -74,7 +71,7 @@ constructor(private val dba: DbAccess,
 
     fun listOwnAt(organizationName: String, timestamp: Long = System.currentTimeMillis(), filter: String? = null) =
             orgDbService.getByShortName(organizationName).flatMap { org ->
-                executeSelectQueryWithCustomMapping(atTimestamp(timestamp).andWhere {
+                executeSelectQueryWithCustomMapping(atTimestamp(timestamp).filter(filter).andWhere {
                     UserTable.organizationId eq org.id!!
                 }) {
                     UserWithoutOrg(it)
@@ -92,12 +89,12 @@ constructor(private val dba: DbAccess,
 
 
     fun addOwn(organization: String, userWithoutOrg: UserWithoutOrg): Long {
-       return UserMapper.INSTANCE.userWithoutOrgToUser(userWithoutOrg).let { user ->
-           orgDbService.getByShortName(organization).map { org ->
-               user.organizationId = org.id!!
-               add(user)
-           }.blockingGet()
+        return UserMapper.INSTANCE.userWithoutOrgToUser(userWithoutOrg).let { user ->
+            orgDbService.getByShortName(organization).map { org ->
+                user.organizationId = org.id!!
+                add(user)
+            }.blockingGet()
 
-       }
+        }
     }
 }

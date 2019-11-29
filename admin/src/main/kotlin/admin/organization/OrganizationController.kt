@@ -16,5 +16,10 @@ constructor(private val organizationDbService: OrganizationDbService)
     @Secured("admin")
     fun addTestData() = organizationDbService.addTestData()
 
+    @Secured("admin")
+    override fun listAt(timestamp: Long, filter: String?) = super.listAt(timestamp, filter)
+
+    @Secured("admin")
+    override fun list() = super.list()
 
 }

@@ -201,6 +201,10 @@ spec:
       name: https
       port: 443
       targetPort: 4443
+    - protocol: TCP
+      name: postgres
+      port: 5432
+      targetPort: 5432
   selector:
     app: traefik
   type: LoadBalancer

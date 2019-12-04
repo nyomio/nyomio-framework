@@ -1,7 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  # "namespace" omitted since ClusterRoles are not namespaced
   name: secret-writer
 rules:
 - apiGroups: [""]
@@ -11,13 +10,19 @@ rules:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  name: secret-access
+  name: secret-writer
   namespace: framework-demo
 subjects:
 - kind: ServiceAccount
-  name: default
+  name: secret-writer
   namespace: framework-demo
 roleRef:
   kind: ClusterRole
-  name: cluster-admin
+  name: secret-writer
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: secret-writer
+  namespace: framework-demo

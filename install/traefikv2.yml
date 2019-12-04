@@ -122,7 +122,7 @@ spec:
               containerPort: 8080
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: ingressroutes.traefik.containo.us
@@ -139,7 +139,7 @@ spec:
   scope: Namespaced
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: ingressroutetcps.traefik.containo.us
@@ -157,7 +157,7 @@ spec:
   scope: Namespaced
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: middlewares.traefik.containo.us
@@ -173,7 +173,7 @@ spec:
     singular: middleware
   scope: Namespaced
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: tlsoptions.traefik.containo.us

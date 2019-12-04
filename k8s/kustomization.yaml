@@ -3,5 +3,7 @@ commonLabels:
 resources:
   - postgresql.yaml
   - keycloak.yaml
+  - auth.yml
+  - admin.yml
   - coredns-rewrite.yml
   - fwdemo-clusterrole.yaml

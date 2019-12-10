@@ -11,7 +11,7 @@ hs_err_pid*
 
 certs/nyomio*
 certs/rootCA*
-install/traefikcertsecret.yml
+k8s-minikube/traefikcertsecret.yaml
 
 build/
 target/

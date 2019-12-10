@@ -8,7 +8,7 @@ kubectl apply -f ../k8s/coredns-rewrite.yml
 
 ## Traefik
 #printf "\n%s\n" "***** Installing Treafik from helm chart"
-kubectl apply -f traefikcertsecret.yml
+kubectl apply -f traefikcertsecret.yaml
 kubectl apply -f traefikv2.yml
 
 # Postgres

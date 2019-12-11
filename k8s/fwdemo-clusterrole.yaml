@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: secret-writer
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list", "post"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: secret-writer
+  namespace: framework-demo
+subjects:
+- kind: ServiceAccount
+  name: secret-writer
+  namespace: framework-demo
+roleRef:
+  kind: ClusterRole
+  name: secret-writer
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: secret-writer
+  namespace: framework-demo

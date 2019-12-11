@@ -9,12 +9,17 @@ import nyomio.dbutils.revisionedentity.BaseController
 @Controller("/api/v1/admin/organization")
 @Secured(SecurityRule.IS_AUTHENTICATED)
 class OrganizationController
-constructor(private val organizationDbService: OrganizationDbServiceRevisionedQueryDbService)
+constructor(private val organizationDbService: OrganizationDbService)
     : BaseController<Organization, OrganizationTable>(organizationDbService) {
 
     @Get(uri = "/add-test-data")
     @Secured("admin")
     fun addTestData() = organizationDbService.addTestData()
 
+    @Secured("admin")
+    override fun listAt(timestamp: Long, filter: String?) = super.listAt(timestamp, filter)
+
+    @Secured("admin")
+    override fun list() = super.list()
 
 }

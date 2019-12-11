@@ -1,18 +1,20 @@
 package admin.<%= entityNameL1 %>
 
 import nyomio.dbutils.*
-import nyomio.dbutils.revisionedentity.RevisionedQueryDbServiceBaseService
-import nyomio.dbutils.revisionedentity.Entity
-import nyomio.dbutils.revisionedentity.EntityTable
-import nyomio.dbutils.revisionedentity.RevisionedQueryService
+import nyomio.dbutils.revisionedentity.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.transactions.transaction
 import javax.inject.Singleton
 
-data class <%= entityNameU1 %>(val name: String) : Entity() {
+class <%= entityNameU1 %>(
+        val name: String,
+        entityId: Long? = null
+) : Entity(entityId) {
     constructor(row: ResultRow) :
-    this(row[<%= entityNameU1 %>Table.name])
+            this(
+                    row[<%= entityNameU1 %>Table.name],
+                    row[<%= entityNameU1 %>Table.entityId]
+            )
 }
 
 object <%= entityNameU1 %>Table : EntityTable() {
@@ -23,10 +25,9 @@ object <%= entityNameU1 %>Table : EntityTable() {
 }
 
 @Singleton
-class <%= entityNameU1 %>DbServiceRevisionedQueryDbService
-constructor(private val dba: DbAccess,
-            private val revSvc: RevisionedQueryService)
-    : RevisionedQueryDbServiceBaseService<<%= entityNameU1 %>, <%= entityNameU1 %>Table>(dba, revSvc) {
+class <%= entityNameU1 %>RevisionedDbService
+constructor(private val dba: DbAccess)
+    : BaseDbService<<%= entityNameU1 %>, <%= entityNameU1 %>Table>(dba) {
 
     override fun table() = <%= entityNameU1 %>Table
 

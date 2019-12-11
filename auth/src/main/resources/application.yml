@@ -1,9 +1,6 @@
----
 micronaut:
   application:
     name: auth
----
-micronaut:
   security:
     enabled: true
     token:

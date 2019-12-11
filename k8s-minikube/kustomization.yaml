@@ -1,0 +1,11 @@
+bases:
+  - ../k8s
+resources:
+  - traefik.yaml
+  - traefikcertsecret.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      kind: PersistentVolumeClaim
+      name: pvc-pgdata
+    path: postgresql-patch.yaml

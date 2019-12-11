@@ -47,7 +47,8 @@ converted certificate and private key in traefikvalues.template.yml and creating
 # Install everything into kubernetes
 Simply run
 ```bash
-install/install.sh
+k8s/setup.sh buildAuth buildAdmin buildWeb
+kubectl apply -k
 ```
 **_IMPORTANT:_** Having rootCA and leaf SSL certificates created is a prerequisite for installing.
 

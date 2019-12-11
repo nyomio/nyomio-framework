@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "admin-deployment"
+  namespace: framework-demo
 spec:
   selector:
     matchLabels:
@@ -25,22 +26,23 @@ spec:
             - name: JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: nyom-apps
-                  key: jwtsecret
+                  name: nyom-app
+                  key: jwt-secret
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: nyom-db-postgresql
-                  key: postgresql-password
+                  name: postgres-user
+                  key: password
             - name: DB_USER
               value: postgres
             - name: DB_URL
-              value: jdbc:postgresql://nyom-db-postgresql.default.svc.cluster.local:5432/postgres
+              value: jdbc:postgresql://postgresql.framework-demo.svc.cluster.local:5432/postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: "admin-service"
+  namespace: framework-demo
 spec:
   selector:
     app: "admin"
@@ -53,6 +55,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: admin-ingress
+  namespace: framework-demo
 spec:
   entryPoints:
     - websecure

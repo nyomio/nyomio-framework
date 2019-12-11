@@ -14,7 +14,6 @@ import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {environment} from '../environments/environment';
 import {OrganizationPageComponent} from './page/organization/organization-page/organization-page.component';
 import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
-import {ErrorComponent} from "./common/error/error.componet";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
@@ -27,12 +26,15 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {ReactiveFormsModule} from "@angular/forms";
 import {NyomioNgComponentsModule} from "nyomio-ng-components";
 import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
+import {UserComponent} from "./page/user/user.component";
+import {DeviceComponent} from "./page/device/device.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     OrganizationPageComponent,
-    ErrorComponent,
+    UserComponent,
+    DeviceComponent
   ],
   imports: [
     CovalentLayoutModule,

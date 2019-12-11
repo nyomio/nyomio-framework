@@ -1,6 +1,5 @@
 package auth
 
-import io.micronaut.security.authentication.UserDetails
 import io.micronaut.security.oauth2.configuration.OpenIdAdditionalClaimsConfiguration
 import io.micronaut.security.oauth2.endpoint.token.response.DefaultOpenIdUserDetailsMapper
 import io.micronaut.security.oauth2.endpoint.token.response.OpenIdClaims

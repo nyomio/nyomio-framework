@@ -11,12 +11,14 @@ version "0.1"
 dependencies {
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-security-jwt"
-    implementation 'io.micronaut.configuration:micronaut-security-oauth2'
+    implementation files('micronaut-fix/micronaut-security-oauth2-1.2.2.jar')
+//    implementation 'io.micronaut.configuration:micronaut-security-oauth2'
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.micronaut:micronaut-http-server-netty"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
     implementation "io.micronaut:micronaut-runtime"
+
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"

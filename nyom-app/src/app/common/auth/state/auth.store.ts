@@ -10,6 +10,7 @@ export interface AuthState {
   loginUrl: string;
   logoutUrl: string;
   ssoLogoutUrl: string;
+  activeOrganization: string;
 }
 
 export function createInitialState(): AuthState {
@@ -22,6 +23,7 @@ export function createInitialState(): AuthState {
     loginUrl: '',
     logoutUrl: '',
     ssoLogoutUrl: '',
+    activeOrganization: ''
   };
 }
 

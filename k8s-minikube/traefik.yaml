@@ -100,7 +100,7 @@ spec:
       serviceAccountName: traefik-ingress
       containers:
         - name: traefik
-          image: traefik:latest
+          image: traefik:2.0.7
           args:
             - --api.insecure
             - --accesslog

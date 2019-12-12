@@ -1,4 +1,4 @@
-# framework-demo
+# Nyomio Framework
 Demo for our API and webapp framework based on micronaut, kotlin, keycloak, grpc and traefik. Ready for kubernetes.
 
 # About the app

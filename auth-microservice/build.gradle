@@ -28,6 +28,8 @@ dependencies {
     implementation "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin:${mapstructVersion}.Beta2"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}.Final"
 
+    implementation "nyomio:commons:0.1"
+
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
     kapt "io.micronaut:micronaut-validation"
@@ -48,9 +50,10 @@ dependencies {
     testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
 }
 
-mainClassName = "auth.Application"
+mainClassName = "nyomio.auth.Application"
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url "https://jcenter.bintray.com" }
     maven { url "https://jitpack.io" }

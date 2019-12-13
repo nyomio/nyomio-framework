@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: "auth"
-          image: "auth:v1"
+          image: "auth:0.1"
           imagePullPolicy: Never
           ports:
             - name: http
@@ -37,6 +37,15 @@ spec:
               value: "nyom-app"
             - name: KEYCLOAK_OPENID_ISSUER_URL
               value: "https://sso.nyomio.local/auth/realms/nyomio"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-user
+                  key: password
+            - name: DB_USER
+              value: postgres
+            - name: DB_URL
+              value: jdbc:postgresql://postgresql.framework-demo.svc.cluster.local:5432/postgres
 ---
 apiVersion: v1
 kind: Service
@@ -60,7 +69,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`app.nyomio.local`) && (PathPrefix(`/oauth/`) || PathPrefix(`/logout`) || PathPrefix(`/api/v1/auth/`))
+    - match: Host(`app.nyomio.local`) && (PathPrefix(`/oauth/`) || PathPrefix(`/logout`) || PathPrefix(`/api/v1/auth/`) || PathPrefix(`/api/v1/admin/`))
       kind: Rule
       priority: 2
       services:

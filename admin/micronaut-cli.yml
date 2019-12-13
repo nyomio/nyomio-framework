@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: admin
----
-testFramework: kotlintest
-sourceLanguage: kotlin

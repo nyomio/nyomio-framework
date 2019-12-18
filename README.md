@@ -16,7 +16,7 @@ Here is a link that describes the architecture, the components, the motivation a
  [here](https://medium.com/@istvan.szoboszlai/micronaut-with-kotlin-keycloak-grpc-traefik-on-kubernetes-a9861041cc52)
 
 ## Frontend
-Angular frontend, but even more opinionated. See docs [here](nyom-app/README.md)
+Angular frontend, but even more opinionated. _*TODO:*_ we need a reference for the documentation
 
 # Getting started (local)
 ## Prerequisites

@@ -2,6 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: keycloak-ingress
+  namespace: {{ .Release.Namespace }}
 spec:
   entryPoints:
     - websecure
@@ -10,7 +11,7 @@ spec:
       kind: Rule
       priority: 1
       services:
-        - name: nyom-sso-keycloak-http
+        - name: keycloak
           port: 80
   tls:
     secretName: certsecret

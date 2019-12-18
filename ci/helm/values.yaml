@@ -1,0 +1,5 @@
+global:
+  # can be "docker", "minikube", "server"
+  clusterMode: docker
+
+

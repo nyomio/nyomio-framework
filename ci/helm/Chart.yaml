@@ -1,0 +1,17 @@
+apiVersion: v2
+name: nyomio-framework
+version: 0.0.1
+dependencies:
+  - name: nyomio-keycloak
+    version: 0.0.2
+    repository: "file://../../nyomio-keycloak"
+  - name: nyomio-traefik
+    version: 0.0.1
+    repository: "file://../../nyomio-traefik"
+  - name: nyomio-postgres
+    version: 0.0.1
+    repository: "file://../../nyomio-postgres"
+  - name: nyomio-auth-microservice
+    version: 0.0.1
+    repository: "file://../../auth-microservice/helm"
+

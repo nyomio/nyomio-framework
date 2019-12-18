@@ -1,8 +1,0 @@
-commonLabels:
-  testLabel: label1
-resources:
-  - postgresql.yaml
-  - keycloak.yaml
-  - auth.yml
-  - coredns-rewrite.yml
-  - fwdemo-clusterrole.yaml

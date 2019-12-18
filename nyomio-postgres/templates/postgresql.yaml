@@ -2,9 +2,15 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-pgdata
-  namespace: framework-demo
+  namespace: {{ .Release.Namespace }}
 spec:
+    {{ if eq .Values.global.clusterMode "server" }}
   storageClassName: longhorn
+    {{ else if eq .Values.global.clusterMode "docker" }}
+  storageClassName: hostpath
+    {{ else if eq .Values.global.clusterMode "minikube" }}
+  storageClassName: standard
+    {{ end }}
   accessModes:
     - ReadWriteOnce
   resources:
@@ -15,13 +21,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgresql
-  namespace: framework-demo
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
   template:
     metadata:
       labels:
-        k8s-app: postgres
+        app: postgres
     spec:
       volumes:
         - name: pv-pgdata
@@ -50,11 +58,10 @@ metadata:
   labels:
     kubernetes.io/name: postgres
   name: postgresql
-  namespace: framework-demo
 spec:
   ports:
     - port: 5432
       targetPort: 5432
       name: postgres-port
   selector:
-    k8s-app: postgres
+    app: postgres

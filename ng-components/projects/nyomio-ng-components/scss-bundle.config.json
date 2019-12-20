@@ -1,0 +1,5 @@
+{
+  "entry": "./projects/nyomio-ng-components/src/lib/nyomio-ng-components-theme.scss",
+  "dest": "./dist/nyomio-ng-components/nyomio-ng-components-theme.scss",
+  "includePaths": ["projects/shared-styles"]
+}

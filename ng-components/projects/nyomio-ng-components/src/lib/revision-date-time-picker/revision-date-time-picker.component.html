@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutAlign="center center">
+  <mat-button-toggle-group name="validity" [value]="modeToggle" class="validity-toggle" (change)="modeToggleChange($event)">
+    <mat-button-toggle value="now" (click)="onNowClick()">Now</mat-button-toggle>
+    <mat-button-toggle value="specific-date">Specific date</mat-button-toggle>
+  </mat-button-toggle-group>
+  <div *ngIf="modeToggle == 'specific-date'" id="datetime-selector">
+    <mat-form-field class="date-picker">
+      <input matInput [matDatepicker]="picker" placeholder="Date or timestamp" name="revisionDate"
+             (dateChange)="dateChange($event)" [value]="selectedDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="timeOfDateTime">
+      <input matInput type="text" name="timeOfDateTime" placeholder="time"
+             [formControl]="selectedTimeControl" (keypress)="timeOfDateTimeKeyPress($event)">
+      <mat-icon matSuffix class="floorIcon" (click)="floorTime()">arrow_downward</mat-icon>
+    </mat-form-field>
+    <span>{{timeZonePart}}</span>
+  </div>
+</div>

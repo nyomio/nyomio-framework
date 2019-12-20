@@ -6,7 +6,8 @@ metadata:
 data:
   Corefile: |
     .:53 {
-        errors
+        errors {{ if eq .Values.global.clusterMode "minikube" }}
+        ready{{ end }}
         health
         rewrite name sso.nyomio.local traefik-ingress.kube-system.svc.cluster.local
         kubernetes cluster.local in-addr.arpa ip6.arpa {

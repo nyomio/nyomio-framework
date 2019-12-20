@@ -1,0 +1,18 @@
+import {Injectable} from '@angular/core';
+import {<%= classify(name) %>Store} from './<%= dasherize(name) %>.store';
+import {RouterQuery} from "@datorama/akita-ng-router-store";
+import {EntityEditorQuery} from "<%= nyomioNgComponentsPath %>";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class <%= classify(name) %>Query extends EntityEditorQuery {
+
+  constructor(protected store: <%= classify(name) %>Store,
+              routerQuery: RouterQuery) {
+    super(routerQuery, store);
+
+  }
+
+}
+

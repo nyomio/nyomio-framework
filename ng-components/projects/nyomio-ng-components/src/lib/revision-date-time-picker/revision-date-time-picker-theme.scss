@@ -1,0 +1,7 @@
+@mixin revision-date-time-picker-theme($theme) {
+  $foreground: mat-color(map-get($theme, foreground), icon);
+  .floorIcon {
+    color: $foreground;
+  }
+}
+

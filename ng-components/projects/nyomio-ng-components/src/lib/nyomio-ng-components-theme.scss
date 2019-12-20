@@ -1,0 +1,5 @@
+@import 'revision-date-time-picker/revision-date-time-picker-theme';
+
+@mixin nyomio-ng-components-theme($theme, $config:null) {
+  @include revision-date-time-picker-theme($theme);
+}

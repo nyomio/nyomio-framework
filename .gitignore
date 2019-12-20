@@ -9,10 +9,6 @@ hs_err_pid*
 
 .idea/
 
-certs/nyomio*
-certs/rootCA*
-ci/k8s-minikube/traefikcertsecret.yaml
-
 build/
 target/
 out/

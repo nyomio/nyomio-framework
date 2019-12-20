@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: "webapp-dev-skaffold"
-  namespace: framework-demo
 spec:
   selector:
     matchLabels:
@@ -26,7 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "webapp-dev-skaffold-service"
-  namespace: framework-demo
+  namespace: nyomio-test
 spec:
   selector:
     app: "webapp-dev-skaffold"
@@ -39,7 +38,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: webapp-dev-skaffold-ingress
-  namespace: framework-demo
+  namespace: nyomio-test
 spec:
   entryPoints:
     - websecure

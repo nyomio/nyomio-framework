@@ -33,9 +33,9 @@ data:
     echo "CLIENT_SECRET: $CLIENT_SECRET"
 
     TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token);
-    DATA="{\"kind\":\"Secret\", \"apiVersion\":\"v1\", \"metadata\": { \"namespace\":\"framework-demo\",\"name\":\"client-secret\"},\"data\": {\"client-secret\":\"$CLIENT_SECRET\"}}";
+    DATA="{\"kind\":\"Secret\", \"apiVersion\":\"v1\", \"metadata\": { \"namespace\":\"{{ .Release.Namespace }}\",\"name\":\"client-secret\"},\"data\": {\"client-secret\":\"$CLIENT_SECRET\"}}";
     echo "Secret data to write: $DATA"
 
-    curl -XPOST -k https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/framework-demo/secrets \
+    curl -XPOST -k https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/{{ .Release.Namespace }}/secrets \
          -H "Authorization: Bearer $TOKEN" -H 'Accet: application/json' -H 'Content-Type: application/json' --data "$DATA"
 {{ end }}

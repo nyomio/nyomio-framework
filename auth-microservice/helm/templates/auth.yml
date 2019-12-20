@@ -31,8 +31,8 @@ spec:
             - name: JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: nyom-app
-                  key: jwt-secret
+                  name: jwt-secret
+                  key: secret
             - name: KEYCLOAK_CLIENT_ID
               value: "nyom-app"
             - name: KEYCLOAK_OPENID_ISSUER_URL
@@ -45,7 +45,7 @@ spec:
             - name: DB_USER
               value: postgres
             - name: DB_URL
-              value: jdbc:postgresql://postgresql.framework-demo.svc.cluster.local:5432/postgres
+              value: jdbc:postgresql://postgresql.{{ .Release.Namespace }}.svc.cluster.local:5432/postgres
 ---
 apiVersion: v1
 kind: Service

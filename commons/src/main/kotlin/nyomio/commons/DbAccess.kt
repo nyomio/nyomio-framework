@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
+import java.sql.Connection
 import javax.inject.Singleton
 
 @Singleton
@@ -22,14 +23,19 @@ constructor(
         @Property(name = "db.password")
         private val dbPass: String,
         @Property(name = "db.create-tables", value = "false")
-        private val dbCreateTables: Boolean
+        private val dbCreateTables: Boolean,
+        private val connectionBuilder: (() -> Connection)? = null
 ) {
     private val logger = LoggerFactory.getLogger(DbAccess::class.java)
 
     private var tableListProvider: (() -> Array<Table>)? = null
 
     val db by lazy {
-        Database.connect(dbConnectionString, dbDriver, dbUser, dbPass).also {
+        if (connectionBuilder != null) {
+            Database.connect(connectionBuilder)
+        } else {
+            Database.connect(dbConnectionString, dbDriver, dbUser, dbPass)
+        }.also {
             if (dbCreateTables) {
                 if (logger.isDebugEnabled) {
                     logger.debug("Updating schema because db.create-tables property is set to true")

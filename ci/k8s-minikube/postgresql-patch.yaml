@@ -1,6 +1,0 @@
-- op: replace
-  path: /spec/resources/requests/storage
-  value: 500Mi
-- op: replace
-  path: /spec/storageClassName
-  value: standard

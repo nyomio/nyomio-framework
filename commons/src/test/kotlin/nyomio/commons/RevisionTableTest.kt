@@ -1,5 +1,6 @@
 package nyomio.commons
 
+import io.zonky.test.db.postgres.embedded.EmbeddedPostgres
 import nyomio.commons.revisionedentity.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -9,13 +10,13 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 
-object TestDevice : EntityTable() {
+object TestDevice : EntityTable("TestDevice") {
     val secret: Column<String> = varchar("secret", 50)
     val name: Column<String> = varchar("name", 50)
     val owner: Column<Long> = long("owner_id")
 }
 
-object TestUser : EntityTable() {
+object TestUser : EntityTable("TestUser") {
     val name: Column<String> = varchar("name", 50)
     val email: Column<String> = varchar("email", 80)
 }
@@ -29,35 +30,39 @@ class RevisionTableTest {
         lateinit var userDbService: BaseDbService<Entity, TestUser>
         lateinit var deviceDbService: BaseDbService<Entity, TestDevice>
 
-
         @BeforeAll
         @JvmStatic
         fun beforeAll() {
-            dbAccess = DbAccess(
-                    "jdbc:postgresql://traefik.nyomio.local:5432/test",
-                    "org.postgresql.Driver",
-                    "postgres",
-                    "xZ5ie8evM4",
-                    false)
-            deviceDbService = object : BaseDbService<Entity, TestDevice>(dbAccess!!) {
-                override fun table() = TestDevice
 
-                override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
+            EmbeddedPostgres.start().also { pg ->
+                dbAccess = DbAccess(
+                        "",
+                        "",
+                        "",
+                        "",
+                        false
+                ) { pg.postgresDatabase.connection }
 
-                override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                deviceDbService = object : BaseDbService<Entity, TestDevice>(dbAccess!!) {
+                    override fun table() = TestDevice
+
+                    override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
+
+                    override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                    }
                 }
-            }
-            userDbService = object : BaseDbService<Entity, TestUser>(dbAccess!!) {
-                override fun table() = TestUser
+                userDbService = object : BaseDbService<Entity, TestUser>(dbAccess!!) {
+                    override fun table() = TestUser
 
-                override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
+                    override fun mapResultRowToEntity(resultRow: ResultRow) = Entity()
 
-                override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                    override fun mapEntityToInsertStatement(stmt: InsertStatement<Number>, entity: Entity) {
+                    }
                 }
+                dropRecreate()
+                createTestUsers()
+                createTestDevices()
             }
-            dropRecreate()
-            createTestUsers()
-            createTestDevices()
         }
 
         private fun dropRecreate() {
@@ -163,7 +168,7 @@ class RevisionTableTest {
             val renderedResult = TestDevice
                     .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
                     .selectAll().atTimestamp(15)
-                    .renderResult("nyomio.dbutils.")
+                    .renderResult("nyomio.commons.")
 //            val renderedResult = deviceDbService.atTimestamp(15,
 //                    TestDevice
 //                            .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
@@ -182,8 +187,8 @@ class RevisionTableTest {
                 """.trimIndent()
             val renderedResult = TestDevice
                     .join(TestUser, JoinType.INNER, TestDevice.owner, TestUser.entityId)
-                    .selectAll().atTimestamp(20).andWhere {TestUser.name like "%Boss" }
-                    .renderResult("nyomio.dbutils.")
+                    .selectAll().atTimestamp(20).andWhere { TestUser.name like "%Boss" }
+                    .renderResult("nyomio.commons.")
         }
     }
 

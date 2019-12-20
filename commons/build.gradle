@@ -2,7 +2,6 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "1.3.50"
     id "org.jetbrains.kotlin.kapt" version "1.3.50"
     id "org.jetbrains.kotlin.plugin.allopen" version "1.3.50"
-    id "application"
     id 'java'
     id 'maven-publish'
 
@@ -42,6 +41,7 @@ dependencies {
     kapt "io.micronaut:micronaut-inject-java"
 
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+    testCompile 'io.zonky.test:embedded-postgres:1.2.6'
 }
 
 compileKotlin {
@@ -58,4 +58,6 @@ compileTestKotlin {
 }
 test {
     useJUnitPlatform()
+    environment "LC_CTYPE", "en_US.UTF-8"
+    environment "LC_ALL", "en_US.UTF-8"
 }

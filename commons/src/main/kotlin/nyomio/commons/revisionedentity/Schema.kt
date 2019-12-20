@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 open class Entity(val id: Long? = null)
 
-open class EntityTable : Table() {
+open class EntityTable(name: String = "") : Table(name) {
     val revisionId: Column<Long> = (long("revision_id") references RevisionTable.id).primaryKey()
     val entityId: Column<Long> = long("entity_id").autoIncrement()
 }

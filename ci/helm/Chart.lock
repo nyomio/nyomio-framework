@@ -1,0 +1,15 @@
+dependencies:
+- name: nyomio-keycloak
+  repository: file://../../nyomio-keycloak
+  version: 0.0.2
+- name: nyomio-traefik
+  repository: file://../../nyomio-traefik
+  version: 0.0.1
+- name: nyomio-postgres
+  repository: file://../../nyomio-postgres
+  version: 0.0.1
+- name: nyomio-auth-microservice
+  repository: file://../../auth-microservice/helm
+  version: 0.0.1
+digest: sha256:8a192c78e80c608941b473bc60d3d3f34a4628e452771716c1d7fe33a903eb57
+generated: "2019-12-20T15:56:58.293734831+01:00"

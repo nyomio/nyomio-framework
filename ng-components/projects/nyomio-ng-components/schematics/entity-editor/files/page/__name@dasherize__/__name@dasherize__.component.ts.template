@@ -1,0 +1,41 @@
+import { Component, OnInit } from '@angular/core';
+import {Column} from "<%= nyomioNgComponentsBasePath %>/lib/nyom-table/nyom-table.component";
+import {ITdDynamicElementConfig, TdDynamicElement} from "@covalent/dynamic-forms";
+import {default<%= classify(name) %>} from "../../state/<%= dasherize(name) %>/<%= dasherize(name) %>.model";
+import {<%= classify(name) %>Query} from "../../state/<%= dasherize(name) %>/<%= dasherize(name) %>.query";
+import {<%= classify(name) %>Service} from "../../state/<%= dasherize(name) %>/<%= dasherize(name) %>.service";
+import {ActivatedRoute, ActivationEnd, ParamMap, UrlSegment} from "@angular/router";
+
+@Component({
+  selector: 'app-<%= dasherize(name) %>',
+  templateUrl: './<%= dasherize(name) %>.component.html',
+  styleUrls: ['./<%= dasherize(name) %>.component.scss']
+})
+export class <%= classify(name) %>Component implements OnInit {
+
+  columns: Column[] = [
+    {name: 'id', label: 'ID'}
+  ];
+
+  formElements: ITdDynamicElementConfig[] = [
+  {
+    name: 'name',
+    label: 'Name',
+    type: TdDynamicElement.Input,
+    required: true,
+  }
+  ];
+
+  defaultEntity = default<%= classify(name) %>;
+
+  constructor(public <%= decapitalize(classify(name)) %>Query: <%= classify(name) %>Query,
+              public <%= decapitalize(classify(name)) %>Service: <%= classify(name) %>Service,
+              private activatedRoute: ActivatedRoute
+  ) {
+  }
+
+  ngOnInit() {
+  }
+
+}
+

@@ -1,0 +1,21 @@
+import {Injectable} from '@angular/core';
+import {EntityStore, StoreConfig} from '@datorama/akita';
+import {<%= classify(name) %>} from './<%= dasherize(name) %>.model';
+import {
+  EntityEditorEntityState,
+  initialState
+} from "<%= nyomioNgComponentsPath %>";
+
+export interface <%= classify(name) %>State extends EntityEditorEntityState<<%= classify(name) %>> {
+}
+
+@Injectable({providedIn: 'root'})
+@StoreConfig({name: '<%= dasherize(name) %>'})
+export class <%= classify(name) %>Store extends EntityStore<<%= classify(name) %>State, <%= classify(name) %>> {
+  constructor() {
+    super(initialState);
+  }
+}
+
+
+

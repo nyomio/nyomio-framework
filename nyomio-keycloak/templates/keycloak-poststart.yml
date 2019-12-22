@@ -37,5 +37,5 @@ data:
     echo "Secret data to write: $DATA"
 
     curl -XPOST -k https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/{{ .Release.Namespace }}/secrets \
-         -H "Authorization: Bearer $TOKEN" -H 'Accet: application/json' -H 'Content-Type: application/json' --data "$DATA"
+         -H "Authorization: Bearer $TOKEN" -H 'Accept: application/json' -H 'Content-Type: application/json' --data "$DATA"
 {{ end }}

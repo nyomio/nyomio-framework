@@ -1,0 +1,25 @@
+<h2>{{formTitle}}</h2>
+
+
+<td-dynamic-forms
+  #form [elements]="formElements">
+  <button mat-raised-button (click)="emitSave()"
+          color="primary"
+          class="text-upper"
+          [disabled]="!form.valid || (isLoading$ | async)">
+    Save
+  </button>
+  <button mat-raised-button (click)="emitCancel()"
+          color="primary"
+          class="text-upper"
+          [disabled]="(isLoading$ | async)">
+    Cancel
+  </button>
+  <button *ngIf="isDeleteVisible" mat-raised-button (click)="emitDelete()"
+          color="primary"
+          class="text-upper"
+          [disabled]="(isLoading$ | async)">
+    Delete
+  </button>
+</td-dynamic-forms>
+

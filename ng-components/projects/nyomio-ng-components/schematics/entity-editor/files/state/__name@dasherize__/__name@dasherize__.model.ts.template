@@ -1,0 +1,11 @@
+import {EntityEditorModel} from "<%= nyomioNgComponentsPath %>";
+
+export interface <%= classify(name) %> extends EntityEditorModel {
+  name: string
+}
+
+export const default<%= classify(name) %>: <%= classify(name) %> = {
+  id: 0,
+  name: ""
+};
+

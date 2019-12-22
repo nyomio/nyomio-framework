@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-deployment
+  name: auth-microservice-deployment
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
@@ -14,8 +14,8 @@ spec:
         app: auth-microservice
     spec:
       containers:
-        - name: "auth"
-          image: "auth:0.1"
+        - name: "auth-mircoservice"
+          image: "nyomio-auth-mircoservice:0.1.0"
           imagePullPolicy: Never
           ports:
             - name: http
@@ -50,7 +50,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-service
+  name: auth-microservice-service
   namespace: {{ .Release.Namespace }}
 spec:
   selector:
@@ -73,7 +73,7 @@ spec:
       kind: Rule
       priority: 2
       services:
-        - name: auth-service
+        - name: auth-microservice-service
           port: 8080
   tls:
     secretName: certsecret

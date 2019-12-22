@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "webapp-dev-skaffold"
+  name: "nyomio-demo-ui-skaffold"
 spec:
   selector:
     matchLabels:
-      app: "webapp-dev-skaffold"
+      app: "nyomio-demo-ui-skaffold"
   revisionHistoryLimit: 1
   template:
     metadata:
       labels:
-        app: "webapp-dev-skaffold"
+        app: "nyomio-demo-ui-skaffold"
     spec:
 
       containers:
-        - name: "webapp-dev-skaffold"
-          image: "webapp-dev-skaffold"
+        - name: "nyomio-demo-ui-skaffold"
+          image: "nyomio-demo-ui-skaffold"
           imagePullPolicy: Never
           ports:
             - name: http
@@ -24,11 +24,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "webapp-dev-skaffold-service"
-  namespace: nyomio-test
+  name: "nyomio-demo-ui-skaffold-service"
 spec:
   selector:
-    app: "webapp-dev-skaffold"
+    app: "nyomio-demo-ui-skaffold"
   ports:
     - name: http
       targetPort: 4200
@@ -37,8 +36,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: webapp-dev-skaffold-ingress
-  namespace: nyomio-test
+  name: nyomio-demo-ui-skaffold-ingress
 spec:
   entryPoints:
     - websecure
@@ -47,7 +45,7 @@ spec:
       kind: Rule
       priority: 1
       services:
-        - name: webapp-dev-skaffold-service
+        - name: nyomio-demo-ui-skaffold-service
           port: 80
   tls:
     secretName: certsecret

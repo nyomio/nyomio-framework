@@ -1,21 +1,21 @@
+{{ if eq .Values.global.frontendDevMode false }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "webapp-deployment"
-  namespace: framework-demo
+  name: nyomio-demo-ui
 spec:
   selector:
     matchLabels:
-      app: "webapp"
+      app: nyomio-demo-ui
   revisionHistoryLimit: 1
   template:
     metadata:
       labels:
-        app: "webapp"
+        app: nyomio-demo-ui
     spec:
       containers:
-        - name: "webapp"
-          image: "webapp:v1"
+        - name: "nyomio-demo-ui"
+          image: "nyomio-demo-ui:0.1.0"
           imagePullPolicy: Never
           ports:
             - name: http
@@ -24,11 +24,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: "webapp-service"
-  namespace: framework-demo
+  name: nyomio-demo-ui-service
 spec:
   selector:
-    app: "webapp"
+    app: nyomio-demo-ui
   ports:
     - name: http
       targetPort: 80
@@ -38,21 +37,19 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: rediredt-404-to-index-html
-  namespace: framework-demo
 spec:
   errors:
     status:
       - 404
     query: /
     service:
-      name: webapp-service
+      name: nyomio-demo-ui-service
       port: 80
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: webapp-ingress
-  namespace: framework-demo
+  name: nyomio-demo-ui-ingress
 spec:
   entryPoints:
     - websecure
@@ -61,9 +58,10 @@ spec:
       kind: Rule
       priority: 1
       services:
-        - name: webapp-service
+        - name: nyomio-demo-ui-service
           port: 80
       middlewares:
         - name: rediredt-404-to-index-html
   tls:
     secretName: certsecret
+{{ end }}

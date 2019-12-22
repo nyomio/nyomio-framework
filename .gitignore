@@ -18,3 +18,4 @@ target/
 out/
 .gradle/
 /ci/helm/charts/
+/demo/helm/charts/

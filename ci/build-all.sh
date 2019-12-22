@@ -7,8 +7,7 @@ cd ../commons || exit
 
 # Build auth microservice
 printf "\n%s\n" "***** Building nyomio-auth-microservice..."
-cd ..
-auth-microservice/build-docker.sh
+../auth-microservice/build.sh
 
 
 

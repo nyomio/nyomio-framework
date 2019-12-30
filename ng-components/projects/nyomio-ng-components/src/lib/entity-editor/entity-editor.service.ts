@@ -1,12 +1,12 @@
-import {UiErrorService} from "../error/ui-error-service";
-import {EntityStore} from "@datorama/akita";
-import {EntityEditorEntityState} from "./entity-editor.store";
-import {EntityEditorModel} from "./entity-editor.model";
-import {Moment} from "moment";
-import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
-import {EntityEditorQuery} from "./entity-editor.query";
-import {HttpClient} from "@angular/common/http";
-import {handleHttpError} from "../error/error.util";
+import {UiErrorService} from '../error/ui-error-service';
+import {EntityStore} from '@datorama/akita';
+import {EntityEditorEntityState} from './entity-editor.store';
+import {EntityEditorModel} from './entity-editor.model';
+import {Moment} from 'moment';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import {EntityEditorQuery} from './entity-editor.query';
+import {HttpClient} from '@angular/common/http';
+import {handleHttpError} from '../error/error.util';
 
 export abstract class EntityEditorService extends UiErrorService {
 
@@ -18,9 +18,9 @@ export abstract class EntityEditorService extends UiErrorService {
     super(entityStore);
   }
 
-  abstract buildGetAtUrl(timestamp: number, filter?: string): string
-  abstract buildUpsertUrl(): string
-  abstract buildDeleteUrl(selectedId: number): string
+  abstract buildGetAtUrl(timestamp: number, filter?: string): string;
+  abstract buildUpsertUrl(): string;
+  abstract buildDeleteUrl(selectedId: number): string;
 
   getAt(timestamp: number, filter?: string) {
     this.entityStore.setLoading(true);
@@ -29,9 +29,9 @@ export abstract class EntityEditorService extends UiErrorService {
     .subscribe((value: EntityEditorModel[]) => {
         this.entityStore.setLoading(false);
         this.entityStore.remove(this.entityQuery.getAll().map(entity => entity.id));
-        this.entityStore.add(value)
+        this.entityStore.add(value);
       }
-    )
+    );
   }
 
   upsert(entity: EntityEditorModel) {
@@ -43,8 +43,8 @@ export abstract class EntityEditorService extends UiErrorService {
       this.entityStore.setLoading(false);
       this.setSelected(null);
       entity.id = resp;
-      if (originalId == 0) {
-        this.entityStore.add(entity)
+      if (originalId === 0) {
+        this.entityStore.add(entity);
       } else {
         this.entityStore.replace(resp, entity);
       }
@@ -65,11 +65,11 @@ export abstract class EntityEditorService extends UiErrorService {
   setSelected(id: number) {
     this.entityStore.update(
       state => ({ui: {...state.ui, selectedEntity: id, newEntityMode: false}})
-    )
+    );
   }
 
   setNewMode(mode: boolean) {
-    this.entityStore.update(state => ({ui: {...state.ui, newEntityMode: mode}}))
+    this.entityStore.update(state => ({ui: {...state.ui, newEntityMode: mode}}));
   }
 
   setFilterTextAndUpdateEntities(filterText: string) {
@@ -78,13 +78,13 @@ export abstract class EntityEditorService extends UiErrorService {
   }
 
   updateEntities() {
-    let state  = this.entityQuery.getValue();
+    const state  = this.entityQuery.getValue();
     this.getAt(this.entityQuery.filterAtLastValue.valueOf(), state.ui.filterText);
   }
 
   setFilterAt(filterAt: Moment) {
-    let navigationExtras: NavigationExtras = {
-      queryParams: {'filterAt' : filterAt.valueOf()},
+    const navigationExtras: NavigationExtras = {
+      queryParams: {filterAt : filterAt.valueOf()},
       queryParamsHandling: 'merge',
       replaceUrl: true,
       relativeTo: this.route

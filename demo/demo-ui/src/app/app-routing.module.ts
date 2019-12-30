@@ -1,15 +1,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {OrganizationPageComponent} from "./page/organization/organization-page/organization-page.component";
-import {AuthGuard} from "./common/auth/auth.guard";
-import {EntityEditorGuard} from "nyomio-ng-components";
-import {UserComponent} from "./page/user/user.component";
-import {DeviceComponent} from "./page/device/device.component";
+import {OrganizationPageComponent} from './page/organization/organization-page.component';
+import {AuthGuard} from './common/auth/auth.guard';
+import {EntityEditorGuard} from 'nyomio-ng-components';
+import {UserComponent} from './page/user/user.component';
 
 export const ROUTES = {
   organizations: 'organizations',
   users: 'users',
-  devices: 'devices',
 };
 
 const routes: Routes = [
@@ -28,11 +26,6 @@ const routes: Routes = [
     path: ROUTES.users,
     canActivate: [AuthGuard, EntityEditorGuard]
   },
-  {
-    component: DeviceComponent,
-    path: ROUTES.devices,
-    canActivate: [AuthGuard, EntityEditorGuard]
-  }
 ];
 
 @NgModule({

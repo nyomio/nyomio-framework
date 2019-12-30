@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
-import {Organization} from './organization.model';
-import {OrganizationQuery} from "./organization.query";
-import {EntityEditorService, handleHttpError} from "nyomio-ng-components";
-import {ActivatedRoute, Router} from "@angular/router";
+import {OrganizationQuery} from './organization.query';
+import {EntityEditorService} from 'nyomio-ng-components';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends EntityEditorService {
@@ -14,7 +13,7 @@ export class OrganizationService extends EntityEditorService {
               private organizationStore: OrganizationStore,
               private organizationQuery: OrganizationQuery,
               http: HttpClient) {
-    super(router, route, organizationStore, organizationQuery, http)
+    super(router, route, organizationStore, organizationQuery, http);
   }
 
   buildDeleteUrl(selectedId: number): string {
@@ -22,11 +21,11 @@ export class OrganizationService extends EntityEditorService {
   }
 
   buildGetAtUrl(timestamp: number, filter?: string): string {
-    return '/api/v1/admin/organization/all-at/' + timestamp + (filter ? "/" + filter : "");
+    return '/api/v1/admin/organization/all-at/' + timestamp + (filter ? '/' + filter : '');
   }
 
   buildUpsertUrl(): string {
-    return "/api/v1/admin/organization";
+    return '/api/v1/admin/organization';
   }
 
 }

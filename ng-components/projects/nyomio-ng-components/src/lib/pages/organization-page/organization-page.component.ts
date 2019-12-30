@@ -1,19 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {OrganizationQuery} from "../state/organization.query";
-import {TdLoadingService} from "@covalent/core";
-import {OrganizationService} from "../state/organization.service";
-import {defaultOrganization, Organization} from "../state/organization.model";
-import {
-  ITdDynamicElementConfig,
-  TdDynamicElement,
-  TdDynamicFormsComponent
-} from "@covalent/dynamic-forms";
-import {MatTableDataSource} from "@angular/material/table";
-import * as moment from "moment";
-import {Column} from "nyomio-ng-components/lib/nyom-table/nyom-table.component";
+import {Component, OnInit} from '@angular/core';
+import {OrganizationQuery} from './state/organization.query';
+import {OrganizationService} from './state/organization.service';
+import {defaultOrganization} from './state/organization.model';
+import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
+import {Column} from 'nyomio-ng-components/lib/nyom-table/nyom-table.component';
 
 @Component({
-  selector: 'app-organization-page',
+  selector: 'nyomio-organization-page',
   templateUrl: './organization-page.component.html',
   styleUrls: ['./organization-page.component.scss'],
 })

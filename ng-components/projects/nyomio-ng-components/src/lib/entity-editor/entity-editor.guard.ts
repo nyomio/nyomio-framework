@@ -6,9 +6,9 @@ import {
   NavigationExtras,
   Router,
   RouterStateSnapshot
-} from "@angular/router";
-import {Observable} from "rxjs";
-import moment from "moment";
+} from '@angular/router';
+import {Observable} from 'rxjs';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ export class EntityEditorGuard implements CanActivate {
     if (route.queryParamMap.has('filterAt')) {
       return true;
     } else {
-      let navigationExtras: NavigationExtras = {
-        queryParams: {'filterAt' : moment().valueOf()},
+      const navigationExtras: NavigationExtras = {
+        queryParams: {filterAt : moment().valueOf()},
         replaceUrl: true,
       };
       this.router.navigate([state.url], navigationExtras);

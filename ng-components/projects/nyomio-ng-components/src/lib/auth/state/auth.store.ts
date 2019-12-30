@@ -6,7 +6,7 @@ export interface AuthState {
     userName: string;
     email: string;
     roles: string[];
-  }
+  };
   loginUrl: string;
   logoutUrl: string;
   ssoLogoutUrl: string;

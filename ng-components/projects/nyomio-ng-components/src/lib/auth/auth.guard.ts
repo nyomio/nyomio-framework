@@ -18,7 +18,7 @@ export class AuthGuard {
           return true;
         }
         const loginUrl = this.authQuery.getValue().loginUrl;
-        if (loginUrl.length != 0) {
+        if (loginUrl.length !== 0) {
           window.location.assign(loginUrl);
         }
         return false;

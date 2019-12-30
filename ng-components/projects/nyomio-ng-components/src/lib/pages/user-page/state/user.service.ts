@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserStore} from './user.store';
-import {UserQuery} from "./user.query";
+import {UserQuery} from './user.query';
 import {
   EntityEditorService,
-} from "nyomio-ng-components";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthQuery} from "../../common/auth/state/auth.query";
+} from 'nyomio-ng-components';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthQuery} from '../../../auth/state/auth.query';
 
 @Injectable({providedIn: 'root'})
 export class UserService extends EntityEditorService {
@@ -22,7 +22,7 @@ export class UserService extends EntityEditorService {
   }
 
   buildGetAtUrl(timestamp: number, filter?: string): string {
-    return `/api/v1/admin/${this.authQuery.getValue().activeOrganization}/user/own-at/${timestamp}${filter ? "/" + filter : ""}`;
+    return `/api/v1/admin/${this.authQuery.getValue().activeOrganization}/user/own-at/${timestamp}${filter ? '/' + filter : ''}`;
   }
 
   buildUpsertUrl(): string {

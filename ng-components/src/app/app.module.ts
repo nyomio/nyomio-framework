@@ -9,9 +9,11 @@ import {NyomioNgComponentsModule} from '../../projects/nyomio-ng-components/src/
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NG_ENTITY_SERVICE_CONFIG} from '@datorama/akita-ng-entity-service';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
-import {AkitaNgRouterStoreModule} from "@datorama/akita-ng-router-store";
+import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
 import { EntityEditorDemo1Component } from './entity-editor-demo1/entity-editor-demo1.component';
 import { EntityEditorDemo2Component } from './entity-editor-demo2/entity-editor-demo2.component';
+import {HttpMockRequestInterceptor} from './mockdata/interceptor.mock';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,11 @@ import { EntityEditorDemo2Component } from './entity-editor-demo2/entity-editor-
     {
       provide: NG_ENTITY_SERVICE_CONFIG,
       useValue: {baseUrl: 'https://jsonplaceholder.typicode.com'}
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpMockRequestInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

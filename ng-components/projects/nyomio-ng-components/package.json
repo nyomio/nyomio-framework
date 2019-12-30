@@ -4,8 +4,8 @@
   "schematics": "./schematics/collection.json",
   "scripts": {
     "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
-    "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/nyomio-ng-components/",
-    "copy:files": "cp --parents -r -p schematics/*/files/** ../../dist/nyomio-ng-components/",
+    "copy:schemas": "rsync -rR schematics/*/schema.json ../../dist/nyomio-ng-components/",
+    "copy:files": "rsync -rR -r -p schematics/*/files/** ../../dist/nyomio-ng-components/",
     "copy:collection": "cp schematics/collection.json ../../dist/nyomio-ng-components/schematics/collection.json",
     "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection"
   },

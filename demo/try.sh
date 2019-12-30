@@ -9,11 +9,17 @@ if [[ $# -eq 0 && ! $1 == "dev" && ! $1 == "prod" ]]
     exit 0
 fi
 
-[[ -n $(docker images -q nyomio-auth-mircoservice:0.1.0) ]] || ../ci/build-all.sh
+printf "Checking if nyomio-auth-micorsevice image already exists... "
+if [[ -n $(docker images -q nyomio-auth-mircoservice:0.1.0) ]]; then
+  printf "NO -- starting build.\n"
+  ../ci/build-all.sh
+else
+  printf "YES.\n"
+fi
+
 
 kubectl delete configmaps --namespace=kube-system coredns
-cd helm
-
+cd helm || exit
 if [[ $1 == "dev" ]]
   then
     helm dependencies update .

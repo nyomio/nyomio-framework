@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import {Column} from "../../../projects/nyomio-ng-components/src/lib/nyom-table/nyom-table.component";
-import {ITdDynamicElementConfig, TdDynamicElement} from "@covalent/dynamic-forms";
-import {defaultOrganization} from "../organization.model";
-import {OrganizationQuery} from "./organization.query";
-import {OrganizationService} from "./organization.service";
+import {Column} from '../../../projects/nyomio-ng-components/src/lib/nyom-table/nyom-table.component';
+import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
+import {defaultOrganization} from '../organization.model';
+import {OrganizationQuery} from './organization.query';
+import {OrganizationService} from './organization.service';
 
 @Component({
   selector: 'app-entity-editor-demo2',

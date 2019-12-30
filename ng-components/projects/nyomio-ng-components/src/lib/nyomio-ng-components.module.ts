@@ -5,27 +5,28 @@ import {RevisionDateTimePickerComponent} from './revision-date-time-picker/revis
 import {EntityEditorComponent} from './entity-editor/entity-editor.component';
 import {EntityTableComponent} from './entity-table/entity-table.component';
 import {EntityFormComponent} from './entity-form/entity-form.component';
-import {MatIconModule} from "@angular/material";
+import {MatIconModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from "@angular/common/http";
-import {CovalentLayoutModule, CovalentLoadingModule, CovalentStepsModule} from "@covalent/core";
+import {HttpClientModule} from '@angular/common/http';
+import {CovalentLayoutModule, CovalentLoadingModule, CovalentStepsModule} from '@covalent/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatListModule} from "@angular/material/list";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {CovalentDynamicFormsModule} from "@covalent/dynamic-forms";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {MatTableModule} from "@angular/material/table";
-import {MatSortModule} from "@angular/material/sort";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatMomentDateModule} from "@angular/material-moment-adapter"
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ErrorComponent} from "./error/error.component";
-
+import {MatListModule} from '@angular/material/list';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {CovalentDynamicFormsModule} from '@covalent/dynamic-forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ErrorComponent} from './error/error.component';
+import {UserPageComponent} from './pages/user-page/user-page.component';
+import {OrganizationPageComponent} from './pages/organization-page/organization-page.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,9 @@ import {ErrorComponent} from "./error/error.component";
     EntityEditorComponent,
     EntityTableComponent,
     EntityFormComponent,
-    ErrorComponent
+    ErrorComponent,
+    UserPageComponent,
+    OrganizationPageComponent,
   ],
   imports: [
     CovalentLayoutModule,
@@ -69,7 +72,9 @@ import {ErrorComponent} from "./error/error.component";
     EntityFormComponent,
     EntityTableComponent,
     RevisionDateTimePickerComponent,
-    ErrorComponent
+    ErrorComponent,
+    UserPageComponent,
+    OrganizationPageComponent,
   ]
 })
 export class NyomioNgComponentsModule {

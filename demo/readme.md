@@ -10,3 +10,21 @@ All scripts are included to try the Nyomio Framework locally with everything tha
  - postgres
  - revisioned management of postgres table data
  - general user and organisation management features
+
+# How to try?
+
+## Prerequisites
+
+You need to have `kubectl` and `helm` installed on your machine.
+
+Shell scripts were tested on Mac and Linux.
+
+## Run
+
+Simply run
+```
+./try.sh prod
+```
+in this directory.
+
+This will build all components and 

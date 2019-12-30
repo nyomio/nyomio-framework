@@ -4,7 +4,7 @@ import {Organization} from '../organization.model';
 import {
   EntityEditorEntityState,
   initialState
-} from "../../../projects/nyomio-ng-components/src/lib/entity-editor/entity-editor.store";
+} from '../../../projects/nyomio-ng-components/src/lib/entity-editor/entity-editor.store';
 
 export interface OrganizationState extends EntityEditorEntityState<Organization> {
 }

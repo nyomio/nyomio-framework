@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthQuery} from './common/auth/state/auth.query';
-import {AuthService} from './common/auth/state/auth.service';
-import {AuthState} from './common/auth/state/auth.store';
 import {ROUTES} from './app-routing.module';
+import {AuthQuery} from 'nyomio-ng-components';
+import {AuthState} from 'nyomio-ng-components';
+import {AuthService} from 'nyomio-ng-components';
 
 export interface MenuEntry {
   title: string;
@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
       newState.push({title : 'Organizations', route: [ROUTES.organizations], icon: 'dashboard'});
     }
     newState.push({title : 'Users', route: [ROUTES.users], icon: 'dashboard'});
-    newState.push({title : 'Devices', route: [ROUTES.devices], icon: 'dashboard'});
     this.menuEntries = newState;
   }
 

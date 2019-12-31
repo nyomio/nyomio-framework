@@ -63,7 +63,6 @@ import {OrganizationPageComponent} from './pages/organization-page/organization-
     CovalentLoadingModule,
     ReactiveFormsModule,
     FormsModule
-
   ],
   exports: [
     NyomioNgComponentsLibComponent,

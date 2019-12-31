@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {OrganizationStore} from './organization.store';
 import {OrganizationQuery} from './organization.query';
-import {EntityEditorService} from 'nyomio-ng-components';
 import {ActivatedRoute, Router} from '@angular/router';
+import {EntityEditorService} from '../../../entity-editor/entity-editor.service';
 
 @Injectable({providedIn: 'root'})
 export class OrganizationService extends EntityEditorService {

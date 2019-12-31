@@ -55,7 +55,7 @@ import {AkitaNgRouterStoreModule} from '@datorama/akita-ng-router-store';
     environment.production ? [] : AkitaNgDevtools.forRoot(),
     AkitaNgRouterStoreModule,
     ReactiveFormsModule,
-    NyomioNgComponentsModule,
+    NyomioNgComponentsModule
   ],
   providers: [{
     provide: NG_ENTITY_SERVICE_CONFIG,

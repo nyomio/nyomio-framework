@@ -1,9 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {OrganizationPageComponent} from './page/organization/organization-page.component';
-import {AuthGuard} from './common/auth/auth.guard';
-import {EntityEditorGuard} from 'nyomio-ng-components';
-import {UserComponent} from './page/user/user.component';
+import {OrganizationPageComponent} from 'nyomio-ng-components';
+import {UserPageComponent} from 'nyomio-ng-components';
+import {AuthGuard, EntityEditorGuard} from 'nyomio-ng-components';
 
 export const ROUTES = {
   organizations: 'organizations',
@@ -22,7 +21,7 @@ const routes: Routes = [
     canActivate: [AuthGuard, EntityEditorGuard]
   },
   {
-    component: UserComponent,
+    component: UserPageComponent,
     path: ROUTES.users,
     canActivate: [AuthGuard, EntityEditorGuard]
   },

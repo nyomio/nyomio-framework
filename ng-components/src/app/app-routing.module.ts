@@ -4,7 +4,6 @@ import {EntityEditorDemo1Component} from './entity-editor-demo1/entity-editor-de
 import {EntityEditorDemo2Component} from './entity-editor-demo2/entity-editor-demo2.component';
 import {EntityEditorGuard} from '../../projects/nyomio-ng-components/src/lib/entity-editor/entity-editor.guard';
 import {OrganizationPageComponent} from '../../projects/nyomio-ng-components/src/lib/pages/organization-page/organization-page.component';
-import {AuthGuard} from '../../projects/nyomio-ng-components/src/lib/auth/auth.guard';
 import {UserPageComponent} from '../../projects/nyomio-ng-components/src/lib/pages/user-page/user-page.component';
 
 

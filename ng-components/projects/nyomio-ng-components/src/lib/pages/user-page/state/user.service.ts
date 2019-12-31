@@ -2,11 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserStore} from './user.store';
 import {UserQuery} from './user.query';
-import {
-  EntityEditorService,
-} from 'nyomio-ng-components';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthQuery} from '../../../auth/state/auth.query';
+import {EntityEditorService} from '../../../entity-editor/entity-editor.service';
 
 @Injectable({providedIn: 'root'})
 export class UserService extends EntityEditorService {

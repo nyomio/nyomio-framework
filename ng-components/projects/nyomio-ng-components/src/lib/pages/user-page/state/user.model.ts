@@ -1,4 +1,4 @@
-import {EntityEditorModel} from 'nyomio-ng-components';
+import {EntityEditorModel} from '../../../entity-editor/entity-editor.model';
 
 export interface User extends EntityEditorModel {
   email: string;

@@ -3,9 +3,10 @@ import {OrganizationQuery} from './state/organization.query';
 import {OrganizationService} from './state/organization.service';
 import {defaultOrganization} from './state/organization.model';
 import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
-import {Column} from 'nyomio-ng-components/lib/nyom-table/nyom-table.component';
+import {Column} from '../../nyom-table/nyom-table.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'nyomio-organization-page',
   templateUrl: './organization-page.component.html',
   styleUrls: ['./organization-page.component.scss'],

@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {Column} from 'nyomio-ng-components/lib/nyom-table/nyom-table.component';
 import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
 import {defaultUser} from './state/user.model';
 import {UserQuery} from './state/user.query';
 import {UserService} from './state/user.service';
 import {ActivatedRoute} from '@angular/router';
+import {Column} from '../../nyom-table/nyom-table.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'nyomio-user-page',
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss']

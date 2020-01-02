@@ -16,12 +16,18 @@ export class OrganizationPageComponent implements OnInit {
   columns: Column[] = [
     {name: 'id', label: 'ID'},
     {name: 'org_name', label: 'Name'},
+    {name: 'org_shortName', label: 'Short Name'},
     {name: 'org_address', label: 'Address'},
   ];
 
   formElements: ITdDynamicElementConfig[] = [{
     name: 'org_name',
     label: 'Organization Name',
+    type: TdDynamicElement.Input,
+    required: true,
+  }, {
+    name: 'org_shortName',
+    label: 'Organization Short Name',
     type: TdDynamicElement.Input,
     required: true,
   }, {

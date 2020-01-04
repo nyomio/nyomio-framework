@@ -1,2 +1,2 @@
 global:
-  clusterMode: docker
+  clusterType: docker

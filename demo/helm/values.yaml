@@ -1,6 +1,6 @@
 global:
   # can be "docker", "minikube", "server"
-  clusterMode: docker
+  clusterType: docker
   frontendDevMode: true
 
 

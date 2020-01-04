@@ -1,4 +1,4 @@
-{{ if or (eq .Values.global.clusterMode "docker") (eq .Values.global.clusterMode "minikube") }}
+{{ if or (eq .Values.global.clusterType "docker") (eq .Values.global.clusterType "minikube") }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

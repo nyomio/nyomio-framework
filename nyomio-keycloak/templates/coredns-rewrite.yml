@@ -6,7 +6,7 @@ metadata:
 data:
   Corefile: |
     .:53 {
-        errors {{ if eq .Values.global.clusterMode "minikube" }}
+        errors {{ if eq .Values.global.clusterType "minikube" }}
         ready{{ end }}
         health
         rewrite name sso.nyomio.local traefik-ingress.kube-system.svc.cluster.local

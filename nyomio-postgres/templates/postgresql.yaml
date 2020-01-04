@@ -4,13 +4,9 @@ metadata:
   name: pvc-pgdata
   namespace: {{ .Release.Namespace }}
 spec:
-    {{ if eq .Values.global.clusterMode "server" }}
-  storageClassName: longhorn
-    {{ else if eq .Values.global.clusterMode "docker" }}
-  storageClassName: hostpath
-    {{ else if eq .Values.global.clusterMode "minikube" }}
-  storageClassName: standard
-    {{ end }}
+  {{- with .Values.global }}
+  storageClassName: {{ if eq .clusterType "server" }}longhorn{{ else if eq .clusterType "docker" }}hostpath{{ else if eq .clusterType "minikube" }}standard{{ end }}
+  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

@@ -1,0 +1,33 @@
+@import '~@angular/material/theming';
+@import '~@covalent/core/theming/all-theme';
+@import '../projects/nyomio-ng-components/src/lib/nyomio-ng-components-theme';
+
+
+// Define a custom typography config that overrides the font-family
+// or any typography level.
+$typography: mat-typography-config(
+  $font-family: 'Roboto, monospace',
+  $headline: mat-typography-level(32px, 48px, 700)
+);
+
+@include mat-core($typography); // $typography is an **optional** argument for the mat-core
+
+$primary: mat-palette($mat-green, 500, 100, 900);
+$accent: mat-palette($mat-light-blue, 600, A100, A400);
+
+$warn: mat-palette($mat-red, 600, 100, 900);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+@include covalent-theme($theme, $typography); // $typography is an **optional** argument for the covalent-theme
+@include nyomio-ng-components-theme($theme);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

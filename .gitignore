@@ -9,11 +9,9 @@ hs_err_pid*
 
 .idea/
 
-certs/nyomio*
-certs/rootCA*
-k8s-minikube/traefikcertsecret.yaml
-
 build/
 target/
 out/
 .gradle/
+/ci/helm/charts/
+/demo/helm/charts/

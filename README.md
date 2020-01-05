@@ -1,14 +1,22 @@
-# framework-demo
-Demo for our API and webapp framework based on micronaut, kotlin, keycloak, grpc and traefik. Ready for kubernetes.
+# Nyomio Framework
+A highly opinionated mash off technologies based on 
+ - micronaut (on kotlin) - microservices backend
+ - angular - frontend
+ - keycloak - authentication provider
+ - postgres - DB both for keycloak and domain data
+ - Traefik - proxy 
 
-# About the app
-The app we build is a simple demo app for company and device management. 
-Here is a link that describes the architecture, the components, and the motivation and reasoning
+The framework has specific ways augmented with code generation to make data travel from backend to frontend.
+
+Ready for kubernetes with helm charts.
+
+# Reasoning behind architectural choices
+Here is a link that describes the architecture, the components, the motivation and the reasoning
  behind each technical decision:
  [here](https://medium.com/@istvan.szoboszlai/micronaut-with-kotlin-keycloak-grpc-traefik-on-kubernetes-a9861041cc52)
 
 ## Frontend
-Angular frontend, but even more opinionated. See docs [here](nyom-app/README.md)
+Angular frontend, but even more opinionated. _*TODO:*_ we need a reference for the documentation
 
 # Getting started (local)
 ## Prerequisites
@@ -57,16 +65,6 @@ execute install.sh. Execute before install.sh:
 ```bash
 eval $(minikube docker-env)
 ```
-
-This will do the following:
-- init helm
-- install Traefik
-- install Keycloak
-- auth microservice: build, create docker image and install to kubernetes
-- nyom-app angular webapp: build, create docker image and install to kubernetes
-- set up all ingress rules
-
-Now you can access the angular app at [https://app.nyomio.local/](https://app.nyomio.local/)
 
 # Add DNS entries to the hosts file
 ```

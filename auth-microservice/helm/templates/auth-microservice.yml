@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-microservice-deployment
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: auth-microservice
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: auth-microservice
+    spec:
+      containers:
+        - name: "auth-mircoservice"
+          image: "nyomio-auth-mircoservice:0.1.0"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: debug
+              containerPort: 8000
+          env:
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: client-secret
+                  key: client-secret
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: secret
+            - name: KEYCLOAK_CLIENT_ID
+              value: "nyom-app"
+            - name: KEYCLOAK_OPENID_ISSUER_URL
+              value: "https://sso.nyomio.local/auth/realms/nyomio"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-user
+                  key: password
+            - name: DB_USER
+              value: postgres
+            - name: DB_URL
+              value: jdbc:postgresql://postgresql.{{ .Release.Namespace }}.svc.cluster.local:5432/postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-microservice-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: auth-microservice
+  ports:
+    - name: http
+      targetPort: 8080
+      port: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: auth-ingress
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`app.nyomio.local`) && (PathPrefix(`/oauth/`) || PathPrefix(`/logout`) || PathPrefix(`/api/v1/auth/`) || PathPrefix(`/api/v1/admin/`))
+      kind: Rule
+      priority: 2
+      services:
+        - name: auth-microservice-service
+          port: 8080
+  tls:
+    secretName: certsecret

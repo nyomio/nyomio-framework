@@ -1,0 +1,6 @@
+<p><%= classify(name) %></p>
+<error-component [assignedQuery]="<%= decapitalize(classify(name)) %>Query" [assignedService]="<%= decapitalize(classify(name)) %>Service"></error-component>
+<entity-editor entityName="<%= classify(name) %>" [columns]="columns" [formElements]="formElements"
+               [query]="<%= decapitalize(classify(name)) %>Query" [service]="<%= decapitalize(classify(name)) %>Service"
+               [defaultEntity]="defaultEntity"></entity-editor>
+

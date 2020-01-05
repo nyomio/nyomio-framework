@@ -1,0 +1,41 @@
+{{ if or (eq .Values.global.clusterType "docker") (eq .Values.global.clusterType "minikube") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-poststart
+  namespace: {{ .Release.Namespace }}
+data:
+  postStart.sh: |
+    #!/usr/bin/env bash
+    while ! /opt/jboss/keycloak/bin/jboss-cli.sh --connect /:reload; do echo 'wait for keycloak ready' >> /tmp/poststart.log; done;
+    while ! curl --silent 127.0.0.1:8080; do echo 'wait for keycloak ready' >> /tmp/poststart.log ; done;
+    /opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user keycloak --password $KEYCLOAK_PASSWORD;
+    echo "Autenticated"
+
+    /opt/jboss/keycloak/bin/kcadm.sh create realms --set realm=nyomio --set enabled=true || exit 0;
+    CLID=$(/opt/jboss/keycloak/bin/kcadm.sh create clients -r nyomio -s clientId=nyom-app -s publicClient=false -s 'redirectUris=["*"]' -i);
+    echo "CLID: $CLID"
+
+    /opt/jboss/keycloak/bin/kcadm.sh create users -r nyomio -s username=user -s email=user@nyom-app.local -s enabled=true -o --fields id,username;
+    /opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username user --new-password user;
+    /opt/jboss/keycloak/bin/kcadm.sh create users -r nyomio -s username=admin -s email=admin@nyom-app.local -s enabled=true -o --fields id,username;
+    /opt/jboss/keycloak/bin/kcadm.sh set-password -r nyomio --username admin --new-password admin;
+    /opt/jboss/keycloak/bin/kcadm.sh create clients/$CLID/roles  -r nyomio -s name=admin;
+    /opt/jboss/keycloak/bin/kcadm.sh add-roles -r nyomio --uusername admin --cid $CLID --rolename admin;
+    echo "Users and roles created"
+
+    CLIENT_SCOPE_ID=$( /opt/jboss/keycloak/bin/kcadm.sh get client-scopes -r nyomio --fields name,id --format csv --noquotes | grep roles | awk -F "'*,'*" '{print $2}');
+    MAPPER_ID=$(/opt/jboss/keycloak/bin/kcadm.sh get client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models --fields name,id --format csv --noquotes -r nyomio | grep "client roles" | awk -F "'*,'*" '{print $2}');
+    /opt/jboss/keycloak/bin/kcadm.sh update client-scopes/$CLIENT_SCOPE_ID/protocol-mappers/models/$MAPPER_ID -s 'config."id.token.claim"="true"' -s 'config."usermodel.clientRoleMapping.clientId"="nyom-app"' -r nyomio;
+    echo "Role mappers set up"
+
+    CLIENT_SECRET=$(/opt/jboss/keycloak/bin/kcadm.sh get clients/$CLID/client-secret -r nyomio --fields value  --format csv --noquotes | head -c -1 | base64 );
+    echo "CLIENT_SECRET: $CLIENT_SECRET"
+
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token);
+    DATA="{\"kind\":\"Secret\", \"apiVersion\":\"v1\", \"metadata\": { \"namespace\":\"{{ .Release.Namespace }}\",\"name\":\"client-secret\"},\"data\": {\"client-secret\":\"$CLIENT_SECRET\"}}";
+    echo "Secret data to write: $DATA"
+
+    curl -XPOST -k https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/{{ .Release.Namespace }}/secrets \
+         -H "Authorization: Bearer $TOKEN" -H 'Accept: application/json' -H 'Content-Type: application/json' --data "$DATA"
+{{ end }}

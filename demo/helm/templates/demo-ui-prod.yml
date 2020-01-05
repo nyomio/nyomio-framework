@@ -1,0 +1,67 @@
+{{ if eq .Values.global.frontendDevMode false }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nyomio-demo-ui
+spec:
+  selector:
+    matchLabels:
+      app: nyomio-demo-ui
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: nyomio-demo-ui
+    spec:
+      containers:
+        - name: "nyomio-demo-ui"
+          image: "nyomio-demo-ui:0.1.0"
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nyomio-demo-ui-service
+spec:
+  selector:
+    app: nyomio-demo-ui
+  ports:
+    - name: http
+      targetPort: 80
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: rediredt-404-to-index-html
+spec:
+  errors:
+    status:
+      - 404
+    query: /
+    service:
+      name: nyomio-demo-ui-service
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nyomio-demo-ui-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`app.nyomio.local`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: nyomio-demo-ui-service
+          port: 80
+      middlewares:
+        - name: rediredt-404-to-index-html
+  tls:
+    secretName: certsecret
+{{ end }}

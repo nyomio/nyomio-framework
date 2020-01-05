@@ -1,0 +1,98 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.50"
+    id "org.jetbrains.kotlin.kapt" version "1.3.50"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.3.50"
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "application"
+}
+
+version "0.1"
+
+dependencies {
+    implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut:micronaut-security-jwt"
+    implementation files('micronaut-fix/micronaut-security-oauth2-1.2.2.jar')
+//    implementation 'io.micronaut.configuration:micronaut-security-oauth2'
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-http-server-netty"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+
+    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "javax.annotation:javax.annotation-api"
+
+    implementation "org.postgresql:postgresql:42.2.8"
+    implementation "org.jetbrains.exposed:exposed:0.17.3"
+    implementation "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin:${mapstructVersion}.Beta2"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}.Final"
+
+    implementation "nyomio:commons:0.1"
+
+    kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
+    kapt "io.micronaut:micronaut-inject-java"
+    kapt "io.micronaut:micronaut-validation"
+    kapt "io.micronaut.configuration:micronaut-openapi"
+    kapt "org.mapstruct:mapstruct-processor:${mapstructVersion}.Final"
+    kapt "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin-processor:${mapstructVersion}.Beta2"
+    kaptTest platform("io.micronaut:micronaut-bom:$micronautVersion")
+    kaptTest "io.micronaut:micronaut-inject-java"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testImplementation "org.jetbrains.spek:spek-api:1.1.5"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation "io.micronaut.test:micronaut-test-kotlintest"
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "io.kotlintest:kotlintest-runner-junit5:3.3.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
+}
+
+mainClassName = "nyomio.auth.Application"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://jcenter.bintray.com" }
+    maven { url "https://jitpack.io" }
+
+}
+
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        //Will retain parameter names for Java reflection
+        javaParameters = true
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        javaParameters = true
+    }
+}
+
+test.classpath += configurations.developmentOnly
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+run.classpath += configurations.developmentOnly
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+
+test {
+    useJUnitPlatform()
+}
+
+allOpen {
+    annotation("io.micronaut.aop.Around")
+}

@@ -1,0 +1,36 @@
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {<%= classify(name) %>Store} from './<%= dasherize(name) %>.store';
+import {<%= classify(name) %>Query} from "./<%= dasherize(name) %>.query";
+import {
+  EntityEditorService,
+} from "<%= nyomioNgComponentsPath %>";
+import {ActivatedRoute, Router} from "@angular/router";
+
+@Injectable({providedIn: 'root'})
+export class <%= classify(name) %>Service extends EntityEditorService {
+
+  constructor(router: Router,
+              route: ActivatedRoute,
+              <%= decapitalize(classify(name)) %>Store: <%= classify(name) %>Store,
+              <%= decapitalize(classify(name)) %>Query: <%= classify(name) %>Query,
+              http: HttpClient
+  ) {
+    super(router, route, <%= decapitalize(classify(name)) %>Store, <%= decapitalize(classify(name)) %>Query, http);
+  }
+
+  buildGetAtUrl(timestamp: number, filter?: string): string {
+    return '/api/v1/admin/<%= dasherize(name) %>/all-at/' + timestamp + (filter ? "/" + filter : "");
+  }
+
+  buildUpsertUrl(): string {
+    return '/api/v1/admin/<%= dasherize(name) %>';
+  }
+
+  buildDeleteUrl(selectedId: number): string {
+    return `/api/v1/admin/<%= dasherize(name) %>/${selectedId}`;
+  }
+
+}
+
+

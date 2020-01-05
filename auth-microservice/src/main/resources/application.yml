@@ -1,0 +1,37 @@
+micronaut:
+  application:
+    name: auth
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+  security:
+    enabled: true
+    token:
+      jwt:
+        enabled: true
+        cookie:
+          enabled: true
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET_KEY}
+    endpoints:
+      logout:
+        enabled: true
+        get-allowed: true
+    oauth2:
+      enabled: true
+      clients:
+        keycloak:
+          client-id: ${KEYCLOAK_CLIENT_ID}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET}
+          openid:
+            issuer: ${KEYCLOAK_OPENID_ISSUER_URL}
+db:
+  driver: org.postgresql.Driver
+  connection-string: ${DB_URL}
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  create-tables: true

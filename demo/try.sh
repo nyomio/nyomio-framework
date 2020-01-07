@@ -22,11 +22,10 @@ kubectl delete configmaps --namespace=kube-system coredns
 cd helm || exit
 if [[ $1 == "dev" ]]
   then
-    helm dependencies update .
-    helm install nyomio-framework-demo .
+    helm install --dependency-update nyomio-framework-demo .
     printf "You can start the nyomio-demo-ui angular serrver in livereload mode with 'skaffold dev' \n"
   else
    [[ -n $(docker images -q nyomio-demo-ui:0.1.0) ]] || ../build.sh
-   helm install nyomio-framework-demo . --set global.frontendDevMode=false
+   helm install --dependency-update nyomio-framework-demo . --set global.frontendDevMode=false
 fi
 

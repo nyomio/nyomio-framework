@@ -1,0 +1,6 @@
+dependencies:
+- name: nyomio-framework
+  repository: file://../../ci/helm
+  version: 0.0.1
+digest: sha256:cd3f70c33042eb338df50fe275d4a480d8af79603800f06be5b5911f1c08daa0
+generated: "2020-01-06T10:51:44.965261681+01:00"

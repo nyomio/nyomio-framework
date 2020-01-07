@@ -1,4 +1,7 @@
 dependencies:
+- name: nyomio-certs
+  repository: file://../../certs/helm
+  version: 0.0.1
 - name: nyomio-keycloak
   repository: file://../../nyomio-keycloak
   version: 0.0.2
@@ -11,5 +14,5 @@ dependencies:
 - name: nyomio-auth-microservice
   repository: file://../../auth-microservice/helm
   version: 0.0.1
-digest: sha256:8a192c78e80c608941b473bc60d3d3f34a4628e452771716c1d7fe33a903eb57
-generated: "2019-12-20T15:56:58.293734831+01:00"
+digest: sha256:3f67b10c0b4adc4daba04a12b0cbe251c460e56d47c26fb54a19a97f2d8ee764
+generated: "2020-01-07T15:53:00.544098857+01:00"

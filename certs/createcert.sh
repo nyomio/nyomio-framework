@@ -10,9 +10,9 @@ NYOMIO_SAN_KEY_BASE64="$(base64 nyomio.local.pem)"
 NYOMIO_SAN_KEY_PKCS8_BASE64="$(base64 nyomio.local.pkcs8)"
 NYOMIO_SAN_CA_BASE64="$(base64 rootCA.crt)"
 JAVA_KEYSTORE_BASE64="$(base64 java_keystore.jks)"
-sed -e "s/NYOMIO_SAN_CERT_BASE64/${NYOMIO_SAN_CERT_BASE64//$'\n'/}/g" ./certsecret.template.yaml \
+sed -e "s/NYOMIO_SAN_CERT_BASE64/${NYOMIO_SAN_CERT_BASE64//$'\n'/}/g" ./certsecret.template.yml \
   | sed "s/NYOMIO_SAN_KEY_BASE64/${NYOMIO_SAN_KEY_BASE64//$'\n'/}/g" \
   | sed "s/NYOMIO_SAN_KEY_PKCS8_BASE64/${NYOMIO_SAN_KEY_PKCS8_BASE64//$'\n'/}/g" \
   | sed "s/NYOMIO_SAN_CA_BASE64/${NYOMIO_SAN_CA_BASE64//$'\n'/}/g" \
-  | sed "s#JAVA_KEYSTORE_BASE64#${JAVA_KEYSTORE_BASE64//$'\n'/}#g" > ./certsecret.yaml
+  | sed "s#JAVA_KEYSTORE_BASE64#${JAVA_KEYSTORE_BASE64//$'\n'/}#g" > ./helm/templates/certsecret.yml
 

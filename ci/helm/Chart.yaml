@@ -2,6 +2,9 @@ apiVersion: v2
 name: nyomio-framework
 version: 0.0.1
 dependencies:
+  - name: nyomio-certs
+    version: 0.0.1
+    repository: "file://../../certs"
   - name: nyomio-keycloak
     version: 0.0.2
     repository: "file://../../nyomio-keycloak"

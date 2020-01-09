@@ -9,5 +9,5 @@ spec:
   routes:
     - match: HostSNI(`*`)
       services:
-        - name: nyom-db-postgresql
+        - name: postgresql
           port: 5432

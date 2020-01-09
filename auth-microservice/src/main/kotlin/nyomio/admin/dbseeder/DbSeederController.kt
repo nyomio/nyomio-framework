@@ -16,15 +16,15 @@ constructor(private val organizationDbService: OrganizationDbService,
 
     @Get(uri = "/seed")
     fun seed() {
-        organizationDbService.add(Organization("Carborail", "carborail", "Budapest")).let { organizationId ->
-            userDbService.add(User("carbouser1@test.com", "carbouser1", organizationId))
-            userDbService.add(User("carbouser2@test.com", "carbouser2", organizationId))
-
-        }
+//        organizationDbService.add(Organization("Carborail", "carborail", "Budapest")).let { organizationId ->
+//            userDbService.add(User("carbouser1@test.com", "carbouser1", organizationId))
+//            userDbService.add(User("carbouser2@test.com", "carbouser2", organizationId))
+//
+//        }
 
         organizationDbService.add(Organization("Inepex", "inepex", "Budapest")).let { organizationId ->
-            userDbService.add(User("ineuser1@test.com", "ineuser1", organizationId))
-            userDbService.add(User("ineuser2@test.com", "ineuser2", organizationId))
+            userDbService.add(User("admin@nyom-app.local", "admin", organizationId))
+            userDbService.add(User("user@nyom-app.local	", "user", organizationId))
         }
 
     }

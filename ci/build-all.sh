@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")" || exit
 
+currentK8sContext=$(kubectl config current-context)
+
+case "$currentK8sContext" in
+  minikube)
+    eval $(minikube docker-env)
+    ;;
+esac
+
 printf "\n%s\n" "***** Generating certs (if they weren't already generated)"
 cd ../certs
 ./build.sh

@@ -1,1 +1,2 @@
-out/
+generated.md
+proto/datatypes.proto

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package example;
+
+service Dummy {
+}
+
+// replace with yours
+message Organization {
+  string name = 1;
+  string shortName = 2;
+  string address = 3;
+}
+

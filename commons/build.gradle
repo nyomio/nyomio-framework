@@ -16,6 +16,11 @@ repositories {
     maven { url "https://jcenter.bintray.com" }
 }
 
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
@@ -23,6 +28,7 @@ publishing {
             artifactId = 'commons'
 
             from components.java
+            artifact sourcesJar
         }
     }
 }
@@ -61,3 +67,4 @@ test {
     environment "LC_CTYPE", "en_US.UTF-8"
     environment "LC_ALL", "en_US.UTF-8"
 }
+

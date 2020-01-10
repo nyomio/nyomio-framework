@@ -1,7 +1,7 @@
 package admin.<%= entityNameL1 %>
 
-import nyomio.dbutils.*
-import nyomio.dbutils.revisionedentity.*
+import nyomio.commons.*
+import nyomio.commons.revisionedentity.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import javax.inject.Singleton

@@ -4,7 +4,7 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
-import nyomio.dbutils.revisionedentity.BaseController
+import nyomio.commons.revisionedentity.BaseController
 
 @Controller("/api/v1/admin/<%= entityNameL1 %>")
 @Secured(SecurityRule.IS_AUTHENTICATED)

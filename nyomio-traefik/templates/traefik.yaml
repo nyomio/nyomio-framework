@@ -108,6 +108,8 @@ spec:
             - --entrypoints.web.Address=:8000
             - --entrypoints.websecure.Address=:4443
             - --entrypoints.postgres.Address=:5432
+            - --entrypoints.kafka1.Address=:32400
+            - --entrypoints.kafka2.Address=:32401
             - --providers.kubernetescrd
             - --providers.kubernetesingress=true
           ports:
@@ -120,6 +122,12 @@ spec:
             - name: postgres
               containerPort: 5432
               hostPort: 5432
+            - name: kafka1
+              containerPort: 32400
+              hostPort: 32400
+            - name: kafka2
+              containerPort: 32401
+              hostPort: 32401
             - name: admin
               containerPort: 8080
               hostPort: 8080
@@ -159,13 +167,22 @@ spec:
             - --log.level=info
             - --entrypoints.web.Address=:8000
             - --entrypoints.websecure.Address=:4443
+            - --entrypoints.postgres.Address=:5432
+            - --entrypoints.kafka1.Address=:32400
+            - --entrypoints.kafka2.Address=:32401
             - --providers.kubernetescrd
             - --providers.kubernetesingress=true
           ports:
             - name: web
-              containerPort: 000
+              containerPort: 8000
             - name: websecure
               containerPort: 4443
+            - name: postgres
+              containerPort: 5432
+            - name: kafka1
+              containerPort: 32400
+            - name: kafka2
+              containerPort: 32401
             - name: admin
               containerPort: 8080
 ---
@@ -189,6 +206,14 @@ spec:
       name: postgres
       port: 5432
       targetPort: 5432
+    - protocol: TCP
+      name: kafka1
+      port: 32400
+      targetPort: 32400
+    - protocol: TCP
+      name: kafka2
+      port: 32401
+      targetPort: 32401
   selector:
     app: traefik
   type: LoadBalancer

@@ -4,10 +4,10 @@ plugins {
     id "org.jetbrains.kotlin.plugin.allopen" version "1.3.50"
     id 'java'
     id 'maven-publish'
-
 }
 
 version '0.1'
+group = 'nyomio.nyomio-framework'
 
 sourceCompatibility = 1.8
 
@@ -24,9 +24,6 @@ task sourcesJar(type: Jar) {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = 'nyomio'
-            artifactId = 'commons'
-
             from components.java
             artifact sourcesJar
         }

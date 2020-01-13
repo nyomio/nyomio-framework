@@ -24,35 +24,6 @@ class UserWithoutOrg(
             )
 }
 
-class User(
-        var email: String,
-        var name: String,
-        var organizationId: Long,
-        entityId: Long? = null
-) : Entity(entityId) {
-    constructor(row: ResultRow) :
-            this(
-                    row[UserTable.email],
-                    row[UserTable.name],
-                    row[UserTable.organizationId],
-                    row[UserTable.entityId]
-            )
-
-    constructor() : this("", "", 0L, 0L)
-}
-
-object UserTable : EntityTable() {
-    val email: Column<String> = varchar("email", 100)
-    val name: Column<String> = varchar("name", 100)
-    val organizationId: Column<Long> = long("organization_id")
-
-    fun insertFrom(stmt: InsertStatement<Number>, user: User) {
-        stmt[email] = user.email
-        stmt[name] = user.name
-        stmt[organizationId] = user.organizationId
-    }
-}
-
 @Singleton
 class UserRevisionedDbService
 constructor(private val dba: DbAccess,

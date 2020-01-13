@@ -28,7 +28,8 @@ dependencies {
     implementation "com.github.pozo.mapstruct-kotlin:mapstruct-kotlin:${mapstructVersion}.Beta2"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}.Final"
 
-    implementation "nyomio:commons:0.1"
+    implementation "nyomio.nyomio-framework:commons:0.1"
+    implementation "nyomio.nyomio-framework:auth-microservice-api:0.1"
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"

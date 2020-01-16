@@ -17,6 +17,11 @@ printf "\n%s\n" "***** Building and publishing nyomio-commons locally..."
 cd ../commons || exit
 ./gradlew build publishToMavenLocal || exit
 
+
+printf "\n%s\n" "***** Building and publishing nyomio-auth-microservice locally..."
+cd ../auth-microservice-api || exit
+./gradlew build publishToMavenLocal || exit
+
 # Build auth microservice
 printf "\n%s\n" "***** Building nyomio-auth-microservice..."
 cd ..

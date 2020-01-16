@@ -12,6 +12,7 @@ import {MapStateService} from '../../../projects/nyomio-ng-components/src/lib/co
   `]
 })
 export class MapTestComponent implements OnInit {
+  i = 0;
 
   constructor(private mapStateService: MapStateService) {
   }
@@ -21,8 +22,9 @@ export class MapTestComponent implements OnInit {
   }
 
   addRouteClicked() {
+    this.i = this.i + 1;
     this.mapStateService.addRoute({
-      id: 1,
+      id: this.i,
       line: 'cs|`HohusB\\jFHnATpFRpEHvB@|@?R?XBl@BbADp@L|AJ`ARfCF~@b@fHD|' +
         '@LpBN~BJhBBV?JBf@@V@HDx@JfBNvCDp@RpDFdA@VHfCBl@@Z@p@DrA@p@@tB?h@@zDAzE@zCAnB?dA@hI???p@?HCfR?D' +
         '?x@DfKAdB?jDBbH@n@DpJA|B?`A?\\@lI?f@ArAAxACr@Ih@M^a@n@GVE\\Eh@Bn@d@rANf@Z`ADXR`AR|@Jh@v@tELv@' +
@@ -40,5 +42,13 @@ export class MapTestComponent implements OnInit {
       lng: 19.040236,
       color: 'red'
     });
+  }
+
+  clearMarkers() {
+    this.mapStateService.clearMarkers();
+  }
+
+  clearRoutes() {
+    this.mapStateService.clearRoutes();
   }
 }

@@ -56,7 +56,10 @@ export class NyomioMapComponent implements OnInit {
   private clearRoutes() {
     this.map.getStyle().layers
     .filter(layer => layer.id.startsWith('route'))
-    .forEach(layer => this.map.removeLayer(layer.id));
+    .forEach(layer => {
+      this.map.removeLayer(layer.id);
+      this.map.removeSource(layer.id);
+    });
   }
 
   private addMarker(markerData: MarkerData) {

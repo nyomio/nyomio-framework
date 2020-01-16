@@ -18,10 +18,10 @@ export class MapStateService {
     });
   }
 
-  addMarker(markerData: MarkerData) {
+  addMarkers(markers: MarkerData[]) {
     this.mapStateStore.update(oldState => {
       return Object.assign({}, oldState, {
-        markers: [...oldState.markers, markerData]
+        markers: [...oldState.markers, ...markers]
       } as MapState);
     });
   }
@@ -34,10 +34,10 @@ export class MapStateService {
     });
   }
 
-  addRoute(routeData: RouteData) {
+  addRoutes(routes: RouteData[]) {
     this.mapStateStore.update(oldState => {
       return Object.assign({}, oldState, {
-        routes: [...oldState.routes, routeData]
+        routes: [...oldState.routes, ...routes]
       } as MapState);
     });
   }

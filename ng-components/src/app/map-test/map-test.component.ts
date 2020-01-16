@@ -11,19 +11,15 @@ import {MapStateService} from '../../../projects/nyomio-ng-components/src/lib/co
     }
   `]
 })
-export class MapTestComponent implements OnInit {
+export class MapTestComponent {
   i = 0;
 
   constructor(private mapStateService: MapStateService) {
   }
 
-  ngOnInit() {
-
-  }
-
   addRouteClicked() {
     this.i = this.i + 1;
-    this.mapStateService.addRoute({
+    this.mapStateService.addRoutes([{
       id: this.i,
       line: 'cs|`HohusB\\jFHnATpFRpEHvB@|@?R?XBl@BbADp@L|AJ`ARfCF~@b@fHD|' +
         '@LpBN~BJhBBV?JBf@@V@HDx@JfBNvCDp@RpDFdA@VHfCBl@@Z@p@DrA@p@@tB?h@@zDAzE@zCAnB?dA@hI???p@?HCfR?D' +
@@ -32,16 +28,16 @@ export class MapTestComponent implements OnInit {
         'GHh@Jl@j@tDXhBHl@VhBCd@ERIRED_@VmAt@UNcAl@OHMJYV[b@KVO`@GNIRk@|AOb@e@rAWv@O^GNGRM\\EJ]~@[|@O\\' +
         'a@~@a@z@ITCRDT@x@Ft@Fr@Fh@Dl@?FBXBT',
       color: 'rgba(100, 243, 140, 1 )'
-    });
+    }]);
   }
 
   addMarkerClicked() {
-    this.mapStateService.addMarker({
+    this.mapStateService.addMarkers([{
       id: 1,
       lat: 47.497913,
       lng: 19.040236,
       color: 'red'
-    });
+    }]);
   }
 
   clearMarkers() {

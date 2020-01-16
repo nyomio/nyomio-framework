@@ -110,6 +110,7 @@ spec:
             - --entrypoints.postgres.Address=:5432
             - --entrypoints.kafka1.Address=:32400
             - --entrypoints.kafka2.Address=:32401
+            - --entrypoints.logstash.Address=:4560
             - --providers.kubernetescrd
             - --providers.kubernetesingress=true
           ports:
@@ -128,6 +129,9 @@ spec:
             - name: kafka2
               containerPort: 32401
               hostPort: 32401
+            - name: logstash
+              containerPort: 4560
+              hostPort: 4560
             - name: admin
               containerPort: 8080
               hostPort: 8080
@@ -170,6 +174,7 @@ spec:
             - --entrypoints.postgres.Address=:5432
             - --entrypoints.kafka1.Address=:32400
             - --entrypoints.kafka2.Address=:32401
+            - --entrypoints.logstash.Address=:4560
             - --providers.kubernetescrd
             - --providers.kubernetesingress=true
           ports:
@@ -183,6 +188,8 @@ spec:
               containerPort: 32400
             - name: kafka2
               containerPort: 32401
+            - name: logstash
+              containerPort: 4560
             - name: admin
               containerPort: 8080
 ---
@@ -214,6 +221,10 @@ spec:
       name: kafka2
       port: 32401
       targetPort: 32401
+    - protocol: TCP
+      name: logstash
+      port: 4560
+      targetPort: 4560
   selector:
     app: traefik
   type: LoadBalancer

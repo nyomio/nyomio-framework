@@ -1,4 +1,4 @@
 nyomio*
 rootCA*
 java_keystore*
-helm/templates/certsecret.yml
+/helm/templates/certsecret.yml

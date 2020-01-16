@@ -5,6 +5,8 @@ import {EntityEditorDemo2Component} from './entity-editor-demo2/entity-editor-de
 import {EntityEditorGuard} from '../../projects/nyomio-ng-components/src/lib/entity-editor/entity-editor.guard';
 import {OrganizationPageComponent} from '../../projects/nyomio-ng-components/src/lib/pages/organization-page/organization-page.component';
 import {UserPageComponent} from '../../projects/nyomio-ng-components/src/lib/pages/user-page/user-page.component';
+import {NyomioMapComponent} from '../../projects/nyomio-ng-components/src/lib/components/map-component/nyomio-map-component';
+import {MapTestComponent} from './map-test/map-test.component';
 
 
 const routes: Routes = [
@@ -33,7 +35,10 @@ const routes: Routes = [
     path: 'users',
     canActivate: [EntityEditorGuard]
   },
-
+  {
+    component: MapTestComponent,
+    path: 'map'
+  }
 ];
 
 @NgModule({

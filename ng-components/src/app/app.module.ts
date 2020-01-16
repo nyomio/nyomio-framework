@@ -14,17 +14,22 @@ import { EntityEditorDemo1Component } from './entity-editor-demo1/entity-editor-
 import { EntityEditorDemo2Component } from './entity-editor-demo2/entity-editor-demo2.component';
 import {HttpMockRequestInterceptor} from './mockdata/interceptor.mock';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import { MapTestComponent } from './map-test/map-test.component';
+import {FlexModule} from '@angular/flex-layout';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
     AppComponent,
     EntityEditorDemo1Component,
-    EntityEditorDemo2Component
+    EntityEditorDemo2Component,
+    MapTestComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NyomioNgComponentsModule,
+    MatButtonModule,
     BrowserAnimationsModule,
     CovalentLayoutModule,
     CovalentStepsModule,

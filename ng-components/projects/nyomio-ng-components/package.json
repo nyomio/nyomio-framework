@@ -17,10 +17,12 @@
     "@covalent/core": "^2.1.1",
     "@covalent/dynamic-forms": "^2.1.1",
     "@covalent/markdown": "^2.1.1",
-    "@datorama/akita": "^4.12.1",
+    "@datorama/akita": "^4.17.4",
     "@datorama/akita-ng-router-store": "^4.0.0",
     "@datorama/akita-ng-entity-service": "^1.2.0",
-    "moment": "^2.24.0"
+    "@mapbox/polyline": "^1.1.0",
+    "moment": "^2.24.0",
+    "mapbox-gl": "^1.6.1"
   },
   "devDependencies": {
   }

@@ -27,6 +27,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ErrorComponent} from './error/error.component';
 import {UserPageComponent} from './pages/user-page/user-page.component';
 import {OrganizationPageComponent} from './pages/organization-page/organization-page.component';
+import {NyomioMapComponent} from './components/map-component/nyomio-map-component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {OrganizationPageComponent} from './pages/organization-page/organization-
     ErrorComponent,
     UserPageComponent,
     OrganizationPageComponent,
+    NyomioMapComponent
   ],
   imports: [
     CovalentLayoutModule,
@@ -74,6 +76,7 @@ import {OrganizationPageComponent} from './pages/organization-page/organization-
     ErrorComponent,
     UserPageComponent,
     OrganizationPageComponent,
+    NyomioMapComponent
   ]
 })
 export class NyomioNgComponentsModule {

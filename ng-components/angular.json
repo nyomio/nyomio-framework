@@ -30,7 +30,8 @@
             "styles": [
               "src/theme.scss",
               "src/styles.scss",
-              "node_modules/@covalent/core/common/platform.scss"
+              "node_modules/@covalent/core/common/platform.scss",
+              "node_modules/mapbox-gl/dist/mapbox-gl.css"
             ],
             "scripts": []
           },
